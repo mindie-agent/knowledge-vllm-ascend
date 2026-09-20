@@ -1,14 +1,5 @@
 ---
 conditions:
-  ASCEND_RT_VISIBLE_DEVICES: '0'
-  device_name: Ascend910_9362
-  domain: vllm-ascend
-  epsilon: 1e-6
-  input_shape: x=[5,1536], w=[1536]
-  logical_device: '0'
-  seed: '20260920'
-  tested_dtypes: torch.float16 and torch.bfloat16
-  tolerances: float16 atol=rtol=0.002; bfloat16 atol=rtol=0.016
   torch_npu_version: 2.10.0.post2
   torch_version: 2.10.0+cpu
 domain: vllm-ascend
@@ -17,7 +8,7 @@ kind: experience
 producers:
 - 7ccbf9f88de1b66a82c572fa4861119c2b85cff21988006296143e34dfed26d7
 retirement_reason: ''
-revision: db8230951dafd1f2e41367fde798c5a922efe2323fd6b03720e21ac351804100
+revision: 6af93131bf84d7e431724642936397145fd4ab960e7e56a632209c42cca04298
 schema: mindie-entry/1
 sources: []
 status: active
@@ -26,6 +17,8 @@ title: 'vllm-ascend: validate torch_npu.npu_rms_norm on Ascend910_9362 with dtyp
 ---
 
 Problem and background: the task needed a held-out numerical sanity check for `torch_npu.npu_rms_norm` without depending on a model or a historical answer. The script seeded PyTorch with `20260920`, created `x32` with shape `[5,1536]` and `w32` with shape `[1536]`, and tested epsilon `1e-6` on one mapped NPU.
+
+Observed hardware: the verified result names `Ascend910_9362`. The FP16/BF16 dtypes, visibility and device selection, numerical parameters and tolerances below describe this particular experiment, not universal requirements.
 
 Failure or applicability issue: an assistant narrative in the task reported that a process using `ASCEND_RT_VISIBLE_DEVICES=8` saw `torch.npu.device_count()==0`. The supplied script exits with status 2 when the device count is zero, so the operator cannot be tested in that process. The included content-verified result does not contain the `8` run; this failure is therefore reported task evidence rather than independently verified result evidence, and the material does not establish why that visibility choice failed beyond no device being exposed. Do not generalize a physical device number to a required logical device number.
 
