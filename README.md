@@ -4,7 +4,7 @@ The public knowledge corpus was intentionally cleared on 2026-09-20 at the
 maintainer's request. The community-sharing rewrite starts with an empty corpus;
 historical entries are not imported into the new system.
 
-New contributions use detailed, sanitized `mindie-entry/1` Markdown under
+New contributions use detailed, sanitized `mindie-entry/2` Markdown under
 `cases/` or `topics/`, with optional explicit feedback under `feedback/`.
 The new publisher and Grok review integration are under implementation and have
 not yet passed end-to-end acceptance. An empty corpus is a valid state.
