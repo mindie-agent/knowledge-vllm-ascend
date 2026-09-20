@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  checks: write
 
 concurrency:
   group: corpus-${{ github.event.pull_request.number || github.ref }}
@@ -21,11 +22,13 @@ jobs:
     timeout-minutes: 5
     steps:
       # No candidate checkout: the PR supplies Git blobs, never executable code.
-      # pull_request_target uses this trusted base workflow with read-only access.
+      # pull_request_target uses the trusted base; only the final step receives
+      # a token, to attach its result to the validated head instead of the base SHA.
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
       - name: Install reviewed validator
+        id: install
         env:
           PIP_NO_INPUT: '1'
           PIP_RETRIES: '0'
@@ -33,6 +36,7 @@ jobs:
           GIT_TERMINAL_PROMPT: '0'
         run: timeout 120s python -m pip install --disable-pip-version-check 'mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@18e89ac8908ea946721ee1947f5d13b129a752ca'
       - name: Validate exact publication head and PR text
+        id: validate
         run: |
           python -I - <<'PY'
           import json
@@ -84,4 +88,44 @@ jobs:
               if git(repo, 'rev-parse', 'FETCH_HEAD') != expected:
                   raise SystemExit('PR head changed while fetching; stale result refused')
               print(json.dumps(validate(repo, expected, 'vllm-ascend'), sort_keys=True))
+          PY
+      - name: Publish result on the validated commit
+        if: always() && !cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUBLICATION_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          VALIDATION_OUTCOME: ${{ steps.validate.outcome }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          import re
+          import urllib.error
+          import urllib.request
+          sha = os.environ['PUBLICATION_HEAD']
+          if not re.fullmatch(r'[0-9a-f]{40}', sha):
+              raise SystemExit('Invalid result commit')
+          ok = all(os.environ[key] == 'success' for key in ('INSTALL_OUTCOME', 'VALIDATION_OUTCOME'))
+          conclusion = 'success' if ok else 'failure'
+          repository = 'mindie-agent/knowledge-vllm-ascend'
+          payload = dict(
+              name='publication-head', head_sha=sha, status='completed', conclusion=conclusion,
+              details_url=f'https://github.com/{repository}/actions/runs/' + os.environ['GITHUB_RUN_ID'],
+              output=dict(title='Publication validation', summary=f'{sha}: {conclusion}. Trusted validator 18e89ac8908ea946721ee1947f5d13b129a752ca.'),
+          )
+          request = urllib.request.Request(
+              f'https://api.github.com/repos/{repository}/check-runs',
+              data=json.dumps(payload).encode(), method='POST',
+              headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+                       'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'},
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=10) as response:
+                  receipt = json.loads(response.read(65536))
+          except urllib.error.HTTPError as exc:
+              raise SystemExit(f'Check publication failed: HTTP {exc.code}; no automatic retry')
+          if receipt.get('head_sha') != sha or receipt.get('conclusion') != conclusion:
+              raise SystemExit('Check publication receipt mismatch')
+          print(json.dumps({'head_sha': sha, 'conclusion': conclusion, 'check_id': receipt['id']}))
           PY
