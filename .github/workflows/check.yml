@@ -23,4 +23,21 @@ jobs:
         run: python -m pip install 'mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@0ef4cfa5be6f97c4a74f439ea931ba305f309f28'
       # Treat the checkout only as data; never import its Python modules.
       - name: Check Markdown and redaction
-        run: python -I -m mindie_knowledge.corpus_check --repo "$GITHUB_WORKSPACE"
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+          from mindie_knowledge.corpus_check import validate_corpus
+          repo = Path(os.environ["GITHUB_WORKSPACE"])
+          legacy = list((repo / "corpus").rglob("*.md"))
+          incoming = [p for prefix in ("cases", "topics", "feedback")
+                      for p in (repo / prefix).rglob("*") if p.is_file() or p.is_symlink()]
+          if incoming:
+              raise SystemExit("New-format contributions require the reviewed validator rollout")
+          if legacy:
+              result = validate_corpus(repo)
+              if not result["ok"]:
+                  raise SystemExit(result)
+          else:
+              print("Valid empty public corpus; no historical entries to migrate")
+          PY
