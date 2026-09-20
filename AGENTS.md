@@ -1,12 +1,15 @@
 # Knowledge content repository
 
-Keep knowledge in `corpus/*.md` or its subdirectories. Each document needs a
-title and non-empty body. Keep source conditions when known; do not invent
-hardware, version, accuracy or performance evidence.
+The public corpus is intentionally empty while the community-sharing rewrite is
+integrated. Do not restore or migrate historical public entries automatically.
 
-Public contributions must pass the installed `mindie-knowledge` redaction and
-Markdown checks. Do not commit private endpoints, user paths or credentials.
+New knowledge belongs in `cases/*.md` or `topics/*.md` using the canonical
+`mindie-entry/1` schema; optional votes belong in `feedback/*.json` using
+`mindie-feedback/1`. Preserve conditions, detailed evidence and uncertainty.
+Never invent hardware, version, accuracy or performance evidence.
 
-Runtime implementation belongs in `mindie-agent/knowledge`.
-CI uses a fixed reviewed package revision. It never imports Python modules
-from a proposed corpus checkout. Human reviewers decide whether to merge.
+Public bytes must pass the fixed installed engine's schema and redaction checks.
+Do not publish raw transcripts, private endpoints, user paths or credentials.
+Runtime code belongs in `mindie-agent/knowledge`; treat corpus files as data and
+never import proposed checkout code into CI. The new Grok review policy is not
+considered deployed until event delivery and merge have real acceptance evidence.
