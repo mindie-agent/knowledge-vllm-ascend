@@ -1,7 +1,7 @@
 # MindIE Agent · vLLM-Ascend knowledge
 
 The public knowledge corpus was intentionally cleared on 2026-09-20 at the
-maintainer's request. The community-sharing rewrite starts with an empty corpus;
+maintainer's request. The community-sharing rewrite started with an empty corpus;
 historical entries are not imported into the new system.
 
 New contributions use detailed, sanitized `mindie-entry/2` Markdown under

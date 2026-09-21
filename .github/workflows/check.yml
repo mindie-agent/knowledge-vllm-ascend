@@ -34,7 +34,7 @@ jobs:
           PIP_RETRIES: '0'
           PIP_DEFAULT_TIMEOUT: '20'
           GIT_TERMINAL_PROMPT: '0'
-        run: timeout 120s python -m pip install --disable-pip-version-check 'mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@e0ee5ac46fe847728b2bf5b0a91f62c83d6ef688'
+        run: timeout 120s python -m pip install --disable-pip-version-check 'mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@40063ebfc94a4b0fcf508a2a653af8b6403a1a0b'
       - name: Validate exact publication head and PR text
         id: validate
         run: |
@@ -112,7 +112,7 @@ jobs:
           payload = dict(
               name='publication-head', head_sha=sha, status='completed', conclusion=conclusion,
               details_url=f'https://github.com/{repository}/actions/runs/' + os.environ['GITHUB_RUN_ID'],
-              output=dict(title='Publication validation', summary=f'{sha}: {conclusion}. Trusted validator e0ee5ac46fe847728b2bf5b0a91f62c83d6ef688.'),
+              output=dict(title='Publication validation', summary=f'{sha}: {conclusion}. Trusted validator 40063ebfc94a4b0fcf508a2a653af8b6403a1a0b.'),
           )
           request = urllib.request.Request(
               f'https://api.github.com/repos/{repository}/check-runs',

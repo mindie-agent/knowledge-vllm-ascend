@@ -1,7 +1,7 @@
 # Knowledge content repository
 
-The public corpus is intentionally empty while the community-sharing rewrite is
-integrated. Do not restore or migrate historical public entries automatically.
+The community-sharing rewrite started with an empty corpus. New contributions
+are admitted individually; do not restore or migrate historical entries automatically.
 
 New knowledge belongs in `cases/*.md` or `topics/*.md` using the canonical
 `mindie-entry/2` schema; optional votes belong in `feedback/*.json` using
@@ -11,7 +11,9 @@ Never invent hardware, version, accuracy or performance evidence.
 Required public headers: schema, entry_id, domain, kind, title and summary.
 Optional conditions contains only observed software versions or source commits.
 Hardware, topology, test inputs, tolerances and public citations belong in the
-body. Omit empty conditions. Do not add producers, revision, sources, status or
+body. Experience faithfully records the supplied process and observations;
+omit unmentioned details rather than adding an unknowns checklist or inferred
+lessons. Omit empty conditions. Do not add producers, revision, sources, status or
 retirement_reason fields. Entry filenames use their stable entry_id; correcting
 a misleading title does not create a new file. Withdrawal means deleting the
 entry through a reviewed PR, with the reason retained in Git/PR history.
