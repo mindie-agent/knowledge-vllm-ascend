@@ -1,8 +1,6 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/mindie-agent/mindie-agent/main/assets/brand/mindie-agent-logo.png" alt="MindIE Agent logo" width="128" height="128">
-</p>
-
 # MindIE Agent · vLLM-Ascend knowledge
+
+Part of [MindIE Agent](https://github.com/mindie-agent/mindie-agent).
 
 The public knowledge corpus was intentionally cleared on 2026-09-20 at the
 maintainer's request. The community-sharing rewrite started with an empty corpus;
