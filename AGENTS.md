@@ -1,25 +1,34 @@
 # Knowledge content repository
 
-The community-sharing rewrite started with an empty corpus. New contributions
-are admitted individually; do not restore or migrate historical entries automatically.
+The 20 entries already public at commit `9aab5e1e2f1298f992b1b41e403c2b1e0232d12c`
+were explicitly repackaged once on 2026-10-04 with exact body bytes preserved.
+See `docs/material-package-migration-2026-10-04.md`. Admit new contributions
+individually; do not automatically import private material or older Git history.
 
-New knowledge belongs in `cases/*.md` or `topics/*.md` using the canonical
-`mindie-entry/2` schema; optional votes belong in `feedback/*.json` using
-`mindie-feedback/1`. Preserve conditions, detailed evidence and uncertainty.
-Never invent hardware, version, accuracy or performance evidence.
+A contribution is a complete task package under `tasks/<task_id>/`: `index.md`
+uses `mindie-material-task/1`, and `blocks/<block_id>.md` files use
+`mindie-material-block/1`. The manifest embeds a `mindie-entry/3` header, ordered
+block descriptors, current navigation and task status. Optional explicit votes
+use `feedback/*.json` with `mindie-feedback/1`. Task and block identifiers are
+64-character lowercase hexadecimal values; changing a title keeps the identity.
 
-Required public headers: schema, entry_id, domain, kind, title and summary.
-Optional conditions contains only observed software versions or source commits.
-Hardware, topology, test inputs, tolerances and public citations belong in the
-body. Experience faithfully records the supplied process and observations;
-omit unmentioned details rather than adding an unknowns checklist or inferred
-lessons. Omit empty conditions. Do not add producers, revision, sources, status or
-retirement_reason fields. Entry filenames use their stable entry_id; correcting
-a misleading title does not create a new file. Withdrawal means deleting the
-entry through a reviewed PR, with the reason retained in Git/PR history.
+Preserve the complete mechanically redacted material, including unsuccessful
+attempts, corrected conclusions and uncertainty. A block body is immutable;
+append new blocks for later observations. The manifest binds each block file's
+SHA256, source range, title, summary and indexing state. All referenced blocks
+must be indexed before publication. Task `status` describes indexing progress,
+not the success or truth of the underlying business task. A summary is a fallible
+retrieval aid; it must not replace material or certify a claim. Never invent
+hardware, version, accuracy, performance or acceptance evidence.
 
-Public bytes must pass the fixed installed engine's schema and redaction checks.
-Do not publish raw transcripts, private endpoints, user paths or credentials.
-Runtime code belongs in `mindie-agent/knowledge`; treat corpus files as data and
-never import proposed checkout code into CI. The new Grok review policy is not
-considered deployed until event delivery and merge have real acceptance evidence.
+Public bytes must pass the reviewed validator's canonical schema, complete
+package topology, hash and redaction checks. No raw private transcript, endpoint,
+user path or credential may be published. Within a task package, files not
+referenced by its manifest are rejected. Withdrawal deletes the task package
+through a reviewed PR; Git/PR history retains the reason. An empty corpus is valid.
+
+Runtime code belongs in `mindie-agent/knowledge`. CI treats proposed content as
+Git blobs and never imports executable code from the candidate checkout. The
+validator is installed at the immutable `KNOWLEDGE_VALIDATOR_SHA` in the trusted
+workflow; its check attaches to the exact validated publication head. Local
+validation does not establish event delivery, remote CI or merge acceptance.

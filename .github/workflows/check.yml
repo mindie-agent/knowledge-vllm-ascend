@@ -1,4 +1,4 @@
-name: Corpus checks
+name: Material package checks
 
 on:
   pull_request_target:
@@ -15,6 +15,9 @@ permissions:
 concurrency:
   group: corpus-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
+env:
+  KNOWLEDGE_VALIDATOR_SHA: 929bdcb918f2207aea38b02a14bd8e6219fabac4
 
 jobs:
   publication:
@@ -34,7 +37,7 @@ jobs:
           PIP_RETRIES: '0'
           PIP_DEFAULT_TIMEOUT: '20'
           GIT_TERMINAL_PROMPT: '0'
-        run: timeout 120s python -m pip install --disable-pip-version-check 'mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@e6818da4e426e938674e7f4cad32e5e0c7ec7157'
+        run: timeout 120s python -m pip install --disable-pip-version-check "mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@${KNOWLEDGE_VALIDATOR_SHA}"
       - name: Validate exact publication head and PR text
         id: validate
         run: |
@@ -112,7 +115,7 @@ jobs:
           payload = dict(
               name='publication-head', head_sha=sha, status='completed', conclusion=conclusion,
               details_url=f'https://github.com/{repository}/actions/runs/' + os.environ['GITHUB_RUN_ID'],
-              output=dict(title='Publication validation', summary=f'{sha}: {conclusion}. Trusted validator e6818da4e426e938674e7f4cad32e5e0c7ec7157.'),
+              output=dict(title='Publication validation', summary=f"{sha}: {conclusion}. Trusted validator {os.environ['KNOWLEDGE_VALIDATOR_SHA']}."),
           )
           request = urllib.request.Request(
               f'https://api.github.com/repos/{repository}/check-runs',
