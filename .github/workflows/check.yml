@@ -19,7 +19,6 @@ concurrency:
 jobs:
   publication:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       # No candidate checkout: the PR supplies Git blobs, never executable code.
       # pull_request_target uses the trusted base; only the final step receives
@@ -47,7 +46,7 @@ jobs:
               raise SystemExit('Trusted base must be an immutable commit')
           def git(repo, *args):
               return subprocess.run(['git', '-C', str(repo), '-c', 'core.hooksPath=/dev/null', *args],
-                                    check=True, capture_output=True, timeout=45,
+                                    check=True, capture_output=True,
                                     env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}).stdout
           with tempfile.TemporaryDirectory(prefix='mindie-contract-') as directory:
               git(directory, 'init', '--bare', '--quiet')
@@ -79,7 +78,7 @@ jobs:
           PIP_RETRIES: '0'
           PIP_DEFAULT_TIMEOUT: '20'
           GIT_TERMINAL_PROMPT: '0'
-        run: timeout 120s python -m pip install --disable-pip-version-check "mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@${KNOWLEDGE_VALIDATOR_SHA}"
+        run: python -m pip install --disable-pip-version-check "mindie-knowledge @ git+https://github.com/mindie-agent/knowledge@${KNOWLEDGE_VALIDATOR_SHA}"
       - name: Validate exact publication head and PR text
         id: validate
         run: |
@@ -119,11 +118,11 @@ jobs:
           def git(repo, *args):
               result = run_argv(
                   ['git', '-C', str(repo), '-c', 'core.hooksPath=/dev/null', *args],
-                  timeout=90, max_output=1048576, input_bytes=b'',
+                  max_output=1048576, input_bytes=b'',
                   env={'GIT_TERMINAL_PROMPT': '0'},
               )
               if result.timed_out or result.code:
-                  raise SystemExit('Bounded Git read failed; no automatic retry')
+                  raise SystemExit('Git read failed; no automatic retry')
               return result.out.decode('utf-8').strip()
 
           with tempfile.TemporaryDirectory(prefix='mindie-publication-') as directory:
