@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  KNOWLEDGE_VALIDATOR_SHA: ec5f33e9d6a329c0fb48cea67cba66113e70a5b9
+  KNOWLEDGE_VALIDATOR_SHA: 0fa011701f4d73f40709df56c969cc3492eb8fab
 
 jobs:
   publication:
