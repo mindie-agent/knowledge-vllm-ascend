@@ -1,0 +1,75 @@
+---
+blocks:
+- block_id: 48994ca4c89ed51e0a0a641806d6b0ce7d80175fe298b8473f15fddae755213c
+  indexed: true
+  sha256: ecb408c85ef4026049028c7cdf959db46864e3714d0c69e14fd258ddd3031209
+  source_range:
+    body_end: 1291
+    body_start: 0
+    published_commit: 9aab5e1e2f1298f992b1b41e403c2b1e0232d12c
+    published_path: cases/01c138e79f25bec8d78fbf4579d27cd4443aa7e31207a705559f68bd2812e9ff.md
+  summary: 'Conversation excerpt: 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证据。
+
+    已通过已安装的 Skill 绑定当前任务：`capture=bound`、`experience=capture-ready`。
+
+    **优先条目已直接命中并读取正文。**来源为 `vllm-ascend` 公开 feed 中的 `experience`，`withdrawn=false`。MindIE 引用：
+
+    `mindie://vllm-ascend/5cdccec11137a3387aba7f7b1e27c9f2b08534b619cc2dc838c622960a4cc8e9@5dd3c315e730da9ae3145066acf1cda36150e4aa8f22a062c8bbca281bb46222`
+
+    正文记录 Qwen3-0.6B 两条推理：输入分别为 6、5 token，输出各 32 token，合计 **11 输入、64 输出 token**；两条生成共 **1.201 秒**。正文长 4,988 字符；知识库没有提供该正文的模型 token 计数。
+
+    **NPU 证据：**vLLM 日志记录 Ascend 插件已激活、`device_config=npu`、`visible_npus=[0]`；运行期间 NPU 0 进程显存峰值为 10,253 MB。结束后两个 chip 恢复空闲，监督器确认子进程退出、退出码为 0。正文也注明限制：torch 包元数据标为 `2.10.0+cpu`，未取得可靠的 AICore 利用率读数。'
+  title: 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证
+entry:
+  conditions: {}
+  domain: vllm-ascend
+  entry_id: 01c138e79f25bec8d78fbf4579d27cd4443aa7e31207a705559f68bd2812e9ff
+  kind: experience
+  material_digest: 502013522a8e45adf9ebf16caf71c8181d203c7d59b941d6133bef8fe2767441
+  revision: 5c5be783166aff311cf7df0ec2f13564d706b598087d061950a7d3321f8930c7
+  schema: mindie-entry/3
+  summary: 'Conversation excerpt: 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证据。
+
+    已通过已安装的 Skill 绑定当前任务：`capture=bound`、`experience=capture-ready`。
+
+    **优先条目已直接命中并读取正文。**来源为 `vllm-ascend` 公开 feed 中的 `experience`，`withdrawn=false`。MindIE 引用：
+
+    `mindie://vllm-ascend/5cdccec11137a3387aba7f7b1e27c9f2b08534b619cc2dc838c622960a4cc8e9@5dd3c315e730da9ae3145066acf1cda36150e4aa8f22a062c8bbca281bb46222`
+
+    正文记录 Qwen3-0.6B 两条推理：输入分别为 6、5 token，输出各 32 token，合计 **11 输入、64 输出 token**；两条生成共 **1.201 秒**。正文长 4,988 字符；知识库没有提供该正文的模型 token 计数。
+
+    **NPU 证据：**vLLM 日志记录 Ascend 插件已激活、`device_config=npu`、`visible_npus=[0]`；运行期间 NPU 0 进程显存峰值为 10,253 MB。结束后两个 chip 恢复空闲，监督器确认子进程退出、退出码为 0。正文也注明限制：torch 包元数据标为 `2.10.0+cpu`，未取得可靠的 AICore 利用率读数。'
+  title: 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证
+navigation: 'Conversation excerpt: 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证据。
+
+  已通过已安装的 Skill 绑定当前任务：`capture=bound`、`experience=capture-ready`。
+
+  **优先条目已直接命中并读取正文。**来源为 `vllm-ascend` 公开 feed 中的 `experience`，`withdrawn=false`。MindIE 引用：
+
+  `mindie://vllm-ascend/5cdccec11137a3387aba7f7b1e27c9f2b08534b619cc2dc838c622960a4cc8e9@5dd3c315e730da9ae3145066acf1cda36150e4aa8f22a062c8bbca281bb46222`
+
+  正文记录 Qwen3-0.6B 两条推理：输入分别为 6、5 token，输出各 32 token，合计 **11 输入、64 输出 token**；两条生成共 **1.201 秒**。正文长 4,988 字符；知识库没有提供该正文的模型 token 计数。
+
+  **NPU 证据：**vLLM 日志记录 Ascend 插件已激活、`device_config=npu`、`visible_npus=[0]`；运行期间 NPU 0 进程显存峰值为 10,253 MB。结束后两个 chip 恢复空闲，监督器确认子进程退出、退出码为 0。正文也注明限制：torch 包元数据标为 `2.10.0+cpu`，未取得可靠的 AICore 利用率读数。'
+schema: mindie-material-task/1
+status: complete
+task_id: 01c138e79f25bec8d78fbf4579d27cd4443aa7e31207a705559f68bd2812e9ff
+---
+
+# 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证
+
+Conversation excerpt: 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证据。
+已通过已安装的 Skill 绑定当前任务：`capture=bound`、`experience=capture-ready`。
+**优先条目已直接命中并读取正文。**来源为 `vllm-ascend` 公开 feed 中的 `experience`，`withdrawn=false`。MindIE 引用：
+`mindie://vllm-ascend/5cdccec11137a3387aba7f7b1e27c9f2b08534b619cc2dc838c622960a4cc8e9@5dd3c315e730da9ae3145066acf1cda36150e4aa8f22a062c8bbca281bb46222`
+正文记录 Qwen3-0.6B 两条推理：输入分别为 6、5 token，输出各 32 token，合计 **11 输入、64 输出 token**；两条生成共 **1.201 秒**。正文长 4,988 字符；知识库没有提供该正文的模型 token 计数。
+**NPU 证据：**vLLM 日志记录 Ascend 插件已激活、`device_config=npu`、`visible_npus=[0]`；运行期间 NPU 0 进程显存峰值为 10,253 MB。结束后两个 chip 恢复空闲，监督器确认子进程退出、退出码为 0。正文也注明限制：torch 包元数据标为 `2.10.0+cpu`，未取得可靠的 AICore 利用率读数。
+
+## Materials
+
+- [检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证](blocks/48994ca4c89ed51e0a0a641806d6b0ce7d80175fe298b8473f15fddae755213c.md): Conversation excerpt: 检索已返回与给定 ID 前缀相同的条目引用，同时也返回了一条转述该 ID 的别的经验记录。我会按知识工具要求读取这个直接命中条目的正文，再据正文核对 token、引用和 NPU 日志证据。
+已通过已安装的 Skill 绑定当前任务：`capture=bound`、`experience=capture-ready`。
+**优先条目已直接命中并读取正文。**来源为 `vllm-ascend` 公开 feed 中的 `experience`，`withdrawn=false`。MindIE 引用：
+`mindie://vllm-ascend/5cdccec11137a3387aba7f7b1e27c9f2b08534b619cc2dc838c622960a4cc8e9@5dd3c315e730da9ae3145066acf1cda36150e4aa8f22a062c8bbca281bb46222`
+正文记录 Qwen3-0.6B 两条推理：输入分别为 6、5 token，输出各 32 token，合计 **11 输入、64 输出 token**；两条生成共 **1.201 秒**。正文长 4,988 字符；知识库没有提供该正文的模型 token 计数。
+**NPU 证据：**vLLM 日志记录 Ascend 插件已激活、`device_config=npu`、`visible_npus=[0]`；运行期间 NPU 0 进程显存峰值为 10,253 MB。结束后两个 chip 恢复空闲，监督器确认子进程退出、退出码为 0。正文也注明限制：torch 包元数据标为 `2.10.0+cpu`，未取得可靠的 AICore 利用率读数。
