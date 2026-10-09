@@ -1,0 +1,19 @@
+{
+  "domain": "vllm-ascend",
+  "formats": {
+    "block": "mindie-material-block/1",
+    "entry": "mindie-entry/3",
+    "feedback": "mindie-feedback/1",
+    "package": "mindie-material-package/1",
+    "task": "mindie-material-task/1"
+  },
+  "review": {
+    "check": "publication-head",
+    "contract": "mindie-content-review/2"
+  },
+  "schema": "mindie-publication-contract/1",
+  "validator": {
+    "repository": "mindie-agent/knowledge",
+    "revision": "7c99fbb387304c0e4b26ca85c1839bed8b7534be"
+  }
+}

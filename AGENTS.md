@@ -29,6 +29,21 @@ through a reviewed PR; Git/PR history retains the reason. An empty corpus is val
 
 Runtime code belongs in `mindie-agent/knowledge`. CI treats proposed content as
 Git blobs and never imports executable code from the candidate checkout. The
-validator is installed at the immutable `KNOWLEDGE_VALIDATOR_SHA` in the trusted
-workflow; its check attaches to the exact validated publication head. Local
+validator is selected by `publication-contract.json` at the trusted base commit,
+never by the candidate PR. Its `publication-head` check attaches to the exact
+validated head: success permits the ordinary content path; neutral indicates valid
+development changes that still require maintainer review. A contract, workflow or
+Bot instruction change can never authorize its own automatic merge. Local
 validation does not establish event delivery, remote CI or merge acceptance.
+
+The [repository Bot operating contract](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md)
+uses `mindie-content-review/2`. A correction that changes body bytes needs a new
+block identity and a recomputed manifest; metadata-only corrections preserve the
+body identity. Withdrawal removes the complete package. Later contributions use
+the confirmed remote version and unsent blocks, preserving maintainer corrections.
+
+A consumer pins this declaration's SHA256 as part of its product combination.
+Content may advance under the same declaration; a changed declaration requires a
+matching plugin combination. Missing or mismatched declarations are explicit
+failures, not empty corpora. Release order is runtime, content and Bot contract,
+then adapter. Local checks do not establish external Bot adoption or native use.

@@ -25,10 +25,25 @@ retained for provenance, and consumers follow this repository's main branch. The
 
 Publication checks validate the exact Git commit, canonical package structure,
 all referenced blocks and hashes, indexing readiness and public-data redaction.
-The trusted workflow pins an immutable runtime validator. Implementation and
+The trusted workflow reads the immutable runtime validator from the base commit's
+[publication contract](publication-contract.json). It distinguishes ordinary
+content from development changes and attaches its result to the exact head.
+Contract and Bot-rule changes require development review. Implementation and
 local tests remain distinct from remote CI, delivery and merge acceptance.
 
 Runtime implementation: [mindie-agent/knowledge](https://github.com/mindie-agent/knowledge).
 Codex plugin: [mindie-agent/mindie-agent-codex](https://github.com/mindie-agent/mindie-agent-codex).
 
 License: MIT.
+
+The [repository Bot operating contract](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md)
+uses `mindie-content-review/2`. A correction that changes body bytes needs a new
+block identity and a recomputed manifest; metadata-only corrections preserve the
+body identity. Withdrawal removes the complete package. Later contributions use
+the confirmed remote version and unsent blocks, preserving maintainer corrections.
+
+A consumer pins this declaration's SHA256 as part of its product combination.
+Content may advance under the same declaration; a changed declaration requires a
+matching plugin combination. Missing or mismatched declarations are explicit
+failures, not empty corpora. Release order is runtime, content and Bot contract,
+then adapter. Local checks do not establish external Bot adoption or native use.
