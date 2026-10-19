@@ -1,0 +1,66 @@
+{
+  "build_elapsed_ms": 0.2311669522896409,
+  "closure": {
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": []
+  },
+  "digest": "8164c09d0a8f8a0cfbe65163ba206cbbc04cb825f090c1c4ba5af1f62b98f298",
+  "generation": "27939dc22c63c48869ef60cfdeff2a8ffef803895819d5c14e843386eb84a36c",
+  "id_path": {
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md"
+  },
+  "query_budget_excludes_build": true,
+  "schema_version": "mindie-routing-manifest/1",
+  "token_estimator": "utf8_bytes_div_4_ceiling",
+  "unit_count": 1,
+  "units": [
+    {
+      "category": "sop",
+      "closure_digest": "sha256:284a5023eff443fdee8a35afbfd10a3e2a493e9d2bb8e657228ac02238d5c8dd",
+      "conditions": {
+        "repository": "vllm-project/vllm-ascend",
+        "revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c"
+      },
+      "content_digest": "sha256:025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+      "content_sha256": "025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+      "domain_path": "integration/custom-ops",
+      "evidence_strength": "single_observation",
+      "id": "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
+      "inherits_from": [],
+      "inherits_from_closure": [],
+      "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
+      "provenance": {
+        "evidence_refs": [
+          "docs/evidence/unit-vllm-ascend-custom-op-gates-import-retry-and-nz-review.json",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L397-L456",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L299-L316",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L656-L786",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L249-L286"
+        ],
+        "source_digest": "b04fd7d5698c9a1ad9cb1470fe4ce593e1e21bbdd00747c2d797850becc43aa9",
+        "source_locator": "docs/evidence/unit-vllm-ascend-custom-op-gates-import-retry-and-nz-review.json",
+        "source_type": "ecosystem_repo",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "Ascend custom-op imports, registration and NZ selection have distinct gates",
+      "token_estimate": 730,
+      "triggers": {
+        "error_signatures": [],
+        "keywords": [
+          "vllm-ascend",
+          "ascend",
+          "custom-op",
+          "imports",
+          "registration",
+          "and",
+          "nz",
+          "selection",
+          "have",
+          "distinct",
+          "gates"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "closure": {
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": []
+  },
+  "digest": "1afbdf330eb5f88f95af4056b11764e591ea31e0cf2d6500761da909aeb40c3a",
+  "federation": {
+    "corpus": {
+      "automatic": false,
+      "bytes": 4430,
+      "estimated_tokens": 730,
+      "kind": "federation",
+      "path": ".",
+      "unit_ids": [
+        "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+      ],
+      "units": 1
+    },
+    "domains": [
+      {
+        "automatic": false,
+        "bytes": 4430,
+        "estimated_tokens": 730,
+        "exceeds": [],
+        "kind": "federation",
+        "path": "integration",
+        "recommended_action": "review_federation_boundary",
+        "unit_ids": [
+          "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+        ],
+        "units": 1
+      }
+    ]
+  },
+  "index_build_elapsed_ms": 0.2311669522896409,
+  "index_digest": "8164c09d0a8f8a0cfbe65163ba206cbbc04cb825f090c1c4ba5af1f62b98f298",
+  "leaves": [
+    {
+      "automatic": false,
+      "bytes": 4430,
+      "estimated_tokens": 730,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "integration/custom-ops",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+      ],
+      "units": 1
+    }
+  ],
+  "schema": "mindie-shard-topology/1",
+  "two_level_subtrees": [
+    {
+      "automatic": false,
+      "bytes": 4430,
+      "estimated_tokens": 730,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "integration/custom-ops",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+      ],
+      "units": 1
+    }
+  ],
+  "unit_count": 1,
+  "units": {
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": {
+      "bytes": 4430,
+      "category": "sop",
+      "content_sha256": "025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+      "domain_path": "integration/custom-ops",
+      "estimated_tokens": 730,
+      "evidence_strength": "single_observation",
+      "inherits_from": [],
+      "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
+      "tier": "L2"
+    }
+  }
+}
