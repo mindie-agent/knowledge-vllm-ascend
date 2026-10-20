@@ -21,7 +21,7 @@
 
 ## What this repository is
 
-The `graded-v2` branch of this repository is the `vllm-ascend` domain graded knowledge source for MindIE Agent `0.0.3`. It stores **graded knowledge units** (`mindie-graded-unit/1`): a reusable rule, procedure or code transformation together with its provenance, applicability conditions, evidence strength and revision.
+The `main` branch of this repository is the `vllm-ascend` domain graded knowledge source for MindIE Agent `0.0.3`. It stores **graded knowledge units** (`mindie-graded-unit/1`): a reusable rule, procedure or code transformation together with its provenance, applicability conditions, evidence strength and revision.
 
 A unit is not a chat summary and not a universal best practice. It answers two questions:
 
@@ -30,7 +30,7 @@ A unit is not a chat summary and not a universal best practice. It answers two q
 
 At query time the runtime compares the task's observed facts with each declared condition. A condition that is unmet, missing or unknown is never treated as "close enough".
 
-> The `graded-v2` branch uses `mindie-publication-contract/2` and `mindie-graded-unit/1`. `main` retains the old material-v1 corpus and old contract bytes for 0.0.2 consumers and is not a graded tree. [`index/routing-manifest.json`](../index/routing-manifest.json) is the live inventory; the table below lists the units present in the manifest at this check, not a fixed count.
+> The `main` branch uses `mindie-publication-contract/2` and `mindie-graded-unit/1`. `main` also carries the historical `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` archive and immutable commit 85ab, but that archive is not active graded content. [`index/routing-manifest.json`](../index/routing-manifest.json) is the live inventory; the table below lists the units present in the manifest at this check, not a fixed count.
 
 ---
 
@@ -42,7 +42,7 @@ MindIE Agent supports **Codex, Claude Code, Kimi and DSH**, each through its own
 
 Once installed, the plugin connects to the [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) runtime, syncs this domain and builds a local index. Read-only `knowledge_query` / `knowledge_explain` does not require community sharing; capture and contribution remain explicit user choices.
 
-This repository does not copy host installers or local paths. Host installation, plugin configuration and upgrades are defined by the main repository. 0.0.3 plugins select the `graded-v2` branch and bind the exact digest of this domain's `publication-contract.json`; contribution PRs use `graded-v2` as their base.
+This repository does not copy host installers or local paths. Host installation, plugin configuration and upgrades are defined by the main repository. Contribution PRs use `main` as their base. Installed hosts use the sources and revisions in their own configuration; updating this repository does not upgrade plugins.
 
 ---
 
@@ -52,12 +52,12 @@ This repository does not copy host installers or local paths. Host installation,
 | --- | --- |
 | Conclusions lose versions, premises and failure branches | The body keeps concrete conditions, steps, counterexamples and limits; provenance binds the source |
 | A search hit does not tell you whether it fits your environment | Query compares observed task facts first; mismatch or unknown is reported explicitly |
-| Old conclusions are silently overwritten | Revision, content digest and pinned references preserve old observations; replaced references fail explicitly |
-| You see only an excerpt and cannot verify the whole claim | `knowledge_query` returns summarized candidates; `knowledge_explain` reads the full body by exact digest |
+| Old conclusions are silently overwritten | Revision and pinned references preserve old observations; replaced references fail explicitly |
+| You see only an excerpt and cannot verify the whole claim | `knowledge_query` returns summarized candidates; `knowledge_explain` reads the full body by exact revision |
 
 A unit may be distilled from reviewed public material, source code, specifications or experiment records. Model assistance is allowed, but **model output is only a proposal**: it must retain provenance and evidence limits and pass deterministic format/privacy checks and semantic review before a reviewed change admits it. A failed experiment cannot be relabeled `reproduced_empirical`; hardware, versions and performance data cannot be invented; model rewriting cannot replace the source.
 
-The original `material-v1` task material is not in the `graded-v2` branch; it remains on `main` and at immutable historical commit 85ab, described under [Old material and history](#-old-material-and-history). That material is evidence, not active retrieval content, and is never relabeled as a graded unit.
+The original `material-v1` task material is archived under `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` on `main` and at immutable historical commit 85ab, described under [Old material and history](#-old-material-and-history). That material is evidence, not active retrieval content, and is never relabeled as a graded unit.
 
 ---
 
@@ -85,15 +85,15 @@ Missing conditions, `unknown` values and incomparable versions produce `conditio
 
 ### 2. Read the full body through the returned reference
 
-A query result carries a digest-pinned `ref`, a stable `unit_ref` and a separate `feedback_ref`. `knowledge_explain` returns the full body, frontmatter, inheritance closure and applicability note for that exact revision:
+A query result carries a revision-pinned `ref`, a stable `unit_ref` and a separate `feedback_ref`. `knowledge_explain` returns the full body, frontmatter, inheritance closure and applicability note for that exact revision:
 
 ```python
 knowledge_explain(
-    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@3",
 )
 ```
 
-The hash after `@` is the **bare 64-character content digest** (`content_sha256`), not the revision number. After a semantic edit, an old reference fails explicitly instead of silently returning new bytes. A location-only move keeps the digest and revision.
+The integer after `@` is the **revision number**, not a content digest. After a semantic edit, an old reference fails explicitly instead of silently returning new bytes. A location-only move keeps the revision and content hash.
 
 Reading a reference only means you received that content; it does not make the unit applicable. Compare its conditions with the task facts.
 
@@ -103,7 +103,7 @@ After testing a unit in real work, optionally submit `up` / `down`:
 
 ```python
 knowledge_feedback(
-    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@3",
     rating="up",
     reason="Recorded after reproducing the import gate difference in the observed task.",
 )
@@ -112,11 +112,11 @@ knowledge_feedback(
 - Feedback binds the **exact content revision actually returned**; an unobserved revision cannot be rated.
 - `reason` is optional, single-line and at most 1000 characters. Private local feedback is not published by default.
 - Feedback is a descriptive signal, not proof of correctness, confidence or an automatic promotion gate. No feedback does not mean a unit is invalid or unused.
-- Public feedback uses `mindie-graded-feedback/1` and counts only votes for the current content digest. Votes for older digests remain distinct local history.
+- Public feedback uses `mindie-graded-feedback/1` and counts only votes for the current revision. Votes for older revisions remain distinct local history.
 
 ### 4. Explicit domain routes
 
-Cross-domain knowledge is read through an explicit reference such as `mindie://operators/units/<unit-id>@<sha256>`. The domain in the reference selects the configured domain engine; an unknown or unconfigured domain fails explicitly instead of falling back to a default.
+Cross-domain knowledge is read through an explicit reference such as `mindie://operators/units/<unit-id>@<revision>`. The domain in the reference selects the configured domain engine; an unknown or unconfigured domain fails explicitly instead of falling back to a default.
 
 The runtime can host arbitrary domains. The `0.0.3` release scope covers `vllm-ascend` and `operators`, but that is not a hardcode of the runtime to exactly two domains. This repository does not copy `operators` units or force same-topic merges across domains.
 
@@ -124,13 +124,13 @@ The runtime can host arbitrary domains. The `0.0.3` release scope covers `vllm-a
 
 ## 📚 Current units
 
-[`index/routing-manifest.json`](../index/routing-manifest.json) is the only live inventory. It records stable IDs, paths, tiers, evidence strength, conditions, content digests, inheritance closures and token estimates. The table lists the units present in the manifest at this check; the manifest remains authoritative. A new unit becomes current only when its Markdown file and rebuilt manifest both exist.
+[`index/routing-manifest.json`](../index/routing-manifest.json) is the only live inventory. It records stable IDs, paths, tiers, evidence strength, conditions, revisions, inheritance closures and token estimates. The table lists the units present in the manifest at this check; the manifest remains authoritative. A new unit becomes current only when its Markdown file and rebuilt manifest both exist.
 
 | Unit | Tier / category | Evidence strength | Pinned reference |
 | --- | --- | --- | --- |
-| [`unit-vllm-ascend-custom-op-gates-import-retry-and-nz`](../integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba` |
-| [`unit-vllm-ascend-idle-dp-gdn-state`](../vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md) | L2 / `sop` | `hypothesis` | `mindie://vllm-ascend/units/unit-vllm-ascend-idle-dp-gdn-state@72f2bfadc7899c951e711b81719ce6b5854cbfe6dd343b00bc35d75b221deb00` |
-| [`unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation`](../vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation@33661ebd978f03c8355b1728e082fb8937bb5bf245bea38557d069def80ef14c` |
+| [`unit-vllm-ascend-custom-op-gates-import-retry-and-nz`](../integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@3` |
+| [`unit-vllm-ascend-idle-dp-gdn-state`](../vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md) | L2 / `sop` | `hypothesis` | `mindie://vllm-ascend/units/unit-vllm-ascend-idle-dp-gdn-state@3` |
+| [`unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation`](../vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation@3` |
 
 These are source-scoped L2 SOPs, not hardware performance results. The custom-op unit binds source revision `175ef4d49c2072f9233619636f0309f4f88b4e2c` of `vllm-project/vllm-ascend`; the idle-DP GDN unit is a `hypothesis` with base commit `c3394206bdd00b132580ae439555b4f1a70d5bf6` and model/state context; the Qwen3.5 unit is a `single_observation` of the historical PR7109 and binds model and source revisions. Do not upgrade a hypothesis or single observation to reproduced measurement; exact conditions are in each unit's frontmatter and body.
 
@@ -158,15 +158,15 @@ knowledge-vllm-ascend/
     └── evidence/                       # sources and review records
 ```
 
-A unit path must be `<domain_path>/<unit_id>.md`. `domain_path` is a normalized repository-relative directory used for routing and sharding; it is not part of stable identity. `unit_id` starts with `unit-` and uses lowercase words and hyphens. The two JSON files under `index/` are derived and rebuilt by the runtime; do not hand-edit them. This branch publishes contract/2 content only; the old `material-v1` local archive copy is not in `graded-v2`.
+A unit path must be `<domain_path>/<unit_id>.md`. `domain_path` is a normalized repository-relative directory used for routing and sharding; it is not part of stable identity. `unit_id` starts with `unit-` and uses lowercase words and hyphens. The two JSON files under `index/` are derived and rebuilt by the runtime; do not hand-edit them. `main` publishes contract/2 content only; the old `material-v1` archive under `docs/archive/material-v1/` is evidence, not active retrieval content.
 
-The complete field, digest, condition, inheritance, feedback and reviewed-change rules are in the [format specification](package-format.en.md).
+The complete field, revision, condition, inheritance, feedback and reviewed-change rules are in the [format specification](package-format.en.md).
 
 ---
 
 ## 🗃️ Old material and history
 
-The old `material-v1` corpus is not in the `graded-v2` branch. It remains on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) for 0.0.2 consumers and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). `graded-v2` does not move, rewrite or relabel that material, and it does not keep a local archive copy.
+The old `material-v1` corpus is archived under `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). The current `main` does not move, rewrite or relabel that material, and it does not treat the archive layout as active corpus content.
 
 The historical migration metadata records 663 task packages, 2,387 files, 1,723 blocks and 1 feedback file; their original blob identities remain on `main` and 85ab.
 
@@ -179,15 +179,15 @@ The historical migration metadata records 663 task packages, 2,387 files, 1,723 
 
 ## ✅ Publication and validation
 
-On `graded-v2`, [`publication-contract.json`](../publication-contract.json) declares `mindie-publication-contract/2`, the data formats and the immutable validator revision used by publication checks. `.github/workflows/check.yml` reads that contract from the branch trusted base, installs the exact validator and validates candidate content as Git blobs without executing candidate code.
+On `main`, [`publication-contract.json`](../publication-contract.json) declares `mindie-publication-contract/2`, the data formats and the immutable validator revision used by publication checks. `.github/workflows/check.yml` reads that contract from the branch trusted base, installs the exact validator and validates candidate content as Git blobs without executing candidate code.
 
 Keep three facts separate:
 
-1. **Local/candidate tree validation**: whether format, digests, inheritance, index consistency and privacy scans pass;
-2. **Remote publication**: the actual readback of `graded-v2`; `main` retains the old material corpus and old contract bytes and does not change with this branch.
+1. **Local/candidate tree validation**: whether format, content hashes, inheritance, index consistency and privacy scans pass;
+2. **Remote publication**: the actual readback of `main`; `main` carries the current contract/2 declaration and does not change automatically with a candidate branch.
 3. **Installed native acceptance**: whether a specific host can actually use query, explain, feedback and routing after installing that revision.
 
-A validated candidate tree does not prove the latter two, and a documentation change does not become an automatic content merge. `graded-v2` may receive content updates within this compatibility version while keeping the same `publication-contract/2` bytes; `main` does not change with them. Formal assets, remote `graded-v2` publication and paid native acceptance are separate results; locally prepared content is not published proof.
+A validated candidate tree does not prove the latter two, and a documentation change does not become an automatic content merge. `main` may receive content updates within this compatibility version without changing the current `publication-contract/2` declaration. Formal assets, remote `main` publication and paid native acceptance are separate results; locally prepared content is not published proof.
 
 Documentation and engineering files follow the development review path; units, feedback and derived indexes follow the content path. The two paths have different check outcomes and merge rules; see the [contributing guide](CONTRIBUTING.en.md).
 
