@@ -11,6 +11,11 @@
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
+    "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+    ],
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": [],
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": [
       "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -37,14 +42,15 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 37725,
-      "estimated_tokens": 5192,
+      "bytes": 48429,
+      "estimated_tokens": 7000,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
         "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
+        "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
         "unit-vllm-ascend-idle-dp-gdn-state",
@@ -53,7 +59,7 @@
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 10
+      "units": 11
     },
     "domains": [
       {
@@ -86,8 +92,8 @@
       },
       {
         "automatic": false,
-        "bytes": 25831,
-        "estimated_tokens": 3644,
+        "bytes": 36535,
+        "estimated_tokens": 5452,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -95,16 +101,17 @@
         "unit_ids": [
           "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
           "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+          "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
           "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
           "unit-vllm-ascend-idle-dp-gdn-state",
           "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
           "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
         ],
-        "units": 6
+        "units": 7
       }
     ]
   },
-  "index_build_elapsed_ms": 1.8478339770808816,
+  "index_build_elapsed_ms": 1.7044579144567251,
   "leaves": [
     {
       "automatic": false,
@@ -187,6 +194,19 @@
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
       ],
       "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 10704,
+      "estimated_tokens": 1808,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/speculative-decoding",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator"
+      ],
+      "units": 1
     }
   ],
   "schema": "mindie-shard-topology/1",
@@ -248,9 +268,22 @@
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
       ],
       "units": 5
+    },
+    {
+      "automatic": false,
+      "bytes": 10704,
+      "estimated_tokens": 1808,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/speculative-decoding",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator"
+      ],
+      "units": 1
     }
   ],
-  "unit_count": 10,
+  "unit_count": 11,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4698,
@@ -292,6 +325,20 @@
       ],
       "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
       "tier": "L2"
+    },
+    "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": {
+      "bytes": 10704,
+      "category": "mutator",
+      "content_sha256": "1ff527c83d582b2b4559f9b6b127ae28adfaac3a0efd6442e58ba812c108e8f5",
+      "domain_path": "vllm-ascend/speculative-decoding",
+      "estimated_tokens": 1808,
+      "evidence_strength": "hypothesis",
+      "inherits_from": [
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/speculative-decoding/unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator.md",
+      "tier": "L4"
     },
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": {
       "bytes": 2734,
