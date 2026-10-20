@@ -11,6 +11,12 @@
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
+    "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-idle-dp-gdn-state"
+    ],
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": [],
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": [
       "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -37,14 +43,15 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 37725,
-      "estimated_tokens": 5192,
+      "bytes": 45432,
+      "estimated_tokens": 6615,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
         "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
+        "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
         "unit-vllm-ascend-idle-dp-gdn-state",
@@ -53,9 +60,22 @@
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 10
+      "units": 11
     },
     "domains": [
+      {
+        "automatic": false,
+        "bytes": 7707,
+        "estimated_tokens": 1423,
+        "exceeds": [],
+        "kind": "federation",
+        "path": "0day",
+        "recommended_action": "review_federation_boundary",
+        "unit_ids": [
+          "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator"
+        ],
+        "units": 1
+      },
       {
         "automatic": false,
         "bytes": 8182,
@@ -104,8 +124,21 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 1.8478339770808816,
+  "index_build_elapsed_ms": 1.8547920044511557,
   "leaves": [
+    {
+      "automatic": false,
+      "bytes": 7707,
+      "estimated_tokens": 1423,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "0day/Qwen3_5",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator"
+      ],
+      "units": 1
+    },
     {
       "automatic": false,
       "bytes": 8182,
@@ -193,6 +226,19 @@
   "two_level_subtrees": [
     {
       "automatic": false,
+      "bytes": 7707,
+      "estimated_tokens": 1423,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "0day/Qwen3_5",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
       "bytes": 8182,
       "estimated_tokens": 1008,
       "exceeds": [],
@@ -250,7 +296,7 @@
       "units": 5
     }
   ],
-  "unit_count": 10,
+  "unit_count": 11,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4698,
@@ -292,6 +338,21 @@
       ],
       "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
       "tier": "L2"
+    },
+    "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": {
+      "bytes": 7707,
+      "category": "mutator",
+      "content_sha256": "139aa40321d79090b088aeb06d640249e323d27fcea96d7e2b43a8cdac4e1e0d",
+      "domain_path": "0day/Qwen3_5",
+      "estimated_tokens": 1423,
+      "evidence_strength": "hypothesis",
+      "inherits_from": [
+        "unit-vllm-ascend-idle-dp-gdn-state",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "0day/Qwen3_5/unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator.md",
+      "tier": "L4"
     },
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": {
       "bytes": 2734,

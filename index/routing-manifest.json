@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 1.8478339770808816,
+  "build_elapsed_ms": 1.8547920044511557,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -11,6 +11,12 @@
     ],
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-idle-dp-gdn-state"
     ],
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": [],
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": [
@@ -35,11 +41,12 @@
     ],
     "unit-vllm-ascend-verification-and-state-parity-gates": []
   },
-  "generation": "941ba496aad6817b69915c89ee6ed298b88b8adf181f6e053c67526f16debc5b",
+  "generation": "15c001836895ad115145b821eef9615575b9715cd829370aef148ec4bdfcba6d",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
+    "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": "0day/Qwen3_5/unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator.md",
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": "_common/unit-vllm-ascend-hccl-and-dp-collective-invariants.md",
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow.md",
     "unit-vllm-ascend-idle-dp-gdn-state": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
@@ -51,7 +58,7 @@
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 10,
+  "unit_count": 11,
   "units": [
     {
       "category": "workflow",
@@ -245,6 +252,86 @@
           "distinct",
           "gates",
           "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "mutator",
+      "conditions": {
+        "active_batch": 0,
+        "dp": 2,
+        "graph_capture_shape": "dynamic",
+        "idle_rank_state": "no_scheduled_requests",
+        "model_family": [
+          "qwen3_5",
+          "Qwen3.5",
+          "gated_deltanet"
+        ],
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend"
+        ]
+      },
+      "domain_path": "0day/Qwen3_5",
+      "evidence_strength": "hypothesis",
+      "id": "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates",
+        "unit-vllm-ascend-idle-dp-gdn-state"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-idle-dp-gdn-state"
+      ],
+      "path": "0day/Qwen3_5/unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator.md",
+      "provenance": {
+        "evidence_refs": [
+          "docs/evidence/l4-gdn-idle-dp-zero-pad-ablation.json",
+          "https://github.com/vllm-project/vllm-ascend/pull/15655",
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py"
+        ],
+        "experiment_status": "not_run_source_only",
+        "source_digest": "5a2f8780ca357258b4f53d3c4a42e37df4386a328a22d4d7a99afec5929b3c08",
+        "source_locator": "docs/evidence/l4-gdn-idle-dp-zero-pad-ablation.json",
+        "source_type": "ablation_design_receipt",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L4",
+      "title": "L4 mutator: GDN idle-DP zero-padded workspace with empty-batch HCCL participation",
+      "token_estimate": 1423,
+      "triggers": {
+        "error_signatures": [
+          "idle DP rank with an empty batch hangs because the zero-token step skipped coordinate_batch_across_dp",
+          "the idle rank workspace shape differs from the captured active shape and replay reads stale buffers",
+          "a zero-token dummy run changes one row of conv_state or ssm_state",
+          "an active batch is routed through the idle zero-pad path and loses its real tokens",
+          "a static graph capture is forced through a dynamic zero-pad replay and fails or writes the wrong region"
+        ],
+        "keywords": [
+          "Qwen3.5",
+          "qwen3_5",
+          "GatedDeltaNet",
+          "idle DP",
+          "zero-pad",
+          "empty batch",
+          "HCCL",
+          "coordinate_batch_across_dp",
+          "conv_state",
+          "ssm_state",
+          "graph capture",
+          "workspace",
+          "leave-one-out",
+          "guard workload"
         ]
       }
     },
