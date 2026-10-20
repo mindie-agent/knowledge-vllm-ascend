@@ -2,9 +2,9 @@
 
 **中文** | [English](package-format.en.md) · [返回仓库首页](../README.md)
 
-本文说明 `graded-v2` 分支中 `knowledge-vllm-ascend` 的 `mindie-graded-unit/1` 单元目录结构、Frontmatter 字段、摘要与修订规则、条件匹配、继承、路由索引、公开反馈和已审核变更。当前 C5 单元契约即 `mindie-graded-unit/1`；C6 已审核投影使用 `mindie-reviewed-change/1`，见第 9 节。格式版本与 validator 由仓库根目录的 [`publication-contract.json`](../publication-contract.json) 统一声明。
+本文说明 `main` 分支中 `knowledge-vllm-ascend` 的 `mindie-graded-unit/1` 单元目录结构、Frontmatter 字段、修订与引用规则、条件匹配、继承、路由索引、公开反馈和已审核变更。当前 C5 单元契约即 `mindie-graded-unit/1`；C6 已审核投影使用 `mindie-reviewed-change/1`，见第 9 节。格式版本与 validator 由仓库根目录的 [`publication-contract.json`](../publication-contract.json) 统一声明。
 
-`graded-v2` 分支使用 `mindie-publication-contract/2`。旧 `tasks/` 材料布局不属于该契约，也不在 `graded-v2` 分支内；其字节保留在 [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) 和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c)。`main` 保持旧的 material 语料和旧 contract 字节，供 0.0.2 消费者使用，不是 graded 树。旧材料不是当前单元。
+`main` 分支使用 `mindie-publication-contract/2`。旧 `tasks/` 材料布局不属于该契约，也不是活动语料；其归档字节保留在 `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`、[`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) 和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c) 中。归档不是当前单元。
 
 ---
 
@@ -14,10 +14,10 @@
 
 - **正文**承载规则、步骤、代码变换、失败条件和边界；
 - **Frontmatter**承载稳定 ID、层级、证据强度、条件、触发词、继承和来源；
-- **内容摘要**绑定正文与语义元数据，使引用可以精确到字节内容；
-- **修订号**记录同一稳定 ID 的语义演进。
+- **修订号**记录同一稳定 ID 的语义演进；公开引用使用整数修订号；
+- **内容哈希**由运行时从正文与语义元数据派生，用于变更检测和精确 Git 校验，不写入 frontmatter。
 
-检索先按条件筛选，再按词法相关度排序；命中后只返回受预算限制的摘录。需要完整上下文时，调用方按返回的摘要引用读取全文。这样既避免把整篇长文塞进上下文，也避免让模型摘要替代原始结论。
+检索先按条件筛选，再按词法相关度排序；命中后只返回受预算限制的摘录。需要完整上下文时，调用方按返回的修订引用读取全文。这样既避免把整篇长文塞进上下文，也避免让模型摘要替代原始结论。
 
 单元可以来自已审核的公开材料、源码、规范或实验记录，也可以由模型辅助提炼。但模型提案不是知识：它必须保留来源和证据边界，经过确定性格式/隐私检查与语义审核，才能成为当前单元。单元正文不是逐字转录；逐字保留的职责属于 `main`/85ab 中的旧材料。
 
@@ -45,7 +45,7 @@ knowledge-vllm-ascend/
 
 ### 路径约束
 
-- 单元路径必须恰好是 `<domain_path>/<unit_id>.md`。`graded-v2` 只发布 contract/2 内容；旧 `material-v1` 的本地 archive 副本不在该分支内。
+- 单元路径必须恰好是 `<domain_path>/<unit_id>.md`。`main` 只发布 contract/2 内容；旧 `material-v1` 归档位于 `docs/archive/material-v1/`，不是活动语料。
 - `<domain_path>` 是规范化的仓库相对目录：使用 `/`，不能是绝对路径，不能含 `.`、`..`、反斜杠或控制字符；首段不能是 `tasks`、`feedback`、`index`、`docs` 或 `private`。
 - `<unit_id>` 匹配 `unit-[a-z0-9]+(-[a-z0-9]+)*`，稳定 ID 不随路径移动而改变。
 - 单元文件必须是普通非可执行 Git blob（`100644`），UTF-8，LF 换行，不超过 256 KiB。
@@ -62,7 +62,6 @@ knowledge-vllm-ascend/
 | `schema` | string | 固定为 `mindie-graded-unit/1` |
 | `id` | string | 稳定单元 ID，`unit-` 加小写单词/连字符；与路径文件名一致 |
 | `revision` | integer | 正整数；新单元为 `1`；语义变化加一；仅移动路径不变 |
-| `content_digest` | string | `sha256:` 加 64 位小写十六进制语义摘要；必须与重新计算结果一致 |
 | `title` | string | 简洁标题，说明适用对象或结论 |
 | `category` | string | 与 `tier` 对应：`axiom`、`measurement`、`sop`、`workflow`、`mutator` |
 | `tier` | string | `L1`、`L2`、`L3`、`L4`；描述用途，不是置信度 |
@@ -103,14 +102,13 @@ knowledge-vllm-ascend/
 
 ### 3.4 示例
 
-以下仅示意字段结构，尖括号占位符不是可发布值；真实单元必须由运行时计算摘要并校验：
+以下仅示意字段结构，尖括号占位符不是可发布值；真实单元必须由运行时解析并校验：
 
 ```yaml
 ---
 schema: mindie-graded-unit/1
 id: unit-example-sop
 revision: 1
-content_digest: sha256:<runtime-computed>
 title: Example source-scoped procedure
 category: sop
 tier: L2
@@ -139,44 +137,37 @@ provenance:
 
 ---
 
-## 4. 摘要、修订与引用
+## 4. 修订、内容哈希与引用
 
-### 4.1 内容摘要
+### 4.1 修订与内容哈希
 
-`content_digest` 是对**语义投影**的 SHA-256：
+公开身份是整数 `revision`，不是内容摘要。新单元从 `revision: 1` 开始；语义变化时修订号加一；仅移动路径时保留原修订号。
 
-- 取 Frontmatter 元数据，排除 `domain_path`、`revision` 和 `content_digest` 本身；
-- 与正文（去除首尾空白后补一个换行）组成 `[metadata, body]`；
-- 使用规范 JSON（键排序、UTF-8、无多余空格）计算 SHA-256；
-- 加上 `sha256:` 前缀。
-
-`index/routing-manifest.json` 中的 `content_sha256` 是同一个摘要去掉前缀后的 64 位十六进制。不要手写摘要或从旧文件复制；用运行时解析和计算，避免正文归一化差异导致引用失效。
-
-摘要排除 `domain_path` 和 `revision`，所以仅移动路径不会改变内容身份；正文或语义元数据变化会改变摘要。引用中的 `@<hash>` 永远指向裸 `content_sha256`。
+运行时另从单元字节派生内容哈希：取 Frontmatter 元数据（排除 `domain_path` 和 `revision`）与正文（去除首尾空白后补一个换行），使用规范 JSON（键排序、UTF-8、无多余空格）计算 SHA-256。该哈希用于变更检测和精确 Git 校验，不写入单元 frontmatter，也不是公开引用键。不要手写内容摘要，也不要添加旧的 `content_digest` 字段。
 
 ### 4.2 修订
 
 - 新单元：`revision: 1`。
-- 语义变化：`revision` 加一，`content_digest` 随新内容变化。
-- 仅移动路径：保留原 `revision` 和内容摘要；路径更新只影响路由。
+- 语义变化：`revision` 加一；运行时内容哈希随新内容变化。
+- 仅移动路径：保留原 `revision` 和内容哈希；路径更新只影响路由。
 - 被替代的旧修订保留在 Git 历史中；当前语料只保留一个稳定 ID 的当前文件。
 
-不使用旧内容摘要“覆盖”新内容，也不把旧修订的引用静默重定向到新正文。被替换或撤下的精确引用必须显式失败。
+不使用旧修订“覆盖”新内容，也不把旧修订的引用静默重定向到新正文。被替换或撤下的精确引用必须显式失败。
 
 ### 4.3 引用形态
 
 ```text
-mindie://<domain>/units/<unit_id>@<content_sha256>
+mindie://<domain>/units/<unit_id>@<revision>
 ```
 
 例如：
 
 ```text
-mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba
+mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@3
 ```
 
-- `@` 后必须是完整 64 位小写十六进制，不能截断。
-- `knowledge_explain` 可以读取当前单元的精确引用；不带 `@` 的稳定 `unit_ref` 也可用于读取当前内容。
+- `@` 后必须是正整数修订号，不能省略或使用内容哈希。
+- `knowledge_explain` 可以读取当前单元的精确修订引用；不带 `@` 的稳定 `unit_ref` 也可用于读取当前内容。
 - `knowledge_feedback` 只接受带 `@` 的精确引用，且该修订必须已被调用方实际观测过。
 - `mindie://` 后的域名决定领域路由；未知或未配置的领域明确失败，不回退到默认领域。
 
@@ -215,7 +206,7 @@ mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@
 
 - 解析完整闭包，包括间接父单元；
 - 拒绝缺失父单元、重复 ID 和继承环；
-- 为每个单元计算 `closure_digest`，绑定闭包内每个成员的修订和内容摘要。
+- 为每个单元记录闭包内的稳定父单元 ID。
 
 查询时，**每个父单元都要独立匹配任务条件**。子单元命中不会让不匹配的父单元变得适用；父单元正文要么完整注入，要么以明确的 `inheritance_excluded` 原因省略，不能截断前提后混入。预算不足时同样显式报告，而不是静默省略。
 
@@ -229,7 +220,7 @@ mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@
 
 - `schema_version`、`generation`、`unit_count`；
 - 每个单元的 `id`、`title`、`tier`、`category`、`evidence_strength`、`domain_path`、`conditions`、`triggers`、`inherits_from`、`inherits_from_closure`；
-- `path`、`content_sha256`、`revision`、`content_digest`、`closure_digest`、`token_estimate`、`provenance`。
+- `path`、`revision`、`token_estimate`、`provenance`。
 
 `generation` 是整个语料的精确状态标识，也是已审核变更的 `base_generation`。`index/shard-topology.json` 使用 `mindie-shard-topology/1`，描述 leaf/subtree/federation 的单元数、字节数、token 估算和超限建议；这些是维护信号，不是自动拆分或自动合并命令。
 
@@ -257,7 +248,6 @@ python3 scripts/build_routing_index.py --root .
       "root_id": "<opaque-root-id>",
       "unit_id": "unit-example-sop",
       "revision": 1,
-      "content_digest": "sha256:<64-hex-content-digest>",
       "rating": "up",
       "reason": "Optional single-line reason."
     }
@@ -271,16 +261,14 @@ python3 scripts/build_routing_index.py --root .
 | `root_id` | 不透明匿名根标识，不暴露本地会话；最多 256 字符 |
 | `unit_id` | 稳定单元 ID |
 | `revision` | **整数**修订号，不是内容摘要 |
-| `content_digest` | `sha256:` 加 64 位内容摘要，必须与观测修订一致 |
 | `rating` | `up` 或 `down` |
 | `reason` | 可选单行文本，最多 1000 字符；公开前必须通过隐私扫描 |
 
 约束：
 
-- 单个文件最多 500 票；同一 `(root_id, unit_id, content_digest)` 只保留一票；
-- 同一内容摘要只能对应一个整数修订，反之亦然；
+- 单个文件最多 500 票；同一 `(root_id, unit_id, revision)` 只保留一票；
 - 只有调用方实际观测过的修订才能投票；
-- 公开统计只计算与当前内容摘要一致的票；旧摘要的票保留在本地历史，不当作当前反馈；
+- 公开统计只计算与当前修订一致的票；旧修订的票保留在本地历史，不当作当前反馈；
 - 投票数量是描述性计数，不是置信度、正确性证明或自动晋升条件。没有反馈不代表内容无效。
 
 ---
@@ -311,7 +299,7 @@ C6 不是“模型提案自动变成单元”。它是一次显式的、可复�
 - `base_generation` 必须等于当前 `index/routing-manifest.json` 的 `generation`；语料在审核后变化时，计划被拒绝，必须重新审核。
 - `changes` 中的 `content` 是**完整渲染的单元文件**，不是摘要、diff 或正文片段；撤下时 `content` 为 `null`。
 - `expected_content_sha256` 用于比较并交换：新单元为 `null`；修改既有单元时必须是该单元当前的 `content_sha256`。
-- 新单元必须 `revision: 1`；语义修改必须等于旧修订加一；仅移动路径保留修订号和内容摘要。
+- 新单元必须 `revision: 1`；语义修改必须等于旧修订加一；仅移动路径保留修订号和内容哈希。
 - 校验先于写入：完整继承图、重复 ID/路径、目标路径冲突和修订规则都在第一次写入前检查。
 - `--apply` 只写入声明的单元、移除声明的旧文件并重建路由索引；不提交、不推送、不发布。
 - 没有自动语义接受、自动晋升或“格式通过即发布”。写入返回 `partial` / `failed` 时保留实际状态，不静默重试。
@@ -339,24 +327,24 @@ python3 scripts/apply_reviewed_change.py --root . --plan reviewed-change.json --
 
 ### 10.2 `publication-head` 分流
 
-在 `graded-v2` 分支上，`publication-contract/2` 下：
+在 `main` 分支上，`publication-contract/2` 下：
 
 - **content**：单元 Markdown、`feedback/**`、`index/**`；检查通过后为 `success`，可由内容审核 Bot 按 `mindie-content-review/2` 处理。
 - **development**：`README.md`、`AGENTS.md`、`CONTRIBUTING.md`、`docs/**`、`.github/**`、`publication-contract.json`；检查结论为 `neutral`，需要维护者按工程设计原则审核，不能由内容 Bot 自动合入。
 
 ### 10.3 三个独立事实
 
-1. **候选树验证**：格式、摘要、继承图、索引一致性、隐私扫描；
-2. **远端发布**：`graded-v2` 的实际回读；`main` 保持旧 material 语料和旧 contract 字节，不随本分支发布而改变。
+1. **候选树验证**：格式、内容哈希、继承图、索引一致性、隐私扫描；
+2. **远端发布**：`main` 的实际回读；`main` 携带当前 contract/2 声明，不随候选分支的本地状态自动改变。
 3. **已安装宿主验收**：具体宿主安装该修订后，原生查询、读取、反馈和路由是否实际可用。
 
-通过候选树验证不自动证明后两项；契约声明、CI 检查和 release/validation evidence 各自记录自己覆盖的事实。`graded-v2` 可以在兼容版本内接收内容更新，而保持同一 `publication-contract/2` 字节；`main` 不会随之改变。正式 assets、远端 `graded-v2` 发布和 paid native acceptance 是独立结果；本地准备好的内容不等于 published proof。
+通过候选树验证不自动证明后两项；契约声明、CI 检查和 release/validation evidence 各自记录自己覆盖的事实。`main` 可以在兼容版本内接收内容更新，而不改变当前 `publication-contract/2` 声明。正式 assets、远端 `main` 发布和 paid native acceptance 是独立结果；本地准备好的内容不等于 published proof。
 
 ---
 
 ## 11. 旧材料位置
 
-旧的 `material-v1` 任务语料不在 `graded-v2` 分支内，也不随本分支移动或重写。它保留在 [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main)（供 0.0.2 消费者继续使用）和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c) 中。
+旧的 `material-v1` 任务语料归档在 `main` 的 `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` 和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c) 中，不随本分支移动或重写。
 
 历史迁移元数据记录：
 
@@ -366,4 +354,4 @@ python3 scripts/apply_reviewed_change.py --root . --plan reviewed-change.json --
 - `feedback_count`: 1
 - 每个旧文件保留原始 `git_blob_oid`，位于 `main`/85ab。
 
-旧材料不是当前单元，也不会被重新标记为 graded knowledge。它用于追溯来源和保留历史；旧 `tasks/` 布局不会重新进入 `graded-v2` 的 contract/2 语料树。`main` 的公开历史和 85ab 的不可变字节保持原样，不是重新生成的内容。
+旧材料不是当前单元，也不会被重新标记为 graded knowledge。它用于追溯来源和保留历史；旧 `tasks/` 布局不会重新进入 `main` 的活动 contract/2 语料树。`main` 的公开历史和 85ab 的不可变字节保持原样，不是重新生成的内容。

@@ -2,9 +2,9 @@
 
 [中文](package-format.md) | **English** · [Back to Homepage](README.en.md)
 
-This document defines the `mindie-graded-unit/1` layout, frontmatter, digest and revision rules, condition matching, inheritance, routing indexes, public feedback and reviewed changes used by `knowledge-vllm-ascend` on the `graded-v2` branch. The current C5 unit contract is `mindie-graded-unit/1`; the C6 reviewed projection uses `mindie-reviewed-change/1` (section 9). The format identifiers and validator revision are declared in [`publication-contract.json`](../publication-contract.json).
+This document defines the `mindie-graded-unit/1` layout, frontmatter, revision and reference rules, condition matching, inheritance, routing indexes, public feedback and reviewed changes used by `knowledge-vllm-ascend` on the `main` branch. The current C5 unit contract is `mindie-graded-unit/1`; the C6 reviewed projection uses `mindie-reviewed-change/1` (section 9). The format identifiers and validator revision are declared in [`publication-contract.json`](../publication-contract.json).
 
-The `graded-v2` branch uses `mindie-publication-contract/2`. The legacy `tasks/` material layout is not part of that contract and is not in `graded-v2`. Its bytes remain on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). `main` retains the old material corpus and old contract bytes for 0.0.2 consumers and is not a graded tree. The old material is not active unit content.
+The `main` branch uses `mindie-publication-contract/2`. The legacy `tasks/` material layout is not part of that contract and is not active corpus content. Its archived bytes remain under `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`, on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). The archive is not active unit content.
 
 ---
 
@@ -14,10 +14,10 @@ A unit makes one reusable engineering conclusion searchable, checkable and revis
 
 - the **body** carries the rule, procedure, code transformation, failure modes and limits;
 - the **frontmatter** carries stable identity, tier, evidence strength, conditions, triggers, inheritance and provenance;
-- the **content digest** binds the body and semantic metadata so a reference identifies exact content;
-- the **revision** records semantic evolution under a stable ID.
+- the **revision** records semantic evolution under a stable ID and is the public reference key;
+- the **content hash** is derived by the runtime for change detection and exact Git checks; it is not stored in frontmatter.
 
-Retrieval checks conditions first and lexical relevance second. A hit returns a budgeted excerpt; the caller reads the full body through a digest-pinned reference. This avoids both dumping a whole document into context and letting a model summary replace the underlying conclusion.
+Retrieval checks conditions first and lexical relevance second. A hit returns a budgeted excerpt; the caller reads the full body through a revision-pinned reference. This avoids both dumping a whole document into context and letting a model summary replace the underlying conclusion.
 
 A unit may be distilled from reviewed public material, source code, specifications or experiment records, including with model assistance. A model proposal is not knowledge: it must retain provenance and evidence limits and pass deterministic format/privacy checks and semantic review before it becomes a current unit. The unit body is not a verbatim transcript; byte preservation belongs to the old material on `main`/85ab.
 
@@ -45,7 +45,7 @@ knowledge-vllm-ascend/
 
 ### Path constraints
 
-- A unit path is exactly `<domain_path>/<unit_id>.md`. `graded-v2` publishes contract/2 content only; the old `material-v1` local archive copy is not in this branch.
+- A unit path is exactly `<domain_path>/<unit_id>.md`. `main` publishes contract/2 content only; the old `material-v1` archive under `docs/archive/material-v1/` is evidence, not active corpus content.
 - `<domain_path>` is a normalized repository-relative directory: forward slashes only, not absolute, no `.`/`..`, backslash or control characters. Its first segment cannot be `tasks`, `feedback`, `index`, `docs` or `private`.
 - `<unit_id>` matches `unit-[a-z0-9]+(-[a-z0-9]+)*`. The stable ID does not change when the file moves.
 - A unit is a plain non-executable Git blob (`100644`), UTF-8, LF line endings, at most 256 KiB.
@@ -62,7 +62,6 @@ knowledge-vllm-ascend/
 | `schema` | string | Fixed to `mindie-graded-unit/1` |
 | `id` | string | Stable unit ID (`unit-` plus lowercase words); matches the file name |
 | `revision` | integer | Positive integer; `1` for a new unit; increments on semantic change; unchanged on a move |
-| `content_digest` | string | `sha256:` plus 64 lowercase hex; must equal the recomputed semantic digest |
 | `title` | string | Concise title naming the subject or conclusion |
 | `category` | string | Must agree with `tier`: `axiom`, `measurement`, `sop`, `workflow`, `mutator` |
 | `tier` | string | `L1`, `L2`, `L3`, `L4`; describes intended use, not confidence |
@@ -103,14 +102,13 @@ Provenance records sources and evidence, not an "accepted" claim. A `review_refe
 
 ### 3.4 Example
 
-The following illustrates the field structure only. Angle-bracket values are placeholders and are not publishable; real units are parsed and digested by the runtime.
+The following illustrates the field structure only. Angle-bracket values are placeholders and are not publishable; real units are parsed and validated by the runtime.
 
 ```yaml
 ---
 schema: mindie-graded-unit/1
 id: unit-example-sop
 revision: 1
-content_digest: sha256:<runtime-computed>
 title: Example source-scoped procedure
 category: sop
 tier: L2
@@ -139,26 +137,19 @@ The body starts after the closing frontmatter delimiter. State the conclusion, p
 
 ---
 
-## 4. Digest, revision and references
+## 4. Revision, content hash and references
 
-### 4.1 Content digest
+### 4.1 Revision and content hash
 
-`content_digest` is the SHA-256 of the semantic projection:
+The public identity is the integer `revision`, not a content digest. A new unit starts at `revision: 1`; a semantic change increments it; a location-only move keeps it unchanged.
 
-- take the frontmatter metadata and exclude `domain_path`, `revision` and `content_digest` itself;
-- combine it with the body (trim outer whitespace, then add one trailing newline) as `[metadata, body]`;
-- hash canonical JSON (sorted keys, UTF-8, no extra whitespace) with SHA-256;
-- prefix the result with `sha256:`.
-
-`content_sha256` in `index/routing-manifest.json` is the same digest without the prefix. Do not hand-write a digest or copy it from an older file; let the runtime parse and compute it so body normalization does not silently invalidate references.
-
-Excluding `domain_path` and `revision` means a location-only move keeps content identity, while body or semantic metadata changes alter the digest. A reference's `@<hash>` always pins the bare `content_sha256`.
+The runtime derives a content hash from the unit bytes: take the frontmatter metadata (excluding `domain_path` and `revision`) and the body (trim outer whitespace, then add one trailing newline), hash canonical JSON (sorted keys, UTF-8, no extra whitespace) with SHA-256, and use the result for change detection and exact Git checks. The hash is not stored in unit frontmatter and is not the public reference key. Do not hand-write a digest or add the legacy `content_digest` field.
 
 ### 4.2 Revision
 
 - New unit: `revision: 1`.
-- Semantic change: increment `revision`; the content digest changes with the content.
-- Location-only move: keep the revision and content digest; only routing changes.
+- Semantic change: increment `revision`; the runtime content hash changes with the content.
+- Location-only move: keep the revision and content hash; only routing changes.
 - Superseded revisions remain in Git history; the current corpus has one current file per stable ID.
 
 Never overwrite bytes under an existing revision or silently redirect an old reference to new content. A replaced or withdrawn pinned reference must fail explicitly.
@@ -166,17 +157,17 @@ Never overwrite bytes under an existing revision or silently redirect an old ref
 ### 4.3 Reference form
 
 ```text
-mindie://<domain>/units/<unit_id>@<content_sha256>
+mindie://<domain>/units/<unit_id>@<revision>
 ```
 
 For example:
 
 ```text
-mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba
+mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@3
 ```
 
-- The hash after `@` is a complete 64-character lowercase digest, never a prefix.
-- `knowledge_explain` reads an exact current unit reference; a stable `unit_ref` without `@` also reads current content.
+- The integer after `@` is a positive revision, never a content hash.
+- `knowledge_explain` reads an exact current unit revision; a stable `unit_ref` without `@` also reads current content.
 - `knowledge_feedback` requires a pinned reference that the caller actually observed.
 - The domain in `mindie://` selects the configured domain engine; an unknown or unconfigured domain fails instead of falling back to a default.
 
@@ -215,7 +206,7 @@ A missing condition yielding `condition_unknown` is a correct result: the eviden
 
 - resolves the complete closure, including indirect parents;
 - rejects missing parents, duplicate IDs and cycles;
-- computes a `closure_digest` binding each member's revision and content digest.
+- records the closure of stable parent IDs for each unit.
 
 At query time **every parent must independently match** the task conditions. A matching child never makes a non-matching parent applicable. A parent body is either injected complete or omitted with an explicit `inheritance_excluded` reason; premises are never silently truncated. Budget exclusion is also reported.
 
@@ -229,7 +220,7 @@ Inheritance does not cross domains. Cross-domain reuse uses an explicit `mindie:
 
 - `schema_version`, `generation`, `unit_count`;
 - per unit: `id`, `title`, `tier`, `category`, `evidence_strength`, `domain_path`, `conditions`, `triggers`, `inherits_from`, `inherits_from_closure`;
-- `path`, `content_sha256`, `revision`, `content_digest`, `closure_digest`, `token_estimate`, `provenance`.
+- `path`, `revision`, `token_estimate`, `provenance`.
 
 `generation` is the exact corpus state and the `base_generation` for a reviewed change. `index/shard-topology.json` uses `mindie-shard-topology/1` and reports leaf/subtree/federation unit counts, bytes, token estimates and over-limit signals. Those are maintenance signals, not automatic split/merge actions.
 
@@ -257,7 +248,6 @@ Public feedback lives at `feedback/votes-<id>.json` and contains only votes sele
       "root_id": "<opaque-root-id>",
       "unit_id": "unit-example-sop",
       "revision": 1,
-      "content_digest": "sha256:<64-hex-content-digest>",
       "rating": "up",
       "reason": "Optional single-line reason."
     }
@@ -271,16 +261,14 @@ Public feedback lives at `feedback/votes-<id>.json` and contains only votes sele
 | `root_id` | Opaque anonymous root ID; no local session identity; at most 256 characters |
 | `unit_id` | Stable unit ID |
 | `revision` | **Integer** revision, not a content hash |
-| `content_digest` | `sha256:` plus 64 hex, matching the observed revision |
 | `rating` | `up` or `down` |
 | `reason` | Optional single-line text, at most 1000 characters; must pass the privacy scan before publication |
 
 Constraints:
 
-- at most 500 votes per file; one current vote per `(root_id, unit_id, content_digest)`;
-- one content digest maps to one integer revision, and vice versa;
+- at most 500 votes per file; one current vote per `(root_id, unit_id, revision)`;
 - a vote requires a revision actually observed by the caller;
-- public totals count only votes for the current content digest; older digests remain local history and are not counted as current feedback;
+- public totals count only votes for the current revision; older revisions remain local history and are not counted as current feedback;
 - vote counts are descriptive, not confidence, proof of correctness or an automatic promotion gate. No feedback does not mean the unit is invalid.
 
 ---
@@ -311,7 +299,7 @@ Rules:
 - `base_generation` must equal the current `generation` in `index/routing-manifest.json`. If the corpus changed after review, the plan is rejected and must be re-reviewed.
 - `content` is the **complete rendered unit file**, not a summary, diff or body excerpt. For a withdrawal, `content` is `null`.
 - `expected_content_sha256` provides compare-and-swap: `null` for a new unit; the current `content_sha256` when editing an existing unit.
-- A new unit must use `revision: 1`; a semantic edit must equal the old revision plus one; a location-only move keeps revision and content digest.
+- A new unit must use `revision: 1`; a semantic edit must equal the old revision plus one; a location-only move keeps revision and content hash.
 - Validation precedes the first write: the complete inheritance graph, duplicate IDs/paths, destination conflicts and revision rules are checked first.
 - `--apply` writes the declared units, removes declared old files and rebuilds the routing index. It does not commit, push or publish.
 - There is no automatic semantic acceptance, automatic promotion or "format passed means published". If application returns `partial` or `failed`, retain the actual state; do not retry blindly.
@@ -339,24 +327,24 @@ Privacy checks require zero findings. Do not add an allowlist, `.gitleaksignore`
 
 ### 10.2 `publication-head` split
 
-On `graded-v2`, under `publication-contract/2`:
+On `main`, under `publication-contract/2`:
 
 - **content**: unit Markdown, `feedback/**`, `index/**`; `success` after checks, handled by the content review bot under `mindie-content-review/2`.
 - **development**: `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**`, `.github/**`, `publication-contract.json`; `neutral`, requiring maintainer review under the engineering design principles, never bot auto-merge.
 
 ### 10.3 Three separate facts
 
-1. **Candidate tree validation**: format, digests, inheritance, index consistency, privacy scans.
-2. **Remote publication**: actual readback of `graded-v2`; `main` retains the old material corpus and old contract bytes and does not change with this branch.
+1. **Candidate tree validation**: format, content hash, inheritance, index consistency, privacy scans.
+2. **Remote publication**: actual readback of `main`; `main` carries the current contract/2 declaration and does not change automatically with a candidate branch.
 3. **Installed native acceptance**: whether a specific host can actually use query, explain, feedback and routing after installing that revision.
 
-Passing candidate validation does not prove the latter two. The contract, CI checks and release/validation evidence each record the facts they cover. `graded-v2` may receive content updates within this compatibility version while keeping the same `publication-contract/2` bytes; `main` does not change with them. Formal assets, remote `graded-v2` publication and paid native acceptance are separate results; locally prepared content is not published proof.
+Passing candidate validation does not prove the latter two. The contract, CI checks and release/validation evidence each record the facts they cover. `main` may receive content updates within this compatibility version without changing the current `publication-contract/2` declaration. Formal assets, remote `main` publication and paid native acceptance are separate results; locally prepared content is not published proof.
 
 ---
 
 ## 11. Old material location
 
-The old `material-v1` corpus is not in the `graded-v2` branch and is not moved or rewritten here. It remains on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) for 0.0.2 consumers and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c).
+The old `material-v1` corpus is archived under `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). It is not moved or rewritten here.
 
 The historical migration metadata records:
 
@@ -366,4 +354,4 @@ The historical migration metadata records:
 - `feedback_count`: 1
 - each old file retains its original `git_blob_oid`, on `main`/85ab.
 
-The old material is not current unit content and is not re-labeled as graded knowledge. It preserves source traceability and history; the old `tasks/` layout does not re-enter the `graded-v2` contract/2 corpus. `main` history and the immutable bytes at 85ab stay as they are; they are not regenerated content.
+The old material is not current unit content and is not re-labeled as graded knowledge. It preserves source traceability and history; the old `tasks/` layout does not re-enter the active `main` contract/2 corpus. `main` history and the immutable bytes at 85ab stay as they are; they are not regenerated content.
