@@ -1,15 +1,29 @@
 ---
 category: sop
 conditions:
+  model_family:
+  - qwen3_5
+  - Qwen3.5
+  - gated_deltanet
   model_repository: Qwen/Qwen3.5-0.8B
   model_revision: 2fc06364715b967f1860aea9cf38778875588b17
+  npu_model:
+  - Ascend910
+  - Ascend910B
+  - Ascend910B4
+  - Ascend910_93
+  repository:
+  - vllm-ascend
+  - vllm-project/vllm-ascend
+  - vllm-ascend-idle-dp
   source0_repository: https://github.com/vllm-project/vllm-ascend
   source0_revision: a78a00e0b1b618f26a3bfce2519055b40cf4bf1e
-content_digest: sha256:33661ebd978f03c8355b1728e082fb8937bb5bf245bea38557d069def80ef14c
 domain_path: vllm-ascend/runtime/qwen35-gated-deltanet-decode
 evidence_strength: single_observation
 id: unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation
-inherits_from: []
+inherits_from:
+- unit-vllm-ascend-npu-runtime-and-graph-invariants
+- unit-vllm-ascend-verification-and-state-parity-gates
 provenance:
   evidence_refs:
   - https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/worker/patch_qwen3_5.py
@@ -21,9 +35,8 @@ provenance:
   source_locator: vllm-project/vllm-ascend@0f289fa2a8a381a644a5f329af61715a73ec2aec:vllm_ascend/patch/worker/patch_qwen3_5.py
   source_type: public_source
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
-target_domain: vllm-ascend
 tier: L2
 title: Qwen3.5 GatedDeltaNet decode adaptation in vLLM-Ascend (historical PR7109)
 triggers:
@@ -43,15 +56,26 @@ triggers:
   - text-only prefill
   - recurrent decode
   - chunk_gated_delta_rule
+  - Ascend910_93
 ---
+
 This unit records the historical Dev adaptation that made Qwen3.5's gated-delta-net (GDN) linear-attention layers run through vLLM-Ascend's decode path. It is source-derived procedural knowledge at L2, not an execution result.
+
+## Inherited runtime and verification boundary
+
+The unit is condition-scoped by repository, NPU family, model repository/revision and the task-start source revision. Its parents supply the contract this historical patch cannot establish on its own:
+
+- `unit-vllm-ascend-npu-runtime-and-graph-invariants` defines the `model_runner_v1` lifecycle, the distinction between stateful GDN `conv_state`/`ssm_state` and stateless paged attention, the decode/prefill indexing rules, and the `torch.ops._C_ascend` / NZ runtime bindings.
+- `unit-vllm-ascend-verification-and-state-parity-gates` orders the evidence: a source diff is not Probe 2, and a single-token logit match is not a multi-rank collective receipt.
+
+The L3 workflow `unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow` consumes this L2 to run the actual 0-day bring-up. This unit alone does not establish checkpoint loading, NPU numerical parity or serving acceptance.
 
 Historical delta. The before views at task-start revision a78a00e0b1b618f26a3bfce2519055b40cf4bf1e show no Qwen3.5 entry in the worker import list and no Qwen3.5 item in the patch index. The after revision 0f289fa2a8a381a644a5f329af61715a73ec2aec adds vllm_ascend/patch/worker/patch_qwen3_5.py and imports it from vllm_ascend/patch/worker/__init__.py under this exact guard:
 
     if not vllm_version_is("v0.16.0"):
         import vllm_ascend.patch.worker.patch_qwen3_5  # noqa
 
-The after patch index documents item 17: Qwen3_5GatedDeltaNet reuses Qwen3NextGatedDeltaNet._forward_core, but the AscendC operators used by the Qwen3Next path do not support a float32 ssm_state; the patch replaces the core with fused FLA/Triton operators. The patch file ends by assigning AscendQwen3_5GatedDeltaNet._forward_core onto Qwen3_5GatedDeltaNet._forward_core. This is a runtime monkeypatch, not a new model class registered with vLLM. Applicability is gated by the exact task-start model revision and source revision recorded in the original task condition; the after fix revision is evidence only.
+The after patch index documents item 17: Qwen3_5GatedDeltaNet reuses Qwen3NextGatedDeltaNet._forward_core, but the AscendC operators used by the Qwen3Next path do not support a float32 ssm_state; the patch replaces the core with fused FLA/Triton operators. The patch file ends by assigning AscendQwen3_5GatedDeltaNet._forward_core onto Qwen3_5GatedDeltaNet._forward_core. This is a runtime monkeypatch, not a new model class registered with vLLM. Applicability is gated by the declared model and source conditions; the after fix revision is evidence only.
 
 Why a separate core. The patch header states that torch_npu.npu_recurrent_gated_delta_rule does not accept float32 ssm_state, so the Qwen3.5 implementation keeps a local _forward_core until that operator supports float32 state. The replacement combines vLLM's chunk_gated_delta_rule and fused_recurrent_gated_delta_rule with vLLM-Ascend's fused_gdn_gating_patch and fused_sigmoid_gating_delta_rule_update. This is source evidence of a compatibility implementation using fused FLA/Triton operators, not evidence that float32 NPU execution or numerical equivalence was achieved.
 
@@ -91,4 +115,4 @@ Stage support. Registration: source-supported. Load: not supported by this patch
 
 Remaining source losses. After the public-name correction, the admitted source-role set has 10 remaining redacted spans / 293 bytes: view 0 (1/36), view 2 (2/68), view 3 (1/36), view 6 (3/102), and corrected view 9 (3/51). Views 1, 4, 5, 7, 8, 10, 11, 12 and 13 are exact; views 0, 2, 3, 6 and 9 remain lossy. View 9 is a .reference.txt with three non-mechanism comment/docstring spans and cannot be called complete executable source. The 16 restored public names are not mechanism losses. The old 26-span/794-byte accounting is obsolete. The admitted union is 14 source roles plus 4 corrected view files (18 unique view files; 4 corrected files supersede the old lossy files for 5/9/10/12), not 18 independent observations and not a new family.
 
-Minimum real evidence before calling this adapted. The independent execution lane must: verify the full-weight checkpoint hash and that all 488 index keys load with no unexpected text-model keys; run text-only prefill and short greedy decode on the historical NPU stack; compare teacher-forced logits and per-step greedy tokens against the CPU float32 official reference using a pre-registered tolerance not tuned from the target; check conv/recurrent state continuity between prefill and decode and single-token vs multi-token equivalence, including both has_initial_state branches; report the runtime's observed ssm_state/conv_state dtypes and SP on/off without treating absent CANN/dtype values as task-start conditions; and record the actual vLLM/vLLM-Ascend environment. Until those exist, this remains an L2 source mechanism, not a full 0-day acceptance.
+Minimum real evidence before calling this adapted. Follow the L1 gates and the L3 workflow: verify the full-weight checkpoint hash and that all 488 index keys load with no unexpected text-model keys; run text-only prefill and short greedy decode on the declared NPU stack; compare teacher-forced logits and per-step greedy tokens against the CPU float32 official reference using a pre-registered tolerance not tuned from the target; check conv/recurrent state continuity between prefill and decode and single-token vs multi-token equivalence, including both has_initial_state branches; report the runtime's observed ssm_state/conv_state dtypes and SP on/off without treating absent CANN/dtype values as task-start conditions; and record the actual vLLM/vLLM-Ascend environment. Until those exist, this remains an L2 source mechanism, not a full 0-day acceptance.

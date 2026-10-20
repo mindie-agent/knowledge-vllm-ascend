@@ -1,13 +1,21 @@
 ---
 category: sop
 conditions:
-  repository: vllm-project/vllm-ascend
-  revision: 175ef4d49c2072f9233619636f0309f4f88b4e2c
-content_digest: sha256:025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba
+  npu_model:
+  - Ascend910
+  - Ascend910B
+  - Ascend910B4
+  - Ascend910_93
+  repository:
+  - vllm-ascend
+  - vllm-project/vllm-ascend
+  - vllm-ascend-idle-dp
 domain_path: integration/custom-ops
 evidence_strength: single_observation
 id: unit-vllm-ascend-custom-op-gates-import-retry-and-nz
-inherits_from: []
+inherits_from:
+- unit-vllm-ascend-npu-runtime-and-graph-invariants
+- unit-vllm-ascend-verification-and-state-parity-gates
 provenance:
   evidence_refs:
   - docs/evidence/unit-vllm-ascend-custom-op-gates-import-retry-and-nz-review.json
@@ -19,7 +27,7 @@ provenance:
   source_locator: docs/evidence/unit-vllm-ascend-custom-op-gates-import-retry-and-nz-review.json
   source_type: ecosystem_repo
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L2
 title: Ascend custom-op imports, registration and NZ selection have distinct gates
@@ -37,8 +45,19 @@ triggers:
   - have
   - distinct
   - gates
+  - Ascend910_93
 ---
+
 At vLLM-Ascend revision 175ef4d49c2072f9233619636f0309f4f88b4e2c, enable_custom_op lazily memoizes its result. Batch-invariant mode or an A5 device sets it false before extension import. Otherwise the extension and meta-registration imports are attempted even while torch.compiler.is_compiling is true; only the initial environment bootstrap is skipped while compiling. An ImportError containing libcust_opapi.so permits one non-compiling retry after adding the vendor library path. That retry imports meta_registration before vllm_ascend_C, reversing the initial order. Other ImportErrors set the result false; exceptions of other types propagate. register_ascend_customop separately registers the operation map, adding GateLinear only for a resolved DeepSeek MLA model and substituting selected implementations on 310P. Its completion flag is set after the registration loop, so an exception can leave earlier registrations applied while the flag remains false. NZ selection is another independent rule: float32 and meta tensors are excluded; 310P then selects NZ; otherwise weight_nz_mode disables it at zero, permits bf16/fp16 only at two, and permits other dtypes when truthy. The adjacent VLLM_ASCEND_ENABLE_NZ comment does not name the value this function actually reads.
+
+## Inherited runtime boundary
+
+This L2 procedure is condition-scoped by repository and NPU family; its provenance pins the inspected source revision. The two L1 parents supply the runtime and verification contract that this procedure alone cannot establish:
+
+- `unit-vllm-ascend-npu-runtime-and-graph-invariants` explains why the extension binding and NZ weight layout are runtime invariants, not import-time guarantees.
+- `unit-vllm-ascend-verification-and-state-parity-gates` orders the probes. An import success or a registered operation map is at most a Probe 1 metadata/source result; it does not establish operator correctness, state parity or collective completion on an NPU.
+
+Applying this unit therefore means: inspect the gate that actually failed (import retry, registration, or NZ policy), then take the relevant L1 probe. Do not treat a successful import as evidence that an NZ kernel produced correct values.
 
 Reviewed limits and corrections:
 
@@ -51,7 +70,7 @@ Adoption boundary: Use these source gates to diagnose an Ascend integration at t
 
 Evidence scope: Root accepted only the rewritten mechanism. Independent Cursor reading and its broader findings remain in the immutable author packet. Root source reading is enumerated separately.
 
-This unit is a source-derived inspection procedure at the exact repository revision in conditions. It does not establish a reproduced hardware outcome or measured performance benefit.
+This unit is a source-derived inspection procedure. Its provenance pins the exact repository revision; the declared conditions describe the repository and NPU family where the procedure is applicable. It does not establish a reproduced hardware outcome or measured performance benefit.
 
 Pinned source ranges:
 
