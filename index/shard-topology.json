@@ -5,15 +5,16 @@
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-verification-and-state-parity-gates"
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
+    "unit-vllm-ascend-hccl-and-dp-collective-invariants": [],
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-verification-and-state-parity-gates"
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-idle-dp-gdn-state"
     ],
     "unit-vllm-ascend-idle-dp-gdn-state": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
@@ -26,40 +27,42 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 63417,
-      "estimated_tokens": 12711,
+      "bytes": 29857,
+      "estimated_tokens": 3997,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
         "unit-vllm-ascend-idle-dp-gdn-state",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 7
+      "units": 8
     },
     "domains": [
       {
         "automatic": false,
-        "bytes": 17006,
-        "estimated_tokens": 3532,
+        "bytes": 8182,
+        "estimated_tokens": 1008,
         "exceeds": [],
         "kind": "federation",
         "path": "_common",
         "recommended_action": "review_federation_boundary",
         "unit_ids": [
+          "unit-vllm-ascend-hccl-and-dp-collective-invariants",
           "unit-vllm-ascend-npu-runtime-and-graph-invariants",
           "unit-vllm-ascend-verification-and-state-parity-gates"
         ],
-        "units": 2
+        "units": 3
       },
       {
         "automatic": false,
-        "bytes": 5555,
-        "estimated_tokens": 987,
+        "bytes": 3712,
+        "estimated_tokens": 540,
         "exceeds": [],
         "kind": "federation",
         "path": "integration",
@@ -71,8 +74,8 @@
       },
       {
         "automatic": false,
-        "bytes": 40856,
-        "estimated_tokens": 8192,
+        "bytes": 17963,
+        "estimated_tokens": 2449,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -87,28 +90,27 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 2.67633399926126,
+  "index_build_elapsed_ms": 1.172791002318263,
   "leaves": [
     {
       "automatic": false,
-      "bytes": 17006,
-      "estimated_tokens": 3532,
-      "exceeds": [
-        "estimated_tokens"
-      ],
+      "bytes": 8182,
+      "estimated_tokens": 1008,
+      "exceeds": [],
       "kind": "leaf",
       "path": "_common",
       "recommended_action": "review_leaf_split",
       "unit_ids": [
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 2
+      "units": 3
     },
     {
       "automatic": false,
-      "bytes": 5555,
-      "estimated_tokens": 987,
+      "bytes": 3712,
+      "estimated_tokens": 540,
       "exceeds": [],
       "kind": "leaf",
       "path": "integration/custom-ops",
@@ -120,8 +122,8 @@
     },
     {
       "automatic": false,
-      "bytes": 16255,
-      "estimated_tokens": 3135,
+      "bytes": 8415,
+      "estimated_tokens": 1155,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runtime/idle-dp-gdn-state",
@@ -134,11 +136,9 @@
     },
     {
       "automatic": false,
-      "bytes": 24601,
-      "estimated_tokens": 5057,
-      "exceeds": [
-        "estimated_tokens"
-      ],
+      "bytes": 9548,
+      "estimated_tokens": 1294,
+      "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
       "recommended_action": "review_leaf_split",
@@ -153,22 +153,23 @@
   "two_level_subtrees": [
     {
       "automatic": false,
-      "bytes": 17006,
-      "estimated_tokens": 3532,
+      "bytes": 8182,
+      "estimated_tokens": 1008,
       "exceeds": [],
       "kind": "subtree",
       "path": "_common",
       "recommended_action": "review_two_level_subtree_split",
       "unit_ids": [
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 2
+      "units": 3
     },
     {
       "automatic": false,
-      "bytes": 5555,
-      "estimated_tokens": 987,
+      "bytes": 3712,
+      "estimated_tokens": 540,
       "exceeds": [],
       "kind": "subtree",
       "path": "integration/custom-ops",
@@ -180,8 +181,8 @@
     },
     {
       "automatic": false,
-      "bytes": 40856,
-      "estimated_tokens": 8192,
+      "bytes": 17963,
+      "estimated_tokens": 2449,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/runtime",
@@ -195,14 +196,14 @@
       "units": 4
     }
   ],
-  "unit_count": 7,
+  "unit_count": 8,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
-      "bytes": 10055,
+      "bytes": 4698,
       "category": "workflow",
-      "content_sha256": "cf5fed68fa5626da0e33d39bb70369e35bb8372aa730018e979c0de377f73b0c",
+      "content_sha256": "f1c80e78dca92aefb6e80b4632f289bad7c9b49421b946acef52853dee7ee35f",
       "domain_path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
-      "estimated_tokens": 1986,
+      "estimated_tokens": 647,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -212,64 +213,75 @@
       "tier": "L3"
     },
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": {
-      "bytes": 5555,
+      "bytes": 3712,
       "category": "sop",
-      "content_sha256": "1ee1edaeb9182d6e3a8fbd77fa28cc1b106b024c5e6391a0a620d64c702904ed",
+      "content_sha256": "49676e66fdf39ba69c08698478bdf89c91da76212677db839114c4057e1f3ff1",
       "domain_path": "integration/custom-ops",
-      "estimated_tokens": 987,
+      "estimated_tokens": 540,
       "evidence_strength": "single_observation",
       "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-verification-and-state-parity-gates"
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
       ],
       "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-hccl-and-dp-collective-invariants": {
+      "bytes": 2734,
+      "category": "axiom",
+      "content_sha256": "9b3fbc0f0a314400532caa36ff968f42cafeccd0d559f58cb5a97991e6ed8593",
+      "domain_path": "_common",
+      "estimated_tokens": 310,
+      "evidence_strength": "hardware_spec",
+      "inherits_from": [],
+      "path": "_common/unit-vllm-ascend-hccl-and-dp-collective-invariants.md",
+      "tier": "L1"
+    },
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": {
-      "bytes": 9042,
+      "bytes": 4108,
       "category": "workflow",
-      "content_sha256": "1773e34c1f43161c9d7215ac1fdc58f87c635e16a497b464574b7ef7bf73f525",
+      "content_sha256": "566271c25211d092975526e0893bf0afe558e56e7048b318fae6c0436e26ca94",
       "domain_path": "vllm-ascend/runtime/idle-dp-gdn-state",
-      "estimated_tokens": 1805,
+      "estimated_tokens": 552,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-idle-dp-gdn-state",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
       "path": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow.md",
       "tier": "L3"
     },
     "unit-vllm-ascend-idle-dp-gdn-state": {
-      "bytes": 7213,
+      "bytes": 4307,
       "category": "sop",
-      "content_sha256": "47c2a8edfad816a3307d2eb42598a2545329d5915827860a49fa2d713d03c095",
+      "content_sha256": "bdef1b0f1a14a7f651e62739fe1d3a3d47e5a5269b5af3e68bee11fbe992fae6",
       "domain_path": "vllm-ascend/runtime/idle-dp-gdn-state",
-      "estimated_tokens": 1330,
+      "estimated_tokens": 603,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
       "path": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
       "tier": "L2"
     },
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": {
-      "bytes": 8694,
+      "bytes": 2676,
       "category": "axiom",
-      "content_sha256": "6c23737835323bf93eccdb6d9ee22ffaaa7ead6b9c2b78f7b8e77f5f4f14d5fa",
+      "content_sha256": "94c09dc94f45fbb78f1e07ff5a07513a2147f4ef3559ee84acd290113d228193",
       "domain_path": "_common",
-      "estimated_tokens": 1806,
+      "estimated_tokens": 350,
       "evidence_strength": "hardware_spec",
       "inherits_from": [],
       "path": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
       "tier": "L1"
     },
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": {
-      "bytes": 14546,
+      "bytes": 4850,
       "category": "sop",
-      "content_sha256": "921ab4b76aedea0a2766a0819eaa27dece6a77cd3401e1973e070fa0d9dc7472",
+      "content_sha256": "bf0960c0d382dfd0cb8c3f486910cafaccaac14487c8dcffdf67eaf7e8adb2a8",
       "domain_path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
-      "estimated_tokens": 3071,
+      "estimated_tokens": 647,
       "evidence_strength": "single_observation",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -279,11 +291,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-verification-and-state-parity-gates": {
-      "bytes": 8312,
+      "bytes": 2772,
       "category": "measurement",
-      "content_sha256": "9e601f9e63d8e6a51af4f8b48653abded00b2aa171d778e158dfa2fbfbb4a0bb",
+      "content_sha256": "ef4e4fc5d641f8518c9c5162491d2b8f0befd48c0bbea11fa36c05fa5b9c7afb",
       "domain_path": "_common",
-      "estimated_tokens": 1726,
+      "estimated_tokens": 348,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [],
       "path": "_common/unit-vllm-ascend-verification-and-state-parity-gates.md",
