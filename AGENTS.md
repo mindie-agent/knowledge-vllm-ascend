@@ -1,8 +1,8 @@
 # `knowledge-vllm-ascend` — Repository Guidelines for AI Agents & Maintainers
 
-This repository is the canonical domain knowledge feed for `vllm-ascend` in [MindIE Agent](https://github.com/mindie-agent/mindie-agent). It contains **graded knowledge units** (`mindie-graded-unit/1`), their provenance and applicability conditions, plus the derived routing index and public feedback. Runtime retrieval, capture, redaction and publication live in [`mindie-agent/knowledge`](https://github.com/mindie-agent/knowledge).
+The `graded-v2` branch of this repository is the canonical graded domain knowledge feed for `vllm-ascend` in [MindIE Agent](https://github.com/mindie-agent/mindie-agent). It contains **graded knowledge units** (`mindie-graded-unit/1`), their provenance and applicability conditions, plus the derived routing index and public feedback. `main` remains the old 0.0.2 material corpus with the old contract bytes and is not a graded tree. Runtime retrieval, capture, redaction and publication live in [`mindie-agent/knowledge`](https://github.com/mindie-agent/knowledge).
 
-The old `tasks/` material layout is not part of `mindie-publication-contract/2`. The material-v1 bytes are preserved under `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` and described by `docs/evidence/material-v1-migration.json`. Do not mix that layout back into the active corpus or re-label it as graded knowledge.
+The old `tasks/` material layout is not part of `mindie-publication-contract/2` and is not in `graded-v2`. Its bytes remain on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c); `graded-v2` omits the local archive copy. Do not mix that layout back into the active corpus or re-label it as graded knowledge.
 
 ---
 
@@ -12,7 +12,7 @@ The old `tasks/` material layout is not part of `mindie-publication-contract/2`.
 - **Derived indexes** live at `index/routing-manifest.json` and `index/shard-topology.json`. They are rebuilt from units; do not hand-edit them.
 - **Public feedback** lives at `feedback/votes-<id>.json` and uses `mindie-graded-feedback/1`.
 - **Metadata and documentation** live at the root (`README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `LICENSE`, `publication-contract.json`) and under `docs/**`.
-- **Archived evidence** lives under `docs/archive/**` and `docs/evidence/**`. It is preserved historical data, not active retrieval content.
+- **Unit evidence** lives under `docs/evidence/**`; the old material-v1 bytes remain on `main` and 85ab, not in this branch, and are not active retrieval content.
 - **Out of scope for this repository's release claim:** other domains. They use the same runtime interfaces through explicit `mindie://<domain>/...` routes, not copies of this corpus.
 
 Do not introduce a `tasks/` tree, a second unit layout, or a private/reserved directory (`index`, `feedback`, `docs`, `private`) as a `domain_path`.
@@ -86,12 +86,12 @@ The plan uses `mindie-reviewed-change/1` and must include:
 
 Validation covers the full inheritance graph, duplicate IDs/paths, revision rules and the destination path before any write. Application writes only the declared units, rebuilds the routing index and reports `applied`, `validated`, `failed` or `partial`; it does not commit, push or publish. There is no automatic semantic acceptance, no promotion of a proposal by a successful format check and no implicit retry after a partial local write. If a write fails, report the concrete state rather than retrying blindly.
 
-`.github/workflows/check.yml` reads the publication contract from the trusted base, installs the pinned validator revision and validates candidate blobs without executing candidate code. In `publication-contract/2`:
+On `graded-v2`, `.github/workflows/check.yml` reads the publication contract from the branch trusted base, installs the pinned validator revision and validates candidate blobs without executing candidate code. Contributions target `graded-v2`; `main` is not the PR base for graded units. In `publication-contract/2`:
 
 - **content** changes are unit files, feedback files and derived index files;
 - **development** changes are root documentation/configuration, `docs/**`, `.github/**` and `publication-contract.json`.
 
-Content validation can be `success`; development validation is `neutral` and requires maintainer review. Neither outcome is proof of semantic truth, remote `main` readback or installed native acceptance. Those are separate release results.
+Content validation can be `success`; development validation is `neutral` and requires maintainer review. Neither outcome is proof of semantic truth, remote `graded-v2` readback or installed native acceptance. Those are separate release results. `graded-v2` may receive content updates within this compatibility version while keeping the same `publication-contract/2` bytes; `main` is unchanged.
 
 ---
 
@@ -130,7 +130,7 @@ Use the installed pinned Gitleaks 8.30.1 binary for the second privacy gate. Do 
 
 ## 9. Preservation rules
 
-- Keep source files, archived bytes, original Git blob identities and historical revisions intact when authoring documentation or units.
+- Keep source files, old material bytes, original Git blob identities and historical revisions intact when authoring documentation or units.
 - Do not erase a failed receipt, an earlier public state or a superseded unit to make the current tree look cleaner.
 - A documentation change must not silently change a unit's claim, conditions, evidence or revision. Use the reviewed-change path for unit edits.
 - Do not copy content between domains or force a same-topic merge; use explicit routes.

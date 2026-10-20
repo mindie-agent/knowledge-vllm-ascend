@@ -21,7 +21,7 @@
 
 ## What this repository is
 
-This is the `vllm-ascend` domain knowledge source for MindIE Agent `0.0.3`. It stores **graded knowledge units** (`mindie-graded-unit/1`): a reusable rule, procedure or code transformation together with its provenance, applicability conditions, evidence strength and revision.
+The `graded-v2` branch of this repository is the `vllm-ascend` domain graded knowledge source for MindIE Agent `0.0.3`. It stores **graded knowledge units** (`mindie-graded-unit/1`): a reusable rule, procedure or code transformation together with its provenance, applicability conditions, evidence strength and revision.
 
 A unit is not a chat summary and not a universal best practice. It answers two questions:
 
@@ -30,7 +30,7 @@ A unit is not a chat summary and not a universal best practice. It answers two q
 
 At query time the runtime compares the task's observed facts with each declared condition. A condition that is unmet, missing or unknown is never treated as "close enough".
 
-> This repository uses `mindie-publication-contract/2` and `mindie-graded-unit/1`. [`index/routing-manifest.json`](../index/routing-manifest.json) is the live inventory; the table below lists the units present in the manifest at this check, not a fixed count.
+> The `graded-v2` branch uses `mindie-publication-contract/2` and `mindie-graded-unit/1`. `main` retains the old material-v1 corpus and old contract bytes for 0.0.2 consumers and is not a graded tree. [`index/routing-manifest.json`](../index/routing-manifest.json) is the live inventory; the table below lists the units present in the manifest at this check, not a fixed count.
 
 ---
 
@@ -42,7 +42,7 @@ MindIE Agent supports **Codex, Claude Code, Kimi and DSH**, each through its own
 
 Once installed, the plugin connects to the [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) runtime, syncs this domain and builds a local index. Read-only `knowledge_query` / `knowledge_explain` does not require community sharing; capture and contribution remain explicit user choices.
 
-This repository does not copy host installers or local paths. Host installation, plugin configuration and upgrades are defined by the main repository.
+This repository does not copy host installers or local paths. Host installation, plugin configuration and upgrades are defined by the main repository. 0.0.3 plugins select the `graded-v2` branch and bind the exact digest of this domain's `publication-contract.json`; contribution PRs use `graded-v2` as their base.
 
 ---
 
@@ -57,7 +57,7 @@ This repository does not copy host installers or local paths. Host installation,
 
 A unit may be distilled from reviewed public material, source code, specifications or experiment records. Model assistance is allowed, but **model output is only a proposal**: it must retain provenance and evidence limits and pass deterministic format/privacy checks and semantic review before a reviewed change admits it. A failed experiment cannot be relabeled `reproduced_empirical`; hardware, versions and performance data cannot be invented; model rewriting cannot replace the source.
 
-The original `material-v1` task material is retained as an archive, described under [Archive and history](#-archive-and-history). Archived material is evidence, not active retrieval content, and is never relabeled as a graded unit.
+The original `material-v1` task material is not in the `graded-v2` branch; it remains on `main` and at immutable historical commit 85ab, described under [Old material and history](#-old-material-and-history). That material is evidence, not active retrieval content, and is never relabeled as a graded unit.
 
 ---
 
@@ -155,42 +155,39 @@ knowledge-vllm-ascend/
     ├── CONTRIBUTING.en.md
     ├── package-format.md
     ├── package-format.en.md
-    ├── evidence/                       # sources and review records
-    └── archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/
+    └── evidence/                       # sources and review records
 ```
 
-A unit path must be `<domain_path>/<unit_id>.md`. `domain_path` is a normalized repository-relative directory used for routing and sharding; it is not part of stable identity. `unit_id` starts with `unit-` and uses lowercase words and hyphens. The two JSON files under `index/` are derived and rebuilt by the runtime; do not hand-edit them.
+A unit path must be `<domain_path>/<unit_id>.md`. `domain_path` is a normalized repository-relative directory used for routing and sharding; it is not part of stable identity. `unit_id` starts with `unit-` and uses lowercase words and hyphens. The two JSON files under `index/` are derived and rebuilt by the runtime; do not hand-edit them. This branch publishes contract/2 content only; the old `material-v1` local archive copy is not in `graded-v2`.
 
 The complete field, digest, condition, inheritance, feedback and reviewed-change rules are in the [format specification](package-format.en.md).
 
 ---
 
-## 🗃️ Archive and history
+## 🗃️ Old material and history
 
-The old `material-v1` corpus is preserved at:
+The old `material-v1` corpus is not in the `graded-v2` branch. It remains on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) for 0.0.2 consumers and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). `graded-v2` does not move, rewrite or relabel that material, and it does not keep a local archive copy.
 
-[`docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`](archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/)
+The historical migration metadata records 663 task packages, 2,387 files, 1,723 blocks and 1 feedback file; their original blob identities remain on `main` and 85ab.
 
-The migration record at [`docs/evidence/material-v1-migration.json`](evidence/material-v1-migration.json) covers 663 task packages, 2,387 archived files, 1,723 blocks and 1 feedback file. Every archived file retains its original Git blob object ID, showing that these bytes are preserved historical evidence rather than regenerated or rewritten units.
-
-- Archived material is **not** active graded-unit content; the `mindie-graded-unit/1` corpus does not mix in the old `tasks/` layout.
-- Archived content is not relabeled as graded knowledge or presented as a current conclusion.
-- The earlier public state and public history remain in Git history. The archive retains existing bytes and original blob identities rather than replacing them.
-- Do not edit archived files, the migration record or blob identities to make the current tree look tidier.
+- The old material is **not** active graded-unit content; the `mindie-graded-unit/1` corpus does not mix in the old `tasks/` layout.
+- The old material is not graded knowledge and is not presented as a current conclusion.
+- `main` history and the immutable bytes at 85ab stay as they are; they are not regenerated content.
+- Do not edit the old material on `main`/85ab, the migration metadata, or blob identities to make the current branch look tidier.
 
 ---
 
 ## ✅ Publication and validation
 
-[`publication-contract.json`](../publication-contract.json) declares `mindie-publication-contract/2`, the data formats and the immutable validator revision used by publication checks. `.github/workflows/check.yml` reads that contract from the trusted base, installs the exact validator and validates candidate content as Git blobs without executing candidate code.
+On `graded-v2`, [`publication-contract.json`](../publication-contract.json) declares `mindie-publication-contract/2`, the data formats and the immutable validator revision used by publication checks. `.github/workflows/check.yml` reads that contract from the branch trusted base, installs the exact validator and validates candidate content as Git blobs without executing candidate code.
 
 Keep three facts separate:
 
 1. **Local/candidate tree validation**: whether format, digests, inheritance, index consistency and privacy scans pass;
-2. **Remote publication**: the actual readback of `main`;
+2. **Remote publication**: the actual readback of `graded-v2`; `main` retains the old material corpus and old contract bytes and does not change with this branch.
 3. **Installed native acceptance**: whether a specific host can actually use query, explain, feedback and routing after installing that revision.
 
-A validated candidate tree does not prove the latter two, and a documentation change does not become an automatic content merge. The publication contract, its pin and release/validation evidence each record the facts they cover. This document does not claim any step that is not recorded there.
+A validated candidate tree does not prove the latter two, and a documentation change does not become an automatic content merge. `graded-v2` may receive content updates within this compatibility version while keeping the same `publication-contract/2` bytes; `main` does not change with them. Formal assets, remote `graded-v2` publication and paid native acceptance are separate results; locally prepared content is not published proof.
 
 Documentation and engineering files follow the development review path; units, feedback and derived indexes follow the content path. The two paths have different check outcomes and merge rules; see the [contributing guide](CONTRIBUTING.en.md).
 

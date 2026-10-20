@@ -28,9 +28,9 @@ With community sharing (Opt-in) enabled, runtime work has four distinct stages; 
 1. **Authorized capture and redaction**: Stop/task capture preserves the public transcript projection only within the current authorization, runs deterministic redaction, and stores selected material. Capture does not create a graded unit.
 2. **Explicit selected-evidence native distillation**: the caller submits `inputs` and `task_state` through `distill_selected`. The native worker may return `propose_graded_units` or `noop`; proposals are locally staged. This operation is independent of Stop and does not discover transcripts, grant contribution consent, or advance the runtime pin.
 3. **Semantic review and C6 application**: the caller/reviewer is responsible for checking the proposal's meaning, conditions and evidence. `review_reference` records the review basis; it is not a signature and does not prove independent review occurred. Only reviewed complete unit bytes applied through `mindie-reviewed-change/1` and an index rebuild make the intended corpus change.
-4. **Separate contribution/publication**: external writes are governed by the contribution/publication path. When a batch is built for a graded corpus while legacy material drafts remain, `build_batch` raises `DistillationRequired` (`legacy_drafts_require_c6`) and requires C6 first; it does not silently generate a graded unit. Opening a PR, merging remotely and installing on a client are separate outcomes and are not guaranteed.
+4. **Separate contribution/publication**: external writes are governed by the contribution/publication path. When a batch is built for a graded corpus while legacy material drafts remain, `build_batch` raises `DistillationRequired` (`legacy_drafts_require_c6`) and requires C6 first; it does not silently generate a graded unit. Opening a PR based on `graded-v2`, merging remotely and installing on a client are separate outcomes and are not guaranteed.
 
-This repository does not copy host installers or require host-specific paths in documentation. Installation and configuration are defined by the main repository.
+This repository does not copy host installers or require host-specific paths in documentation. Installation and configuration are defined by the main repository. 0.0.3 plugins select the `graded-v2` branch and bind the exact digest of this domain's `publication-contract.json`; manual contributions start from a `graded-v2` checkout and PRs use `graded-v2` as their base.
 
 ---
 
@@ -114,20 +114,20 @@ Do not publish:
 - personal home directories, private workspace paths, internal ticket IDs or non-public benchmark/held-out/oracle identifiers;
 - any source content that is not confirmed public.
 
-Use placeholders such as `/home/<user>/...` when a path shape matters. Do not copy identifiers already reviewed in archived evidence into new prose or examples.
+Use placeholders such as `/home/<user>/...` when a path shape matters. Do not copy identifiers already reviewed in the old material or evidence on `main`/85ab into new prose or examples.
 
 ---
 
 ## 5. Two PR review paths
 
-`publication-head` classifies changes by path:
+`graded-v2` is the PR base for graded units; `main` retains the old material corpus and old contract bytes and does not accept graded-unit contributions. `publication-head` classifies changes by path:
 
 | Mode | Touched paths | Check outcome | Merge path |
 | --- | --- | --- | --- |
 | **content** | Unit Markdown, `feedback/**`, `index/**` | `success` | After format, digest, inheritance and privacy checks, the content review bot handles it under [`mindie-content-review/2`](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) |
 | **development** | `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**`, `.github/**`, `publication-contract.json` | `neutral` | No content-bot auto-merge; maintainer review under the [engineering design principles](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.en.md) |
 
-`success` means the candidate tree passed that check; it is not proof of semantic correctness, remote `main` update or installed native acceptance. `neutral` is not a failure; it selects the maintainer review path.
+`success` means the candidate tree passed that check; it is not proof of semantic correctness, remote `graded-v2` update or installed native acceptance. `main` does not change with graded content. `neutral` is not a failure; it selects the maintainer review path.
 
 ---
 
@@ -141,10 +141,11 @@ Use placeholders such as `/home/<user>/...` when a path shape matters. Do not co
 
 ## 7. Do not
 
-- add the old `tasks/` layout or relabel archived material as a graded unit;
-- hand-edit derived indexes, `publication-contract.json`, CI workflows or archived files to fit documentation;
+- add the old `tasks/` layout or relabel old material on `main`/85ab as a graded unit;
+- hand-edit derived indexes, `publication-contract.json` or CI workflows, or rewrite the old material on `main`/85ab to fit documentation;
 - replace a unit body or source with a model-generated summary;
 - claim "automatic semantic acceptance", "automatic promotion" or "installed means accepted"; those steps do not exist;
+- send graded-unit PRs to `main`; graded content uses `graded-v2` as its base;
 - copy units between domains or force same-topic merges; use explicit routes.
 
 ---

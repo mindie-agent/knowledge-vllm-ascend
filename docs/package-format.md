@@ -2,9 +2,9 @@
 
 **中文** | [English](package-format.en.md) · [返回仓库首页](../README.md)
 
-本文说明 `knowledge-vllm-ascend` 中 `mindie-graded-unit/1` 单元的目录结构、Frontmatter 字段、摘要与修订规则、条件匹配、继承、路由索引、公开反馈和已审核变更。当前 C5 单元契约即 `mindie-graded-unit/1`；C6 已审核投影使用 `mindie-reviewed-change/1`，见第 9 节。格式版本与 validator 由仓库根目录的 [`publication-contract.json`](../publication-contract.json) 统一声明。
+本文说明 `graded-v2` 分支中 `knowledge-vllm-ascend` 的 `mindie-graded-unit/1` 单元目录结构、Frontmatter 字段、摘要与修订规则、条件匹配、继承、路由索引、公开反馈和已审核变更。当前 C5 单元契约即 `mindie-graded-unit/1`；C6 已审核投影使用 `mindie-reviewed-change/1`，见第 9 节。格式版本与 validator 由仓库根目录的 [`publication-contract.json`](../publication-contract.json) 统一声明。
 
-本仓库使用 `mindie-publication-contract/2`。旧 `tasks/` 材料布局不属于该契约；其字节保留在 [`docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`](archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/)，说明见 [`docs/evidence/material-v1-migration.json`](evidence/material-v1-migration.json)。归档材料不是当前单元。
+`graded-v2` 分支使用 `mindie-publication-contract/2`。旧 `tasks/` 材料布局不属于该契约，也不在 `graded-v2` 分支内；其字节保留在 [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) 和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c)。`main` 保持旧的 material 语料和旧 contract 字节，供 0.0.2 消费者使用，不是 graded 树。旧材料不是当前单元。
 
 ---
 
@@ -19,7 +19,7 @@
 
 检索先按条件筛选，再按词法相关度排序；命中后只返回受预算限制的摘录。需要完整上下文时，调用方按返回的摘要引用读取全文。这样既避免把整篇长文塞进上下文，也避免让模型摘要替代原始结论。
 
-单元可以来自已审核的公开材料、源码、规范或实验记录，也可以由模型辅助提炼。但模型提案不是知识：它必须保留来源和证据边界，经过确定性格式/隐私检查与语义审核，才能成为当前单元。单元正文不是逐字转录；逐字保留的职责属于归档材料。
+单元可以来自已审核的公开材料、源码、规范或实验记录，也可以由模型辅助提炼。但模型提案不是知识：它必须保留来源和证据边界，经过确定性格式/隐私检查与语义审核，才能成为当前单元。单元正文不是逐字转录；逐字保留的职责属于 `main`/85ab 中的旧材料。
 
 ---
 
@@ -40,17 +40,16 @@ knowledge-vllm-ascend/
     ├── CONTRIBUTING.en.md
     ├── package-format.md
     ├── package-format.en.md
-    ├── evidence/
-    └── archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/
+    └── evidence/
 ```
 
 ### 路径约束
 
-- 单元路径必须恰好是 `<domain_path>/<unit_id>.md`。
+- 单元路径必须恰好是 `<domain_path>/<unit_id>.md`。`graded-v2` 只发布 contract/2 内容；旧 `material-v1` 的本地 archive 副本不在该分支内。
 - `<domain_path>` 是规范化的仓库相对目录：使用 `/`，不能是绝对路径，不能含 `.`、`..`、反斜杠或控制字符；首段不能是 `tasks`、`feedback`、`index`、`docs` 或 `private`。
 - `<unit_id>` 匹配 `unit-[a-z0-9]+(-[a-z0-9]+)*`，稳定 ID 不随路径移动而改变。
 - 单元文件必须是普通非可执行 Git blob（`100644`），UTF-8，LF 换行，不超过 256 KiB。
-- `index/` 和 `feedback/` 是保留目录；文档与归档放在 `docs/`，不参与单元扫描。
+- `index/` 和 `feedback/` 是保留目录；文档与证据放在 `docs/`，不参与单元扫描。
 
 ---
 
@@ -340,7 +339,7 @@ python3 scripts/apply_reviewed_change.py --root . --plan reviewed-change.json --
 
 ### 10.2 `publication-head` 分流
 
-`publication-contract/2` 下：
+在 `graded-v2` 分支上，`publication-contract/2` 下：
 
 - **content**：单元 Markdown、`feedback/**`、`index/**`；检查通过后为 `success`，可由内容审核 Bot 按 `mindie-content-review/2` 处理。
 - **development**：`README.md`、`AGENTS.md`、`CONTRIBUTING.md`、`docs/**`、`.github/**`、`publication-contract.json`；检查结论为 `neutral`，需要维护者按工程设计原则审核，不能由内容 Bot 自动合入。
@@ -348,21 +347,23 @@ python3 scripts/apply_reviewed_change.py --root . --plan reviewed-change.json --
 ### 10.3 三个独立事实
 
 1. **候选树验证**：格式、摘要、继承图、索引一致性、隐私扫描；
-2. **远端发布**：`main` 的实际回读；
+2. **远端发布**：`graded-v2` 的实际回读；`main` 保持旧 material 语料和旧 contract 字节，不随本分支发布而改变。
 3. **已安装宿主验收**：具体宿主安装该修订后，原生查询、读取、反馈和路由是否实际可用。
 
-通过候选树验证不自动证明后两项；契约声明、CI 检查和 release/validation evidence 各自记录自己覆盖的事实。本文不声称任何未记录的发布或安装步骤已经完成。
+通过候选树验证不自动证明后两项；契约声明、CI 检查和 release/validation evidence 各自记录自己覆盖的事实。`graded-v2` 可以在兼容版本内接收内容更新，而保持同一 `publication-contract/2` 字节；`main` 不会随之改变。正式 assets、远端 `graded-v2` 发布和 paid native acceptance 是独立结果；本地准备好的内容不等于 published proof。
 
 ---
 
-## 11. 归档材料
+## 11. 旧材料位置
 
-`docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` 保存旧的 `material-v1` 字节，[`docs/evidence/material-v1-migration.json`](evidence/material-v1-migration.json) 记录迁移身份：
+旧的 `material-v1` 任务语料不在 `graded-v2` 分支内，也不随本分支移动或重写。它保留在 [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main)（供 0.0.2 消费者继续使用）和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c) 中。
+
+历史迁移元数据记录：
 
 - `task_count`: 663
 - `archived_file_count`: 2,387
 - `block_count`: 1,723
 - `feedback_count`: 1
-- 每个归档文件保留原始 `git_blob_oid`。
+- 每个旧文件保留原始 `git_blob_oid`，位于 `main`/85ab。
 
-归档不是当前单元，也不会被重新标记为 graded knowledge。它用于追溯来源和保留历史；旧 `tasks/` 布局不会重新进入 contract/2 语料树。早期公开状态和公开历史仍在 Git 历史中，归档保留原始 blob 身份，不是重新生成的内容。
+旧材料不是当前单元，也不会被重新标记为 graded knowledge。它用于追溯来源和保留历史；旧 `tasks/` 布局不会重新进入 `graded-v2` 的 contract/2 语料树。`main` 的公开历史和 85ab 的不可变字节保持原样，不是重新生成的内容。

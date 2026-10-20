@@ -28,9 +28,9 @@ Codex、Claude Code、Kimi、DSH 四种宿主都通过各自的**原生插件**�
 1. **授权采集与脱敏**：Stop 钩子/任务采集只在当前授权范围内保留公开对话投影，执行确定性脱敏，并保存选中的材料。采集本身不创建 graded unit。
 2. **显式选证的本地提炼**：调用方通过 `distill_selected` 明确提交 `inputs` 与 `task_state`。native worker 可以返回 `propose_graded_units` 或 `noop`，提案在本地暂存；该操作独立于 Stop，不会自行发现 transcript、授予贡献 consent 或提升运行时 pin。
 3. **语义审核与 C6 应用**：调用方/审核者负责确认提案的语义、条件和证据；`review_reference` 记录审核依据，不是签名，也不证明独立审核已经发生。只有通过审核的完整单元字节经 `mindie-reviewed-change/1` 应用并重建索引，才形成当前语料的预期变更。
-4. **独立的贡献/发布**：外部写入由贡献/发布路径单独治理。构建 batch 时，若目标语料使用 graded units 而仍有 legacy material drafts，构建会抛出 `DistillationRequired`（`legacy_drafts_require_c6`），要求先走 C6；不会静默生成 graded unit。打开 PR、远端合入和客户端安装是彼此独立的结果，不保证发生。
+4. **独立的贡献/发布**：外部写入由贡献/发布路径单独治理。构建 batch 时，若目标语料使用 graded units 而仍有 legacy material drafts，构建会抛出 `DistillationRequired`（`legacy_drafts_require_c6`），要求先走 C6；不会静默生成 graded unit。以 `graded-v2` 为 base 打开 PR、远端合入和客户端安装是彼此独立的结果，不保证发生。
 
-本仓库不复制安装脚本，也不要求在文档里手写宿主路径。安装与配置以主仓库为准。
+本仓库不复制安装脚本，也不要求在文档里手写宿主路径。安装与配置以主仓库为准。0.0.3 插件选择 `graded-v2` 分支并绑定本领域 `publication-contract.json` 的精确摘要；手工贡献从 `graded-v2` checkout 开始，PR 也以 `graded-v2` 为 base。
 
 ---
 
@@ -114,20 +114,20 @@ python3 -m mindie_knowledge.publication_check \
 - 个人主目录、私有工作区路径、内部工单号、未公开的 benchmark/heldout/oracle 标识；
 - 任何无法确认已公开的来源内容。
 
-需要表达路径形状时使用 `/home/<user>/...` 等占位符。归档和证据中已经审核过的历史标识不要复制到新文档或新单元。
+需要表达路径形状时使用 `/home/<user>/...` 等占位符。`main`/85ab 旧材料和证据中已经审核过的历史标识不要复制到新文档或新单元。
 
 ---
 
 ## 5. 两类 PR 的审核路径
 
-`publication-head` 会按变更路径分流：
+`graded-v2` 是 graded 单元的 PR base；`main` 保持旧 material 语料和旧 contract 字节，不接收 graded 单元贡献。`publication-head` 会按变更路径分流：
 
 | 类型 | 涉及路径 | 检查结论 | 合入方式 |
 | --- | --- | --- | --- |
 | **content** | 单元 Markdown、`feedback/**`、`index/**` | `success` | 通过格式、摘要、继承、隐私检查后，由内容审核 Bot 按 [`mindie-content-review/2`](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.zh.md) 处理 |
 | **development** | `README.md`、`AGENTS.md`、`CONTRIBUTING.md`、`docs/**`、`.github/**`、`publication-contract.json` | `neutral` | 不允许内容 Bot 自动合入；需要维护者按[工程设计原则](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.md)审核 |
 
-`success` 只表示候选树通过了该检查，不是语义正确性的证明，也不等于远端 `main` 已更新或已安装宿主已验收。`neutral` 不是失败，而是要求维护者审核路径。
+`success` 只表示候选树通过了该检查，不是语义正确性的证明，也不等于远端 `graded-v2` 已更新或已安装宿主已验收；`main` 不会随 graded 内容更新而改变。`neutral` 不是失败，而是要求维护者审核路径。
 
 ---
 
@@ -141,10 +141,11 @@ python3 -m mindie_knowledge.publication_check \
 
 ## 7. 不要做的事
 
-- 不要新增旧 `tasks/` 布局，或把归档材料重新标记为 graded unit。
-- 不要手工编辑派生索引、`publication-contract.json`、CI 工作流或归档文件来配合文档。
+- 不要新增旧 `tasks/` 布局，或把 `main`/85ab 中的旧材料重新标记为 graded unit。
+- 不要手工编辑派生索引、`publication-contract.json` 或 CI 工作流，也不要改写 `main`/85ab 中的旧材料来配合文档。
 - 不要用模型生成的摘要替代单元正文或来源。
 - 不要声称“自动语义接受”“自动晋升”或“安装即验收”；这些步骤不存在。
+- 不要向 `main` 发送 graded 单元 PR；graded 内容以 `graded-v2` 为 base。
 - 不要在两个领域之间复制单元或强行合并同主题内容；跨领域使用显式路由。
 
 ---

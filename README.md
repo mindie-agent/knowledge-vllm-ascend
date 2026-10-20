@@ -21,7 +21,7 @@
 
 ## 这是什么
 
-本仓库承载 MindIE Agent `0.0.3` 的 `vllm-ascend` 领域知识源。它保存的是**分级知识单元**（graded unit，`mindie-graded-unit/1`）：一条可复用的判断、步骤或代码变换，连同它的来源、适用条件、证据强度和修订号。
+本仓库的 `graded-v2` 分支承载 MindIE Agent `0.0.3` 的 `vllm-ascend` 领域分级知识源。它保存的是**分级知识单元**（graded unit，`mindie-graded-unit/1`）：一条可复用的判断、步骤或代码变换，连同它的来源、适用条件、证据强度和修订号。
 
 知识单元不是聊天记录摘要，也不是“放之四海皆准”的最佳实践。每条单元都明确回答两个问题：
 
@@ -30,7 +30,7 @@
 
 查询时，运行时把任务实际观测到的事实与单元声明的条件逐项比较。条件不满足、缺失或未知，都不会被当作“差不多适用”。
 
-> 本仓库使用 `mindie-publication-contract/2` 和 `mindie-graded-unit/1`。实时单元清单以 [`index/routing-manifest.json`](index/routing-manifest.json) 为准；本文中的表格只列出本次检查时清单中的单元，不是固定计数。
+> `graded-v2` 分支使用 `mindie-publication-contract/2` 和 `mindie-graded-unit/1`；`main` 保持旧的 material-v1 语料和旧 contract 字节，供 0.0.2 消费者使用，不是 graded 树。实时单元清单以 [`index/routing-manifest.json`](index/routing-manifest.json) 为准；本文中的表格只列出本次检查时清单中的单元，不是固定计数。
 
 ---
 
@@ -42,7 +42,7 @@ MindIE Agent 支持 **Codex、Claude Code、Kimi、DSH** 四种宿主，各自�
 
 插件就绪后会连接 [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) 运行时，同步本领域内容并建立本地索引。只读的 `knowledge_query` / `knowledge_explain` 不要求开启社区共享；是否允许采集和贡献由用户显式决定。
 
-本仓库不再复制各宿主的安装脚本或本机路径。宿主安装、插件配置与升级以主仓库说明为准。
+本仓库不再复制各宿主的安装脚本或本机路径。宿主安装、插件配置与升级以主仓库说明为准。0.0.3 插件显式选择 `graded-v2` 分支，并绑定本领域 `publication-contract.json` 的精确摘要；贡献 PR 以 `graded-v2` 为 base。
 
 ---
 
@@ -57,7 +57,7 @@ MindIE Agent 支持 **Codex、Claude Code、Kimi、DSH** 四种宿主，各自�
 
 知识单元可以来自已审核的公开材料、源码、规范或实验记录。允许使用模型辅助提炼，但**模型输出只是草案**：它必须保留来源和证据边界，经过确定性格式/隐私检查和语义审核，才能通过已审核变更进入当前语料。不能把失败实验写成 `reproduced_empirical`，不能编造硬件、版本或性能数据，也不能用模型改写替代来源。
 
-原先的 `material-v1` 任务材料仍以归档形式保留，见[归档与历史](#-归档与历史)。归档材料是证据，不参与当前单元检索，也不会被重新标记为 graded unit。
+原先的 `material-v1` 任务材料不在 `graded-v2` 分支内；它们保留在 `main` 和不可变历史提交 85ab 中，见[旧材料与历史](#-旧材料与历史)。旧材料是证据，不参与当前单元检索，也不会被重新标记为 graded unit。
 
 ---
 
@@ -155,42 +155,39 @@ knowledge-vllm-ascend/
     ├── CONTRIBUTING.en.md
     ├── package-format.md
     ├── package-format.en.md
-    ├── evidence/                       # 来源与审核记录
-    └── archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/
+    └── evidence/                       # 来源与审核记录
 ```
 
-单元路径必须是 `<domain_path>/<unit_id>.md`。`domain_path` 是规范化的仓库相对目录，用于路由和分片，不参与稳定 ID；`unit_id` 以 `unit-` 开头，由小写单词和连字符组成。`index/` 中的两个 JSON 是派生数据，由运行时重建，不应手工编辑。
+单元路径必须是 `<domain_path>/<unit_id>.md`。`domain_path` 是规范化的仓库相对目录，用于路由和分片，不参与稳定 ID；`unit_id` 以 `unit-` 开头，由小写单词和连字符组成。`index/` 中的两个 JSON 是派生数据，由运行时重建，不应手工编辑。本分支只发布 contract/2 内容；旧 `material-v1` 的本地 archive 副本不在 `graded-v2` 内。
 
 格式字段、摘要计算、条件匹配、继承、反馈和已审核变更的完整规则见[格式规范](docs/package-format.md)。
 
 ---
 
-## 🗃️ 归档与历史
+## 🗃️ 旧材料与历史
 
-旧的 `material-v1` 任务语料保留在：
+旧的 `material-v1` 任务语料不在 `graded-v2` 分支内。它保留在 [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main)（供 0.0.2 消费者继续使用）和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c) 中。`graded-v2` 不移动、重写或重新标记这些材料，也不在分支内保留本地 archive 副本。
 
-[`docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`](docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/)
+历史迁移元数据记录了 663 个任务包、2,387 个文件、1,723 个分块和 1 个反馈文件；这些原始 blob 身份保留在 `main` 和 85ab 中。
 
-迁移记录在 [`docs/evidence/material-v1-migration.json`](docs/evidence/material-v1-migration.json)，记录了 663 个任务包、2,387 个文件、1,723 个分块和 1 个反馈文件。归档保留每个文件原始的 Git blob 对象 ID，说明这些字节是保留下来的历史证据，而不是被重新生成或改写的单元。
-
-- 归档材料**不**进入当前 graded unit 检索；`mindie-graded-unit/1` 的语料树不混入旧 `tasks/` 布局。
-- 归档内容不会被重新标记为 graded knowledge，也不会被当作当前结论。
-- 早期公开状态和公开历史仍在 Git 历史中；归档保留既有字节和原始 blob 身份，不是重新生成的内容。
-- 不修改归档文件、迁移记录或 blob 身份来让文档看起来更整洁。
+- 旧材料**不**进入当前 graded unit 检索；`mindie-graded-unit/1` 的语料树不混入旧 `tasks/` 布局。
+- 旧材料不是 graded knowledge，也不会被当作当前结论。
+- `main` 的公开历史和 85ab 的不可变字节保持原样，不是重新生成的内容。
+- 不修改 `main`/85ab 中的旧材料、迁移元数据或 blob 身份来让当前分支看起来更整洁。
 
 ---
 
 ## ✅ 发布与验证
 
-[`publication-contract.json`](publication-contract.json) 声明 `mindie-publication-contract/2`、数据格式和发布检查使用的不可变 validator 修订。`.github/workflows/check.yml` 从可信基准确读取该契约，安装精确的 validator，并以 Git blob 方式校验候选内容，不执行候选代码。
+在 `graded-v2` 分支上，[`publication-contract.json`](publication-contract.json) 声明 `mindie-publication-contract/2`、数据格式和发布检查使用的不可变 validator 修订。`.github/workflows/check.yml` 从该分支的可信基准确读取契约，安装精确的 validator，并以 Git blob 方式校验候选内容，不执行候选代码。
 
 需要区分三个独立事实：
 
 1. **本地/候选树验证**：格式、摘要、继承图、索引一致性、隐私扫描是否通过；
-2. **远端发布**：`main` 的实际回读结果；
+2. **远端发布**：`graded-v2` 的实际回读结果；`main` 保持旧 material 语料和旧 contract 字节，不随本分支发布而改变。
 3. **已安装宿主验收**：具体宿主安装该修订后，原生查询、读取、反馈和路由是否实际可用。
 
-一个通过验证的候选树不自动证明后两项，也不把文档变更变成内容自动合入。发布契约、发布 pin 和 release/validation evidence 各自记录自己覆盖的事实；本文不声称任何尚未记录的步骤已经完成。
+一个通过验证的候选树不自动证明后两项，也不把文档变更变成内容自动合入。`graded-v2` 可以在兼容版本内接收内容更新，而保持同一 `publication-contract/2` 字节；`main` 不会随之改变。正式 assets、远端 `graded-v2` 发布和 paid native acceptance 是独立结果；本地准备好的内容不等于 published proof。
 
 文档与工程文件属于 development 审核路径；单元、反馈和派生索引属于 content 审核路径。两条路径的检查结论和合入方式不同，详见[贡献指南](CONTRIBUTING.md)。
 

@@ -2,9 +2,9 @@
 
 [中文](package-format.md) | **English** · [Back to Homepage](README.en.md)
 
-This document defines the `mindie-graded-unit/1` layout, frontmatter, digest and revision rules, condition matching, inheritance, routing indexes, public feedback and reviewed changes used by `knowledge-vllm-ascend`. The current C5 unit contract is `mindie-graded-unit/1`; the C6 reviewed projection uses `mindie-reviewed-change/1` (section 9). The format identifiers and validator revision are declared in [`publication-contract.json`](../publication-contract.json).
+This document defines the `mindie-graded-unit/1` layout, frontmatter, digest and revision rules, condition matching, inheritance, routing indexes, public feedback and reviewed changes used by `knowledge-vllm-ascend` on the `graded-v2` branch. The current C5 unit contract is `mindie-graded-unit/1`; the C6 reviewed projection uses `mindie-reviewed-change/1` (section 9). The format identifiers and validator revision are declared in [`publication-contract.json`](../publication-contract.json).
 
-This repository uses `mindie-publication-contract/2`. The legacy `tasks/` material layout is not part of that contract. Its bytes are preserved under [`docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`](archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/) and described by [`docs/evidence/material-v1-migration.json`](evidence/material-v1-migration.json). Archived material is not active unit content.
+The `graded-v2` branch uses `mindie-publication-contract/2`. The legacy `tasks/` material layout is not part of that contract and is not in `graded-v2`. Its bytes remain on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). `main` retains the old material corpus and old contract bytes for 0.0.2 consumers and is not a graded tree. The old material is not active unit content.
 
 ---
 
@@ -19,7 +19,7 @@ A unit makes one reusable engineering conclusion searchable, checkable and revis
 
 Retrieval checks conditions first and lexical relevance second. A hit returns a budgeted excerpt; the caller reads the full body through a digest-pinned reference. This avoids both dumping a whole document into context and letting a model summary replace the underlying conclusion.
 
-A unit may be distilled from reviewed public material, source code, specifications or experiment records, including with model assistance. A model proposal is not knowledge: it must retain provenance and evidence limits and pass deterministic format/privacy checks and semantic review before it becomes a current unit. The unit body is not a verbatim transcript; byte preservation belongs to archived material.
+A unit may be distilled from reviewed public material, source code, specifications or experiment records, including with model assistance. A model proposal is not knowledge: it must retain provenance and evidence limits and pass deterministic format/privacy checks and semantic review before it becomes a current unit. The unit body is not a verbatim transcript; byte preservation belongs to the old material on `main`/85ab.
 
 ---
 
@@ -40,17 +40,16 @@ knowledge-vllm-ascend/
     ├── CONTRIBUTING.en.md
     ├── package-format.md
     ├── package-format.en.md
-    ├── evidence/
-    └── archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/
+    └── evidence/
 ```
 
 ### Path constraints
 
-- A unit path is exactly `<domain_path>/<unit_id>.md`.
+- A unit path is exactly `<domain_path>/<unit_id>.md`. `graded-v2` publishes contract/2 content only; the old `material-v1` local archive copy is not in this branch.
 - `<domain_path>` is a normalized repository-relative directory: forward slashes only, not absolute, no `.`/`..`, backslash or control characters. Its first segment cannot be `tasks`, `feedback`, `index`, `docs` or `private`.
 - `<unit_id>` matches `unit-[a-z0-9]+(-[a-z0-9]+)*`. The stable ID does not change when the file moves.
 - A unit is a plain non-executable Git blob (`100644`), UTF-8, LF line endings, at most 256 KiB.
-- `index/` and `feedback/` are reserved directories. Documentation and archives live under `docs/` and are not scanned as units.
+- `index/` and `feedback/` are reserved directories. Documentation and evidence live under `docs/` and are not scanned as units.
 
 ---
 
@@ -340,7 +339,7 @@ Privacy checks require zero findings. Do not add an allowlist, `.gitleaksignore`
 
 ### 10.2 `publication-head` split
 
-Under `publication-contract/2`:
+On `graded-v2`, under `publication-contract/2`:
 
 - **content**: unit Markdown, `feedback/**`, `index/**`; `success` after checks, handled by the content review bot under `mindie-content-review/2`.
 - **development**: `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**`, `.github/**`, `publication-contract.json`; `neutral`, requiring maintainer review under the engineering design principles, never bot auto-merge.
@@ -348,21 +347,23 @@ Under `publication-contract/2`:
 ### 10.3 Three separate facts
 
 1. **Candidate tree validation**: format, digests, inheritance, index consistency, privacy scans.
-2. **Remote publication**: actual readback of `main`.
+2. **Remote publication**: actual readback of `graded-v2`; `main` retains the old material corpus and old contract bytes and does not change with this branch.
 3. **Installed native acceptance**: whether a specific host can actually use query, explain, feedback and routing after installing that revision.
 
-Passing candidate validation does not prove the latter two. The contract, CI checks and release/validation evidence each record the facts they cover. This document does not assert any unrecorded publication or installation step.
+Passing candidate validation does not prove the latter two. The contract, CI checks and release/validation evidence each record the facts they cover. `graded-v2` may receive content updates within this compatibility version while keeping the same `publication-contract/2` bytes; `main` does not change with them. Formal assets, remote `graded-v2` publication and paid native acceptance are separate results; locally prepared content is not published proof.
 
 ---
 
-## 11. Archived material
+## 11. Old material location
 
-`docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` preserves the old `material-v1` bytes; [`docs/evidence/material-v1-migration.json`](evidence/material-v1-migration.json) records the migration identity:
+The old `material-v1` corpus is not in the `graded-v2` branch and is not moved or rewritten here. It remains on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) for 0.0.2 consumers and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c).
+
+The historical migration metadata records:
 
 - `task_count`: 663
 - `archived_file_count`: 2,387
 - `block_count`: 1,723
 - `feedback_count`: 1
-- each archived file retains its original `git_blob_oid`.
+- each old file retains its original `git_blob_oid`, on `main`/85ab.
 
-The archive is not current unit content and is not re-labeled as graded knowledge. It preserves source traceability and history; the old `tasks/` layout does not re-enter the contract/2 corpus. The earlier public state remains in Git history and the archive retains original blob identities rather than replacing them.
+The old material is not current unit content and is not re-labeled as graded knowledge. It preserves source traceability and history; the old `tasks/` layout does not re-enter the `graded-v2` contract/2 corpus. `main` history and the immutable bytes at 85ab stay as they are; they are not regenerated content.
