@@ -4,6 +4,10 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
@@ -18,6 +22,12 @@
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
+    "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+    ],
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
@@ -27,21 +37,23 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 29857,
-      "estimated_tokens": 3997,
+      "bytes": 37725,
+      "estimated_tokens": 5192,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
         "unit-vllm-ascend-idle-dp-gdn-state",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 8
+      "units": 10
     },
     "domains": [
       {
@@ -74,23 +86,25 @@
       },
       {
         "automatic": false,
-        "bytes": 17963,
-        "estimated_tokens": 2449,
+        "bytes": 25831,
+        "estimated_tokens": 3644,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
         "recommended_action": "review_federation_boundary",
         "unit_ids": [
           "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
+          "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
           "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
           "unit-vllm-ascend-idle-dp-gdn-state",
+          "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
           "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
         ],
-        "units": 4
+        "units": 6
       }
     ]
   },
-  "index_build_elapsed_ms": 1.172791002318263,
+  "index_build_elapsed_ms": 1.8478339770808816,
   "leaves": [
     {
       "automatic": false,
@@ -117,6 +131,32 @@
       "recommended_action": "review_leaf_split",
       "unit_ids": [
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4269,
+      "estimated_tokens": 673,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/performance/prefill-decode",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 3599,
+      "estimated_tokens": 522,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/runtime/graph-capture",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
       ],
       "units": 1
     },
@@ -181,22 +221,36 @@
     },
     {
       "automatic": false,
-      "bytes": 17963,
-      "estimated_tokens": 2449,
+      "bytes": 4269,
+      "estimated_tokens": 673,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/performance",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 21562,
+      "estimated_tokens": 2971,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/runtime",
       "recommended_action": "review_two_level_subtree_split",
       "unit_ids": [
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
         "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
         "unit-vllm-ascend-idle-dp-gdn-state",
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
       ],
-      "units": 4
+      "units": 5
     }
   ],
-  "unit_count": 8,
+  "unit_count": 10,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4698,
@@ -211,6 +265,20 @@
       ],
       "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
       "tier": "L3"
+    },
+    "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": {
+      "bytes": 3599,
+      "category": "sop",
+      "content_sha256": "edf80b8dc2f723641e4a1b53e47002acf146a96b8634c94e2a4bb8f1321abd43",
+      "domain_path": "vllm-ascend/runtime/graph-capture",
+      "estimated_tokens": 522,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
+      "tier": "L2"
     },
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": {
       "bytes": 3712,
@@ -275,6 +343,21 @@
       "inherits_from": [],
       "path": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
       "tier": "L1"
+    },
+    "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow": {
+      "bytes": 4269,
+      "category": "workflow",
+      "content_sha256": "d759a5dc73e958cc6d757060a23e88e4df461a39e1dd5e8d0b7d3b320f31523a",
+      "domain_path": "vllm-ascend/performance/prefill-decode",
+      "estimated_tokens": 673,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/performance/prefill-decode/unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow.md",
+      "tier": "L3"
     },
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": {
       "bytes": 4850,

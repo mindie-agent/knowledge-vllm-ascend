@@ -1,7 +1,11 @@
 {
-  "build_elapsed_ms": 1.172791002318263,
+  "build_elapsed_ms": 1.8478339770808816,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
@@ -19,27 +23,35 @@
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
+    "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+    ],
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-verification-and-state-parity-gates": []
   },
-  "generation": "4d2626018dc92c316e1ecaedb6e4fd65b84b62d80c872c12b74f4fc62340e8c7",
+  "generation": "941ba496aad6817b69915c89ee6ed298b88b8adf181f6e053c67526f16debc5b",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
+    "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": "_common/unit-vllm-ascend-hccl-and-dp-collective-invariants.md",
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow.md",
     "unit-vllm-ascend-idle-dp-gdn-state": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
+    "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow": "vllm-ascend/performance/prefill-decode/unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow.md",
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
     "unit-vllm-ascend-verification-and-state-parity-gates": "_common/unit-vllm-ascend-verification-and-state-parity-gates.md"
   },
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 8,
+  "unit_count": 10,
   "units": [
     {
       "category": "workflow",
@@ -110,6 +122,69 @@
           "Hermes",
           "reviewed_change",
           "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "graph_mode": [
+          "aclgraph",
+          "piecewise",
+          "full_decode_only"
+        ],
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend"
+        ]
+      },
+      "domain_path": "vllm-ascend/runtime/graph-capture",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py"
+        ],
+        "source_digest": "61ee8bc56d4ac0e1a7f43d1804bfe41c1a6699181774938907c97174f2348343",
+        "source_locator": "vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:vllm_ascend/worker/model_runner_v1.py",
+        "source_type": "runtime_triage_sop",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "ACLGraph capture invalidation, dynamic shape bucketing, and stream sync triage SOP",
+      "token_estimate": 522,
+      "triggers": {
+        "error_signatures": [
+          "ACLGraph replay falls back to eager execution on decode steps",
+          "RuntimeError during npu_graph capture due to host-device synchronization or dynamic allocation",
+          "decode output diverges after batch size changes across padded graph buckets"
+        ],
+        "keywords": [
+          "ACLGraph",
+          "graph capture",
+          "invalidation",
+          "padded batch",
+          "bucket",
+          "eager fallback",
+          "stream synchronization",
+          "persistent buffer",
+          "model_runner_v1"
         ]
       }
     },
@@ -441,6 +516,74 @@
           "contiguous",
           "weight_nz_mode",
           "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "workflow",
+      "conditions": {
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend"
+        ],
+        "workload_phase": [
+          "prefill_decode_mixed",
+          "decode_heavy",
+          "prefill_heavy"
+        ]
+      },
+      "domain_path": "vllm-ascend/performance/prefill-decode",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates",
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+      ],
+      "path": "vllm-ascend/performance/prefill-decode/unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py"
+        ],
+        "source_digest": "61ee8bc56d4ac0e1a7f43d1804bfe41c1a6699181774938907c97174f2348343",
+        "source_locator": "vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:vllm_ascend/worker/model_runner_v1.py",
+        "source_type": "hermes_workflow_distillation",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L3",
+      "title": "Hermes workflow: vllm-ascend TTFT vs TPOT/ITL bottleneck attribution and convergence",
+      "token_estimate": 673,
+      "triggers": {
+        "error_signatures": [
+          "TPOT or ITL regresses under decode concurrency while single-operator latency is unchanged",
+          "TTFT spikes during chunked prefill or multi-rank DP/TP execution",
+          "NPU stream timeline shows gaps between consecutive decode steps"
+        ],
+        "keywords": [
+          "TTFT",
+          "TPOT",
+          "ITL",
+          "prefill",
+          "decode",
+          "host bubble",
+          "ACLGraph",
+          "HCCL",
+          "KV cache",
+          "bottleneck attribution",
+          "workflow"
         ]
       }
     },
