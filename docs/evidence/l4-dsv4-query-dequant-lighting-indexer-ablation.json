@@ -1,0 +1,193 @@
+{
+  "schema": "mindie-l4-ablation-design/1",
+  "domain": "vllm-ascend",
+  "candidate_id": "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator",
+  "candidate_family": "dsv4-v41-query-dequant-lightning-indexer-fusion",
+  "sibling_l4_family": "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
+  "experiment_status": "not_run_source_only",
+  "ablation_retained": false,
+  "measurement_claims": {
+    "status": "not_run",
+    "baseline_run_id": null,
+    "candidate_run_id": null,
+    "ablation_run_id": null,
+    "tpot_improvement_retained_under_ablation": null,
+    "host_d2h_syncs_inside_captured_step": null,
+    "gm_copy_kernels_per_mla_layer": null
+  },
+  "reason": "The mutation is the combination of (a) fusing the query low-rank dequantization, FP32 RMSNorm and RoPE/NoPE split into one decode kernel so three intermediate GM passes disappear, (b) replacing explicit contiguous clones on the LightningIndexer query/key inputs with stride-compliant aliases that satisfy the 32 B/512 B NPU alignment contract, and (c) keeping the top-k selected block indices and valid-length mask device-resident across the npu_lightning_indexer to sparse-MLA handoff so a -1 sentinel never becomes an AICore address and no host clamp is needed. The source-only status is deliberate: the transcripts establish the baseline copy/sync/fault signals and the kernels involved, but the three factors have not been run as a controlled baseline/full/leave-one-out experiment on one frozen service.",
+  "conditions": {
+    "framework": "vllm-ascend",
+    "model_family": ["deepseek-v4", "deepseek-v4.1", "dsv4", "dsv3.2"],
+    "attention_backend": "sparse_mla",
+    "quantization": ["w8a8", "w4a8", "c8"],
+    "execution_mode": ["eager", "aclgraph"],
+    "workload_phase": ["chunked_prefill", "decode", "speculative_decode"]
+  },
+  "geometry": {
+    "kv_lora_rank": 512,
+    "qk_rope_head_dim": 64,
+    "mla_latent_record_elements": 576,
+    "indexer_head_dim": 128,
+    "indexer_topk": 512,
+    "indexer_compress_ratio": 4,
+    "indexer_layout_query": "TND",
+    "indexer_layout_key": "PA_BSND",
+    "causal_sparse_mode": 3,
+    "note": "These are the observed V4-Flash C4 values. Re-derive them when the model, layer compression class or checkpoint differs; do not treat them as universal constants."
+  },
+  "factors": [
+    {
+      "id": "fused_q_qr_dequant_and_rope_split",
+      "kind": "performance",
+      "change": "Replace the decode query chain (dequantize qr to a temporary, RMSNorm to a second temporary, project with the W_UK-absorbed W_Q, split NoPE/RoPE, apply RoPE to the 64-wide slice, concat) with one fused kernel that reads int8 qr plus its per-token FP32 scale, dequantizes in FP32, applies the FP32 RMSNorm weight, multiplies by the absorbed W_Q, splits 512 NoPE and 64 RoPE in registers, applies RoPE only to the 64-wide slice, and writes one packed [T, H, 576] query.",
+      "depends_on": [],
+      "removed_by_arm": "minus_q_fusion",
+      "invariants": [
+        "W_Q contains the W_UK absorption for decode; the non-absorbed prefill path remains 128 + 64 and is not routed through this kernel.",
+        "The output width is 512 + 64 per head and the last dimension is contiguous.",
+        "RoPE touches only the 64-wide slice; accumulation is FP32; qr_scale is per token and rms_weight is FP32.",
+        "The output base satisfies the 32 B alignment contract and no intermediate qr/norm/split tensor is written to GM."
+      ],
+      "expected_effect": "Remove three intermediate GM passes per MLA layer and one launch chain per layer; lower decode TPOT and indexer-adjacent latency without changing the index scores beyond the unavoidable FP32/quantization ordering.",
+      "removal_signature": "The dequant, RMSNorm, split and concat TensorMove/Memcpy entries return and decode TPOT regresses, while the index scores stay equal."
+    },
+    {
+      "id": "contiguous_view_alias_for_lightning_indexer",
+      "kind": "performance",
+      "change": "Replace explicit .contiguous() clones on q_indexer and k_indexer with stride-compliant slice views before npu_quant_lightning_indexer. The query view keeps the producer's axis-0 stride and storage offset, has stride(-1) == 1, and is 32 B aligned; the key view remains the PA_BSND paged index-key cache. Request offsets come from the device query_start_loc; a kernel rejection falls back to a copy outside the captured decode path.",
+      "depends_on": [],
+      "removed_by_arm": "minus_view_alias",
+      "invariants": [
+        "No allocation and no .contiguous() in the captured forward.",
+        "data_ptr() is unchanged across the call; the last dimension is contiguous; the base and row stride satisfy the kernel's 32 B/512 B alignment contract.",
+        "The key cache stays PA_BSND with its original page strides; the block table stays int32 and axis-0 strided.",
+        "A view that is not accepted by the kernel is not forced; the fallback is recorded."
+      ],
+      "expected_effect": "Remove one token-scaled clone per layer and indexer call, reducing device bandwidth and decode TPOT with bitwise-equal index scores and top-k selections.",
+      "removal_signature": "The Q/K TensorMove clones return and TPOT regresses, while the top-k selections stay equal; a stride/contiguity error means the fallback boundary applies and the factor is not retained."
+    },
+    {
+      "id": "device_resident_topk_block_mask_guard",
+      "kind": "correctness",
+      "change": "Keep the selected top-k indices, the valid-length tensor and the block-table guard on the device. Clamp the valid count with a device op, replace the -1 sentinel with a safe allocated dummy block, scatter the guarded indices into a persistent device block table, and pass seqused_k so the dummy is excluded from attention. Remove the host clamp and .item()/.cpu() from the indexer-to-attention handoff; if a host scalar is unavoidable, compute it once in metadata/prepare outside capture.",
+      "depends_on": [],
+      "removed_by_arm": "minus_device_guard",
+      "invariants": [
+        "-1 never reaches AICore; the dummy block is a real allocated block excluded by seqused_k or the mask.",
+        "seqused_k is int32 on the device and non-increasing per request when the context shrinks.",
+        "The block-table row length is at least topk and covers the padded capacity; no .item()/.cpu() occurs inside the captured step.",
+        "Graph replay observes the updated device buffers, not a stale host snapshot."
+      ],
+      "expected_effect": "Remove the D2H synchronization and host clamp, prevent invalid GM reads at long context, and stabilize TPOT when the selected block count changes across steps.",
+      "removal_signature": "The host clamp and D2H return; the adversarial long-context case exposes an invalid block id, a wrong selection, or an invalid GM address."
+    }
+  ],
+  "leave_one_out_arms": [
+    {
+      "arm": "baseline",
+      "removed": [],
+      "purpose": "Capture the unmodified absorbed decode path with the same model, weights, topology, context lengths, concurrency and graph mode."
+    },
+    {
+      "arm": "full_candidate",
+      "removed": [],
+      "purpose": "Measure the complete retained combination and require every correctness and performance gate to pass."
+    },
+    {
+      "arm": "minus_q_fusion",
+      "removed": ["fused_q_qr_dequant_and_rope_split"],
+      "purpose": "Must restore the dequant/RMSNorm/split copies and a decode TPOT regression while keeping index scores equal."
+    },
+    {
+      "arm": "minus_view_alias",
+      "removed": ["contiguous_view_alias_for_lightning_indexer"],
+      "purpose": "Must restore the Q/K contiguous clones and a TPOT regression while keeping top-k selections equal."
+    },
+    {
+      "arm": "minus_device_guard",
+      "removed": ["device_resident_topk_block_mask_guard"],
+      "purpose": "Must restore the host clamp/D2H and expose an invalid block id, a wrong selection, or an invalid GM address in the adversarial long-context case."
+    }
+  ],
+  "guard_workloads": [
+    "decode_step_at_1k_context_below_topk_times_compress_ratio",
+    "decode_step_at_32k_context_above_topk_times_compress_ratio",
+    "decode_step_at_128k_context_above_topk_times_compress_ratio",
+    "chunked_prefill_boundary_at_a_partial_compressed_block",
+    "topk_row_with_invalid_tail_minus_one",
+    "topk_row_at_exactly_topk_times_compress_ratio",
+    "paged_block_table_with_non_zero_storage_offset",
+    "c8_latent_store_and_load_scale_parity",
+    "w8a8_dynamic_dequant_parity",
+    "w4a8_group_scale_dequant_parity",
+    "mtp_draft_target_num_accepted_tokens_parity",
+    "mtp_draft_target_query_start_loc_parity",
+    "mtp_draft_target_block_tables_parity",
+    "aclgraph_replay_with_changed_topk_valid_length",
+    "tp_rank_parity_of_selected_block_ids"
+  ],
+  "expected_signals": {
+    "fused_q_qr_dequant_and_rope_split": {
+      "baseline": "Three or more token-scaled TensorMove/Memcpy entries per MLA layer around qr dequant, RMSNorm and the NoPE/RoPE split.",
+      "candidate": "One fused query kernel per layer and no intermediate GM tensors.",
+      "removal_must_show": "The copies return and decode TPOT regresses; index scores remain equal."
+    },
+    "contiguous_view_alias_for_lightning_indexer": {
+      "baseline": "A TensorMove/Memcpy immediately before npu_quant_lightning_indexer whose size scales with the token count.",
+      "candidate": "The indexer consumes an aliased view with the producer's data_ptr and axis-0 stride.",
+      "removal_must_show": "The clone returns and TPOT regresses; top-k selections remain equal."
+    },
+    "device_resident_topk_block_mask_guard": {
+      "baseline": "A host clamp or .item()/.cpu() between npu_lightning_indexer and sparse MLA, and a -1 tail that can reach the attention operator.",
+      "candidate": "Zero host D2H in the captured handoff and a device-side sentinel guard.",
+      "removal_must_show": "The host clamp/D2H returns and the adversarial long-context case exposes an invalid block id or GM address."
+    }
+  },
+  "measurement_plan": {
+    "context_lengths": [1024, 32768, 131072],
+    "output_lengths": {
+      "prefill_only": 1,
+      "decode_tpot": 128
+    },
+    "repetitions_per_cell": 3,
+    "metrics": [
+      "ttft_p50_p90_ms",
+      "tpot_p50_p90_ms",
+      "itl_p50_p90_ms",
+      "output_tokens_per_second",
+      "indexer_kernel_time_us",
+      "gm_copy_kernels_per_mla_layer",
+      "host_d2h_sync_count_in_captured_step",
+      "selected_block_count_per_request",
+      "accuracy_metric"
+    ],
+    "acceptance": [
+      "1k greedy output matches the BF16 dense reference token for token.",
+      "32k and 128k accuracy stays within the pre-registered tolerance and long-context retrieval is not below baseline.",
+      "No AICore invalid GM address, cross-device timeout, NaN, graph recapture or host D2H inside the captured step.",
+      "A performance win must exceed twice the run-to-run spread and must appear in the long-context cells, not only at 1k."
+    ]
+  },
+  "fallback_boundary": {
+    "non_absorbed_prefill": "Factor 1 does not apply; keep the 128 + 64 prefill query and the kv_b_proj expansion. Factors 2 and 3 apply only when an indexer is present.",
+    "different_geometry": "When kv_lora_rank, qk_rope_head_dim, indexer head_dim, topk, compress_ratio or the layer compression class differs, re-derive the widths and scale binding instead of reusing 512/64/128/512/4.",
+    "kernel_rejects_view": "Keep .contiguous() at the call site or in metadata/prepare, report the copy and its size, and do not claim factor 2. A forced view that changes scores is a correctness regression.",
+    "per_tensor_c8": "Factor 3's per-token scale assumption is invalid; use a consistent per-tensor store and load and do not mix granularities.",
+    "host_scalar_required": "If an operator cannot consume a device valid-length tensor, keep the synchronization outside capture and report it; do not hide it inside replay.",
+    "different_soc": "A2/A3 and A5 have different QLI tiling keys and bindings (torch.ops.custom versus torch.ops.cann_ops_transformer); re-check the available kernel, dtype and layout.",
+    "ablation_unproven": "Until the full candidate and all three minus arms run on one frozen configuration, keep experiment_status as not_run_source_only and do not report a measured speedup."
+  },
+  "source_references": [
+    "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms.md",
+    "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop.md",
+    "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md",
+    "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/50809f1fefde44f4671b682248b8a55c32debd931359dd887585022e0a68fa79/index.md",
+    "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md",
+    "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/99e97cb3574e1288dd1faa397b490f01e93349bdaee11d3f6909f2e5c383fac4/index.md",
+    "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0bc94d24162470fe8ce3fc189b7eb239aa868d074ff53c78706cad0c5c608243/index.md",
+    "vllm_ascend/models/deepseek_v41/indexer.py",
+    "vllm_ascend/attention/dsa_v41.py",
+    "vllm_ascend/core/kv_cache_interface.py"
+  ]
+}

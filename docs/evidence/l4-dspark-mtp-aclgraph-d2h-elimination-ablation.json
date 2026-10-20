@@ -1,0 +1,217 @@
+{
+  "schema": "mindie-l4-ablation-design/1",
+  "domain": "vllm-ascend",
+  "candidate_id": "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
+  "candidate_family": "dspark-mtp-aclgraph-d2h-elimination",
+  "sibling_l4_family": "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator",
+  "corpus_parent": "knowledge-vllm-ascend",
+  "corpus_parent_revision": "835baf2",
+  "source_repository": "https://github.com/vllm-project/vllm-ascend",
+  "source_commit": "d8c9e3a673af918c94a7794ef6f1f69c024d9c62",
+  "experiment_status": "not_run_source_only",
+  "evidence_strength": "hypothesis",
+  "measurement_claims": [],
+  "reason": "Source-derived optimization design grounded in the pinned vllm-ascend commit (d8c9e3a673af918c94a7794ef6f1f69c024d9c62). It defines the three separable optimization factors, leave-one-out ablation arms, and verification criteria for eliminating per-step host D2H synchronization and aligning capture buckets on the v2 DSpark full-graph speculative decode path. Live NPU baseline, candidate, and leave-one-out ablation runs remain to be executed before promoting evidence_strength beyond hypothesis.",
+  "conditions": {
+    "runtime": "vllm-ascend",
+    "soc": ["Ascend910B2", "Ascend910B3", "Ascend910B4", "Ascend910_93"],
+    "execution_mode": "aclgraph",
+    "workload_phase": ["decode", "speculative_decode"],
+    "dspark_graph_path": "v2_ascend_dspark_full_graph"
+  },
+  "source_boundary": {
+    "v2_initializer": "The v2 module imports vllm.v1.worker.gpu.spec_decode.dspark.speculator.DSparkSpeculator and the AscendDSparkSpeculator class subclasses it. Its own __init__ calls super().__init__ and sets input_batch only; it does not initialize num_query_per_req. The upstream initializer is not vendored in the pinned vllm-ascend tree.",
+    "v1_observation": "The sample_from_anchor default and the K-vs-K+1 num_query_per_req formula are observed only in the v1 AscendDSparkProposer. They are not evidence for the v2 default or formula.",
+    "pre_use_requirement": "A task must record dspark_graph_path=v2_ascend_dspark_full_graph and the observed v2 num_query_per_req, and must bind the upstream DSparkSpeculator source revision if it relies on that dependency. Unknown values, a v1/eager path, another runner path or an unrelated speculative method exclude the hypothesis.",
+    "graph_condition": "dspark_graph_path is a declared unit condition. It prevents the mutator from matching v1/eager DSpark or unrelated speculative methods just because the generic runtime, soc, aclgraph and workload-phase fields match."
+  },
+  "source_observations": [
+    {
+      "anchor": "vllm_ascend/utils.py:1058",
+      "observation": "uniform_decode_query_len is 1 when speculative decoding is disabled and 1 + speculative_config.num_speculative_tokens otherwise. This is the source basis for the target verification step's K+1 per-request query length.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/utils.py#L1058"
+    },
+    {
+      "anchor": "vllm_ascend/worker/v2/spec_decode/dspark/speculator.py:26-28,41,44-46",
+      "observation": "The v2 module imports the upstream vllm.v1.worker.gpu.spec_decode.dspark.speculator.DSparkSpeculator and the AscendDSparkSpeculator class subclasses it. Its own __init__ calls super().__init__ and sets input_batch only; it does not initialize num_query_per_req. The pinned tree therefore does not establish the v2 default or formula for that field.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dspark/speculator.py#L26-L46"
+    },
+    {
+      "anchor": "vllm_ascend/worker/v2/spec_decode/dspark/speculator.py:108-150",
+      "observation": "The v2 build_draft_attn_metadatas consumes self.num_query_per_req to compute num_tokens_padded = num_reqs_padded * self.num_query_per_req and to rebuild actual_seq_lengths_q. The docstring records the FIA TND requirement that the last element equal the query token count of the graph being replayed; otherwise tiling fails with queryT != last element of actualSequenceLengthQ. The consumed value must be observed; no default is asserted.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dspark/speculator.py#L108-L150"
+    },
+    {
+      "anchor": "vllm_ascend/spec_decode/dspark_proposer.py:37-41",
+      "observation": "In the v1 AscendDSparkProposer only, sample_from_anchor defaults to true; when true num_query_per_req is num_speculative_tokens (K), and when false it is 1 + num_speculative_tokens (K+1). This is a v1 observation and does not define the v2 value.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/spec_decode/dspark_proposer.py#L37-L41"
+    },
+    {
+      "anchor": "vllm_ascend/spec_decode/dspark_proposer.py:70-71",
+      "observation": "The v1 AscendDSparkProposer sets use_cuda_graph=False and states that DSpark runs eager only on that path because Ascend cudagraph is unsupported there. The v1 path is excluded from this ACLGraph hypothesis.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/spec_decode/dspark_proposer.py#L70-L71"
+    },
+    {
+      "anchor": "vllm_ascend/worker/v2/spec_decode/dflash/aclgraph.py:81-116",
+      "observation": "The v2 DFlash ACLGraph manager builds draft attention metadata before super().run_fullgraph(desc) and updates full-graph parameters inside set_forward_context. The v2 DSpark speculator docstring states that DSpark inherits DFlash's full-graph path. This is the source-bound graph path for the hypothesis.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dflash/aclgraph.py#L81-L116"
+    },
+    {
+      "anchor": "vllm_ascend/worker/model_runner_v1.py:857-900,1339-1348",
+      "observation": "The async speculative path writes accepted-token counts into a GPU tensor and records a D2H event after the forward. The CPU copy is consumed in the next prepare step. This is a device-resident/evented pattern with the synchronization outside the forward, not evidence that a DSpark ACLGraph run measured zero synchronizations.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L857-L900"
+    },
+    {
+      "anchor": "vllm_ascend/worker/model_runner_v1.py:1448-1466",
+      "observation": "seq_lens is written on the device with tensor indexing and the padding tail is zero-filled. When async speculative decoding is active and a CPU seq-lens value is required, _correct_optimistic_seq_lens_cpu corrects it without an extra NPU-to-CPU seq_lens copy.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L1448-L1466"
+    },
+    {
+      "anchor": "vllm_ascend/worker/model_runner_v1.py:927-949,5186-5214",
+      "observation": "_pad_query_start_loc_for_fia pads the query-start-location series when the padded token count differs from the request count times the uniform decode length. The graph-alignment block computes lcm(uniform_decode_query_len, tensor_parallel_size) only when sequence parallelism is enabled and both values are greater than one. This alignment is conditional, not universal.",
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L927-L949"
+    }
+  ],
+  "factors": [
+    {
+      "id": "align_target_and_observed_draft_graph_buckets",
+      "kind": "performance",
+      "change": "Hypothesis: align the target and draft graphs separately. The target verification step uses uniform_decode_query_len = K+1. The DSpark draft bucket uses the task-observed v2 num_query_per_req; the pinned v2 source consumes that field but does not initialize it, and the v1 K-vs-K+1 formula is v1-only. Choose a capture bucket that covers the observed padded token count for the relevant step, and mark tail slots with slot_mapping=-1 and masked seq_lens=0 so they never reach live KV or recurrent state. The source applies lcm(K+1, TP) alignment only on the SP+TP>1 path. Do not force the draft block into the target bucket.",
+      "depends_on": [],
+      "source_anchors": ["vllm_ascend/utils.py:1058", "vllm_ascend/worker/v2/spec_decode/dspark/speculator.py:108-150", "vllm_ascend/worker/model_runner_v1.py:927-949,5186-5214"]
+    },
+    {
+      "id": "hoist_attention_metadata_out_of_capture",
+      "kind": "correctness",
+      "change": "Hypothesis: build the per-bucket DSpark draft/FIA metadata, including an actual_seq_lengths_q whose last element equals the captured query-token count for the observed draft query length, in the prepare step before replay, then update graph parameters outside the captured region. The captured region must allocate no metadata and rebuild no per-step metadata. The v2 DFlash ACLGraph manager follows this shape and the v2 DSpark docstring says DSpark inherits that path. No specific sink-metadata class is asserted.",
+      "depends_on": ["align_target_and_observed_draft_graph_buckets"],
+      "source_anchors": ["vllm_ascend/worker/v2/spec_decode/dspark/speculator.py:132-150", "vllm_ascend/worker/v2/spec_decode/dflash/aclgraph.py:81-116"]
+    },
+    {
+      "id": "device_side_num_accepted_tokens_and_seq_lens",
+      "kind": "performance",
+      "change": "Hypothesis: keep num_accepted_tokens and seq_lens device-resident for the captured speculative step, update them with in-place index/scatter/copy operations, and place any required host synchronization outside the captured step. Do not call .item() or .cpu() inside the captured step. The pinned async speculative path demonstrates the GPU tensor plus event pattern; applying it to the v2 DSpark ACLGraph path is the unmeasured part.",
+      "depends_on": [],
+      "source_anchors": ["vllm_ascend/worker/model_runner_v1.py:857-900", "vllm_ascend/worker/model_runner_v1.py:1339-1348", "vllm_ascend/worker/model_runner_v1.py:1448-1466"]
+    }
+  ],
+  "leave_one_out_arms": [
+    {
+      "arm": "baseline",
+      "status": "not_run",
+      "removed": [],
+      "purpose": "Planned only: capture the unmodified v2 DSpark ACLGraph path with the same source revision, observed num_query_per_req, model/checkpoint, dtype, topology, bucket set, workload and warmup."
+    },
+    {
+      "arm": "full_candidate",
+      "status": "not_run",
+      "removed": [],
+      "purpose": "Planned only: measure the complete three-factor combination and require every capture, D2H, parity and performance gate to pass."
+    },
+    {
+      "arm": "minus_bucket_alignment",
+      "status": "not_run",
+      "removed": ["align_target_and_observed_draft_graph_buckets"],
+      "purpose": "Planned only: must expose a capture miss, a tiling failure or a padded-shape mismatch."
+    },
+    {
+      "arm": "minus_metadata_hoist",
+      "status": "not_run",
+      "removed": ["hoist_attention_metadata_out_of_capture"],
+      "purpose": "Planned only: must expose an allocation or metadata-preparation fault in or around the captured region."
+    },
+    {
+      "arm": "minus_device_side_updates",
+      "status": "not_run",
+      "removed": ["device_side_num_accepted_tokens_and_seq_lens"],
+      "purpose": "Planned only: must expose a host D2H synchronization or a stale accepted-token count."
+    }
+  ],
+  "guard_workloads": [
+    "speculative_decode_step_at_each_K",
+    "padded_batch_bucket_transition",
+    "num_accepted_tokens_device_parity",
+    "seq_lens_device_parity",
+    "observed_dspark_num_query_per_req_matches_captured_draft_bucket",
+    "dspark_draft_actual_seq_lengths_q_matches_captured_query_count",
+    "graph_recapture_after_warmup",
+    "host_d2h_sync_inside_captured_step",
+    "v1_eager_and_unrelated_method_condition_check"
+  ],
+  "guard_status": "not_run",
+  "fallback_boundary": {
+    "non_aclgraph_mode": "With eager or another execution mode, use the normal speculative decode path; do not force graph capture or report a capture result. The v1 AscendDSparkProposer path sets use_cuda_graph=False and is excluded.",
+    "different_k": "When K, TP, sequence parallelism, the observed v2 num_query_per_req, the upstream DSparkSpeculator dependency revision or the padded bucket family differs, align a new bucket set and re-run the capture gate instead of reusing this shape assumption.",
+    "host_scalar_dependency": "If an operator still requires a host scalar for correctness, keep that synchronization outside the captured step and report it; do not hide the sync or move it into replay.",
+    "parity_unproven": "If accepted-token or seq_lens parity is unavailable, keep the unit at hypothesis or single_observation at most; do not claim ablation_verified.",
+    "graph_capture_unavailable": "If ACLGraph capture is unavailable or unsupported on the selected path, report the execution-condition failure and stop; do not substitute eager results for a capture result."
+  },
+  "missing_experiment": {
+    "status": "not_run",
+    "required_receipts": [
+      "baseline and full-candidate receipts on the same frozen source revision, model/checkpoint, dtype, CANN/driver, torch/torch_npu, topology, K, capture bucket set, workload and warmup",
+      "one leave-one-out receipt per factor",
+      "the observed v2 num_query_per_req, the observed dspark_graph_path, and the source revision/path of the upstream DSparkSpeculator dependency",
+      "raw paired timing samples with host-monotonic intervals and synchronization flags",
+      "ACLGraph recapture counter after warmup",
+      "captured-step D2H synchronization trace",
+      "accepted-token and seq_lens parity against an eager or independent reference, including rejected-draft and bucket-shrink transitions",
+      "TPOT, ITL p50/p90 and mean_acceptance_length for every arm",
+      "guard-workload results and one independent receipt identifier per run"
+    ],
+    "blocked_claims": [
+      "zero recaptures",
+      "zero captured-step host D2H synchronizations",
+      "retained TPOT improvement under ablation",
+      "reproduced_empirical evidence strength",
+      "any verified ablation gate",
+      "any inferred v2 num_query_per_req default or K-vs-K+1 formula"
+    ]
+  },
+  "future_measured_acceptance": {
+    "preconditions": "Freeze the model/checkpoint, vllm-ascend source revision, NPU model, CANN/driver, torch/torch_npu, dtype, K, TP, sequence-parallel setting, observed v2 num_query_per_req, source-bound upstream DSparkSpeculator revision, observed dspark_graph_path, capture bucket set, workload, warmup and tolerance before looking at the result.",
+    "gates": [
+      {
+        "gate": "scope",
+        "requirement": "The task records dspark_graph_path=v2_ascend_dspark_full_graph and an observed v2 num_query_per_req. A v1/eager path, another runner path or an unrelated speculative method is excluded and must not be reported as this hypothesis."
+      },
+      {
+        "gate": "capture_stability",
+        "requirement": "After warmup, a sustained speculative interval covering every configured K and boundary bucket has zero ACLGraph recaptures; one recapture rejects the combination."
+      },
+      {
+        "gate": "d2h",
+        "requirement": "The captured step has zero host D2H synchronizations in a trace; any .item(), .cpu() or blocking copy inside replay rejects the combination even if latency improves."
+      },
+      {
+        "gate": "state_parity",
+        "requirement": "Device num_accepted_tokens and seq_lens match an independent eager or reference path at every step, including rejected-draft and bucket-shrink transitions; tail rows do not touch live KV or recurrent state."
+      },
+      {
+        "gate": "paired_performance",
+        "requirement": "Report TPOT, ITL p50/p90 and mean_acceptance_length for baseline and full candidate on the same frozen workload and stack; an acceptance-rate regression remains visible."
+      },
+      {
+        "gate": "ablation_retention",
+        "requirement": "The paired TPOT improvement must be retained by the full candidate and must weaken or disappear when the device-side D2H removal is ablated; bucket-only or metadata-only gains cannot claim this unit."
+      },
+      {
+        "gate": "guards",
+        "requirement": "Every declared guard workload passes, or its failure is reported as a failure; a local speedup cannot mask a guard regression."
+      }
+    ],
+    "promotion_rule": "One qualifying run supports single_observation at most. reproduced_empirical requires an independent repeat on the same recorded stack. Schema validation, a worker exit code of 0, a unit test or a prefilled receipt is not evidence.",
+    "insufficient_evidence": ["schema validation", "worker exit 0", "unit tests", "prefilled or synthetic payloads", "reviewer approval without a run receipt", "an inferred v1-to-v2 num_query_per_req default"]
+  },
+  "source_references": [
+    "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
+    "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
+    "_common/unit-vllm-ascend-verification-and-state-parity-gates.md",
+    "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py",
+    "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/utils.py#L1058",
+    "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dspark/speculator.py#L26-L150",
+    "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dflash/aclgraph.py#L81-L116",
+    "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/spec_decode/dspark_proposer.py#L37-L41",
+    "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/spec_decode/dspark_proposer.py#L70-L71"
+  ]
+}

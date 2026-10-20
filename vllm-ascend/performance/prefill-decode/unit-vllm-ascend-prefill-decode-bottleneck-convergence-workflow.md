@@ -18,7 +18,6 @@ evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow
 inherits_from:
 - unit-vllm-ascend-npu-runtime-and-graph-invariants
-- unit-vllm-ascend-hccl-and-dp-collective-invariants
 - unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop
 provenance:
   evidence_refs:
@@ -27,7 +26,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:vllm_ascend/worker/model_runner_v1.py
   source_type: hermes_workflow_distillation
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L3
 title: 'Hermes workflow: vllm-ascend TTFT vs TPOT/ITL bottleneck attribution and convergence'
@@ -71,6 +70,7 @@ Use this staged workflow when optimizing or diagnosing end-to-end serving throug
   - Apply `unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop`: inspect ACLGraph bucket hit rate, eliminate `.item()` / `.cpu()` host syncs in `prepare_inputs`, and verify async output processing overlap.
 - **Branch B (`T_collective` dominates or diverges across ranks):**
   - Check whether collective time is true bandwidth saturation or arrival imbalance caused by uneven prefill/decode token distribution or missing idle-rank dummy participation (`unit-vllm-ascend-hccl-and-dp-collective-invariants`).
+  - DP idle-rank participation applies only when `data_parallel_size > 1`; with `dp=1` there is no idle DP rank, so this branch reduces to the TP/EP collective check.
   - Measure per-rank compute duration before the collective barrier; only tune HCCL/comm overlap after confirming ranks enter the collective simultaneously.
 - **Branch C (`T_device_compute` dominates with high stream coverage):**
   - Rank the top-3 device kernels by share of `T_device_compute` (`p` in Amdahl's law $S_{\text{est}} = \frac{1}{(1 - p) + p / s}$).

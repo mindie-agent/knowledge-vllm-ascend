@@ -36,7 +36,7 @@ provenance:
 revision: 2
 schema: mindie-graded-unit/1
 tier: L3
-title: 'Hermes workflow: hybrid GDN/Mamba + MLA DP idle-rank state correction'
+title: 'Hybrid GDN/Mamba + MLA DP idle-rank state troubleshooting workflow'
 triggers:
   error_signatures:
   - idle DP rank with no scheduled requests while peer is active
@@ -48,7 +48,6 @@ triggers:
   - GDN
   - conv_state
   - ssm_state
-  - Hermes
   - workflow
   - skip_gdn_state_update
   - HCCL
@@ -58,7 +57,7 @@ triggers:
   - reviewed_change
 ---
 
-# Hermes workflow: hybrid GDN/Mamba + MLA DP idle-rank state correction
+# Hybrid GDN/Mamba + MLA DP idle-rank state troubleshooting workflow
 
 ## Trigger
 

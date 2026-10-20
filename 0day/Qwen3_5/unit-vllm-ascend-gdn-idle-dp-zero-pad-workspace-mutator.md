@@ -6,7 +6,7 @@ tier: L4
 category: mutator
 domain_path: 0day/Qwen3_5
 evidence_strength: hypothesis
-title: 'L4 mutator: GDN idle-DP zero-padded workspace with empty-batch HCCL participation'
+title: 'GDN idle-DP zero-padded workspace with empty-batch HCCL participation'
 conditions:
   model_family:
   - qwen3_5
@@ -61,7 +61,7 @@ triggers:
   - leave-one-out
   - guard workload
 ---
-# L4 mutator: GDN idle-DP zero-padded workspace with empty-batch HCCL participation
+# GDN idle-DP zero-padded workspace with empty-batch HCCL participation
 
 ## Applicability
 
