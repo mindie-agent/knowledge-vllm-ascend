@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 8.946957997977734,
+  "build_elapsed_ms": 1.7044579144567251,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -9,9 +9,6 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
-    "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-    ],
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
@@ -19,24 +16,6 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates",
       "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
-    ],
-    "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-    ],
-    "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
-      "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop"
-    ],
-    "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms"
-    ],
-    "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-verification-and-state-parity-gates",
-      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
-      "unit-vllm-ascend-idle-dp-gdn-state"
     ],
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": [],
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": [
@@ -48,32 +27,10 @@
       "unit-vllm-ascend-hccl-and-dp-collective-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
-    "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-    ],
-    "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
-      "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
-      "unit-vllm-ascend-verification-and-state-parity-gates",
-      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
-    ],
-    "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms"
-    ],
-    "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
-      "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
-    ],
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
-    "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-hccl-and-dp-collective-invariants"
-    ],
     "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates",
       "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
     ],
@@ -81,42 +38,26 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
-    "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop": [
-      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-      "unit-vllm-ascend-verification-and-state-parity-gates",
-      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
-    ],
     "unit-vllm-ascend-verification-and-state-parity-gates": []
   },
-  "generation": "db2dce1d9f069ee883e609a0f65b9a273e3fc3442029951c4465e6f2caf7b3ea",
+  "generation": "3adabffed0080f30db9872a5da7f231665628c83e2840b46aad3616a28dba75c",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
-    "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop.md",
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
     "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": "vllm-ascend/speculative-decoding/unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator.md",
-    "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms.md",
-    "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator.md",
-    "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop.md",
-    "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": "0day/Qwen3_5/unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator.md",
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": "_common/unit-vllm-ascend-hccl-and-dp-collective-invariants.md",
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow.md",
     "unit-vllm-ascend-idle-dp-gdn-state": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
-    "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms.md",
-    "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow.md",
-    "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop.md",
-    "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow": "vllm-ascend/distributed/unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow.md",
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
-    "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": "vllm-ascend/distributed/unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop.md",
     "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow": "vllm-ascend/performance/prefill-decode/unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow.md",
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
-    "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop.md",
     "unit-vllm-ascend-verification-and-state-parity-gates": "_common/unit-vllm-ascend-verification-and-state-parity-gates.md"
   },
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 22,
+  "unit_count": 11,
   "units": [
     {
       "category": "workflow",
@@ -164,8 +105,8 @@
       },
       "revision": 2,
       "tier": "L3",
-      "title": "0-day Qwen3.5 GatedDeltaNet + Attention bring-up workflow on vllm-ascend",
-      "token_estimate": 652,
+      "title": "Hermes workflow: 0-day Qwen3.5 GatedDeltaNet + Attention bring-up on vllm-ascend",
+      "token_estimate": 647,
       "triggers": {
         "error_signatures": [
           "torch_npu.npu_recurrent_gated_delta_rule does not support ssm_state inputs in float32 format",
@@ -184,7 +125,7 @@
           "speculative decode",
           "ssm_state",
           "conv_state",
-          "workflow",
+          "Hermes",
           "reviewed_change",
           "Ascend910_93"
         ]
@@ -250,84 +191,6 @@
           "stream synchronization",
           "persistent buffer",
           "model_runner_v1"
-        ]
-      }
-    },
-    {
-      "category": "sop",
-      "conditions": {
-        "fault_class": [
-          "runtime_error",
-          "hang",
-          "aicore_exception",
-          "hccl_timeout"
-        ],
-        "framework": "vllm-ascend"
-      },
-      "domain_path": "vllm-ascend/runtime/cannbot-runbooks",
-      "evidence_strength": "software_contract",
-      "id": "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop",
-      "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-      ],
-      "path": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop.md",
-      "provenance": {
-        "evidence_refs": [
-          "https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/920beta2/maintenref/troubleshooting/docs/zh/troubleshooting/error-codes/Driver-Errors/EL0004-Memory_Allocation_Failure.md",
-          "https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/920beta2/maintenref/troubleshooting/docs/zh/error_codes/EI0006-Communication_Error_Get_Socket.md",
-          "https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/920beta2/maintenref/troubleshooting/docs/zh/error_codes/EI0002-Communication_Error_Timeout.md",
-          "https://gitcode.com/cann/oam-tools",
-          "https://github.com/vllm-project/vllm-ascend/issues/4051",
-          "https://github.com/vllm-project/vllm-ascend/pull/3005",
-          "https://github.com/vllm-project/vllm-ascend/pull/3158"
-        ],
-        "experiment_status": "not_run_source_only",
-        "source_digest": "76476793563a667b5d66b04c526d97113ba6d24e5a9d2e52a7a4b75ae380cc2c",
-        "source_locator": "public/cannbot-skills/ops/cann-error-code-standard/references/development-standard.md",
-        "source_type": "cannbot_skill_and_runbook_distillation",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L2",
-      "title": "CANN error-code, AICore exception, HCCL hang and OOM triage SOP for vllm-ascend",
-      "token_estimate": 3036,
-      "triggers": {
-        "error_signatures": [
-          "EZ9999 AclNN_Inner_Error with no semantic cause in the message",
-          "EL0004 Memory_Allocation_Failure or 507001 event timeout during a hang",
-          "EI0006 Get_Socket_Timeout or EI0002 Notify register timeout",
-          "ErrCode=507015 aicore exception or ErrCode=507018 aicpu exception",
-          "ErrCode=507035 vector core exception",
-          "PrintCoreInfo reports aic error mask, PC start and IFU/MTE/VEC/CUBE status",
-          "rank zero HCCL timeout while another rank has the first real error",
-          "service hangs after a graph capture or an idle DP step"
-        ],
-        "keywords": [
-          "CANN error code",
-          "EZ9999",
-          "EL0004",
-          "EI0006",
-          "EI0002",
-          "507015",
-          "507018",
-          "507035",
-          "507001",
-          "AICore",
-          "AICPU",
-          "vector core",
-          "plog",
-          "aic error mask",
-          "PC start",
-          "ASCEND_LAUNCH_BLOCKING",
-          "msaicerr",
-          "asys",
-          "hccn_tool",
-          "HCCL timeout",
-          "OOM",
-          "memory_summary"
         ]
       }
     },
@@ -438,16 +301,16 @@
         ],
         "experiment_status": "not_run_source_only",
         "source_commit": "d8c9e3a673af918c94a7794ef6f1f69c024d9c62",
-        "source_digest": "99555432d52fc8846ea1870c65a293030914209d0795103f90f35b3e2ef89a33",
+        "source_digest": "75a8ce2460f3154c7988f661e9dc0e177655d4dad8fad0c775b93fe8d28baf05",
         "source_locator": "docs/evidence/l4-dspark-mtp-aclgraph-d2h-elimination-ablation.json",
         "source_repository": "https://github.com/vllm-project/vllm-ascend",
         "source_type": "ablation_design_receipt",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 1,
       "tier": "L4",
-      "title": "v2 DSpark ACLGraph bucket alignment and device-resident D2H elimination",
-      "token_estimate": 1790,
+      "title": "L4 hypothesis: v2 DSpark ACLGraph bucket/D2H alignment (source-only)",
+      "token_estimate": 1808,
       "triggers": {
         "error_signatures": [
           "FIA rejects a replayed v2 DSpark graph because actual_seq_lengths_q[-1] differs from the captured query-token count (queryT != last element of actualSequenceLengthQ)",
@@ -467,307 +330,6 @@
           "bucket",
           "v2",
           "hypothesis"
-        ]
-      }
-    },
-    {
-      "category": "axiom",
-      "conditions": {
-        "framework": "vllm-ascend",
-        "model_family": [
-          "deepseek-v4",
-          "deepseek-v4.1",
-          "dsv4",
-          "dsv3.2"
-        ],
-        "soc": [
-          "Ascend910B",
-          "Ascend910_93",
-          "Ascend950"
-        ]
-      },
-      "domain_path": "vllm-ascend/models/deepseek-v4-v41",
-      "evidence_strength": "software_contract",
-      "id": "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
-      "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-      ],
-      "path": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms.md",
-      "provenance": {
-        "evidence_refs": [
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8329f666c3f1ed8962ee75cda1081fa980e25ccfa3c7179f83a7737b37860a28/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/bad4bf3370420a4fa68a1300b59acf74e43c293bf54a187d85299b012073e8ed/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/a15c80208a9b43704a944b69a8c518645a2e4e42965218e0c397986cde2ec745/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/99e97cb3574e1288dd1faa397b490f01e93349bdaee11d3f6909f2e5c383fac4/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0bc94d24162470fe8ce3fc189b7eb239aa868d074ff53c78706cad0c5c608243/index.md"
-        ],
-        "source_digest": "d688b8e09beac9ce4d77e155f906689494cfeed6a7c851f4682a797772841194",
-        "source_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md",
-        "source_type": "session_distill",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L1",
-      "title": "DeepSeek-V4/V4.1 MLA latent, LightningIndexer/QLI-v2, Compressor/Engram, and absorption invariants",
-      "token_estimate": 2495,
-      "triggers": {
-        "error_signatures": [
-          "LightningIndexer or QLI-v2 selects a block id outside the paged KV or block table",
-          "AICore invalid GM address or cross-device timeout after npu_sparse_flash_attention or npu_quant_lightning_indexer",
-          "C8 latent KV dequantizes to garbage because k_norm or the per-token scale is applied in the wrong order",
-          "Engram lookup returns different embeddings on different TP or DP ranks for identical token ids",
-          "decode logits diverge after switching between absorbed and non-absorbed MLA paths in a mixed batch",
-          "compressor output is consumed before its group-completion flag is set"
-        ],
-        "keywords": [
-          "deepseek-v4",
-          "deepseek-v4.1",
-          "dsv4",
-          "dsv3.2",
-          "MLA",
-          "kv_lora_rank",
-          "qk_rope_head_dim",
-          "LightningIndexer",
-          "QLI-v2",
-          "Compressor",
-          "Engram",
-          "weight absorption",
-          "C8",
-          "W8A8",
-          "W4A8",
-          "topk"
-        ]
-      }
-    },
-    {
-      "category": "mutator",
-      "conditions": {
-        "attention_backend": "sparse_mla",
-        "framework": "vllm-ascend",
-        "model_family": [
-          "deepseek-v4",
-          "deepseek-v4.1",
-          "dsv4",
-          "dsv3.2"
-        ],
-        "quantization": [
-          "w8a8",
-          "w4a8",
-          "c8"
-        ]
-      },
-      "domain_path": "vllm-ascend/models/deepseek-v4-v41",
-      "evidence_strength": "reproduced_empirical",
-      "id": "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator",
-      "inherits_from": [
-        "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
-        "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
-        "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop"
-      ],
-      "path": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator.md",
-      "provenance": {
-        "evidence_refs": [
-          "docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/50809f1fefde44f4671b682248b8a55c32debd931359dd887585022e0a68fa79/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/99e97cb3574e1288dd1faa397b490f01e93349bdaee11d3f6909f2e5c383fac4/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0bc94d24162470fe8ce3fc189b7eb239aa868d074ff53c78706cad0c5c608243/index.md"
-        ],
-        "experiment_status": "not_run_source_only",
-        "source_digest": "1cddab93c1c9ee3fad0eca71a03b5fa69286f2079ed75d1e817a738acfb55ae6",
-        "source_locator": "docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json",
-        "source_type": "ablation_design_receipt",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L4",
-      "title": "Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer views, and keep top-k block masks device-resident",
-      "token_estimate": 4086,
-      "triggers": {
-        "error_signatures": [
-          "three TensorMove or Memcpy passes per MLA layer around qr dequantization, RMSNorm and the RoPE/NoPE split",
-          "explicit contiguous clone on q_indexer or k_indexer before npu_lightning_indexer",
-          "host clamp or item on the top-k valid length between npu_lightning_indexer and sparse MLA",
-          "invalid GM address when a -1 top-k block id reaches npu_sparse_flash_attention",
-          "TPOT regresses at 32k or 128k while the 1k cell is unchanged"
-        ],
-        "keywords": [
-          "DeepSeek-V4",
-          "DeepSeek-V4.1",
-          "SparseMLA",
-          "QLI-v2",
-          "LightningIndexer",
-          "query dequantization",
-          "RMSNorm",
-          "RoPE split",
-          "contiguous view",
-          "top-k block mask",
-          "device-resident metadata",
-          "C8",
-          "W8A8",
-          "W4A8"
-        ]
-      }
-    },
-    {
-      "category": "sop",
-      "conditions": {
-        "attention_backend": "sparse_mla",
-        "framework": "vllm-ascend",
-        "model_family": [
-          "deepseek-v4",
-          "deepseek-v4.1",
-          "dsv4",
-          "dsv3.2"
-        ]
-      },
-      "domain_path": "vllm-ascend/models/deepseek-v4-v41",
-      "evidence_strength": "reproduced_empirical",
-      "id": "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop",
-      "inherits_from": [
-        "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms"
-      ],
-      "path": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop.md",
-      "provenance": {
-        "evidence_refs": [
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/50809f1fefde44f4671b682248b8a55c32debd931359dd887585022e0a68fa79/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/40fd4789f8c5706d39fce27e2fe6da9b72e38c3afd28b9adbfe4eb4eee2e8a6c/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/a677bfbfcb76c7232fdd04d27da6800d1d154e00f49d8e9b45c1c3fa5aaccfec/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/b25f088ec92d529b589da9b927614f27c3bced925bb6d5f3dbe256652bbc026a/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/bad4bf3370420a4fa68a1300b59acf74e43c293bf54a187d85299b012073e8ed/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md",
-          "docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json"
-        ],
-        "source_digest": "491d49d20724fa41b120b69ad94dbab25f34d74641f298cb0de0f2fbc8c1b9b9",
-        "source_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/50809f1fefde44f4671b682248b8a55c32debd931359dd887585022e0a68fa79/index.md",
-        "source_type": "session_distill",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L2",
-      "title": "DeepSeek-V4/V4.1 SparseMLA, LightningIndexer/QLI-v2, C8 scale, and MTP alignment SOP",
-      "token_estimate": 3652,
-      "triggers": {
-        "error_signatures": [
-          "top-k block id -1 reaches npu_sparse_flash_attention and triggers an AICore GM read fault",
-          "QLI-v2 selects the current partial compressed block or a future block under chunked prefill",
-          "explicit contiguous or TensorMove clones appear before lightning_indexer or mla_Graded",
-          "C8 latent cache dequantization mismatches the per-token store scale after W8A8 or W4A8 quantization",
-          "MTP draft and target disagree on num_accepted_tokens, query_start_loc or block_tables",
-          "item or cpu on seqused_k or num_accepted_tokens inside the captured step",
-          "accuracy is normal at 1k but degrades or faults once seq_len exceeds topk times compress_ratio"
-        ],
-        "keywords": [
-          "SparseMLA",
-          "npu_lightning_indexer",
-          "QLI-v2",
-          "softmax_scale",
-          "causal mask",
-          "topk",
-          "block_table",
-          "seqused_k",
-          "C8",
-          "W8A8",
-          "W4A8",
-          "MTP",
-          "num_accepted_tokens",
-          "query_start_loc",
-          "TPOT"
-        ]
-      }
-    },
-    {
-      "category": "mutator",
-      "conditions": {
-        "active_batch": 0,
-        "dp": 2,
-        "graph_capture_shape": "dynamic",
-        "idle_rank_state": "no_scheduled_requests",
-        "model_family": [
-          "qwen3_5",
-          "Qwen3.5",
-          "gated_deltanet"
-        ],
-        "npu_model": [
-          "Ascend910",
-          "Ascend910B",
-          "Ascend910B4",
-          "Ascend910_93"
-        ],
-        "repository": [
-          "vllm-ascend",
-          "vllm-project/vllm-ascend"
-        ]
-      },
-      "domain_path": "0day/Qwen3_5",
-      "evidence_strength": "hypothesis",
-      "id": "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator",
-      "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-verification-and-state-parity-gates",
-        "unit-vllm-ascend-idle-dp-gdn-state"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-verification-and-state-parity-gates",
-        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
-        "unit-vllm-ascend-idle-dp-gdn-state"
-      ],
-      "path": "0day/Qwen3_5/unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator.md",
-      "provenance": {
-        "evidence_refs": [
-          "docs/evidence/l4-gdn-idle-dp-zero-pad-ablation.json",
-          "https://github.com/vllm-project/vllm-ascend/pull/15655",
-          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py"
-        ],
-        "experiment_status": "not_run_source_only",
-        "source_digest": "5a2f8780ca357258b4f53d3c4a42e37df4386a328a22d4d7a99afec5929b3c08",
-        "source_locator": "docs/evidence/l4-gdn-idle-dp-zero-pad-ablation.json",
-        "source_type": "ablation_design_receipt",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L4",
-      "title": "GDN idle-DP zero-padded workspace with empty-batch HCCL participation",
-      "token_estimate": 1420,
-      "triggers": {
-        "error_signatures": [
-          "idle DP rank with an empty batch hangs because the zero-token step skipped coordinate_batch_across_dp",
-          "the idle rank workspace shape differs from the captured active shape and replay reads stale buffers",
-          "a zero-token dummy run changes one row of conv_state or ssm_state",
-          "an active batch is routed through the idle zero-pad path and loses its real tokens",
-          "a static graph capture is forced through a dynamic zero-pad replay and fails or writes the wrong region"
-        ],
-        "keywords": [
-          "Qwen3.5",
-          "qwen3_5",
-          "GatedDeltaNet",
-          "idle DP",
-          "zero-pad",
-          "empty batch",
-          "HCCL",
-          "coordinate_batch_across_dp",
-          "conv_state",
-          "ssm_state",
-          "graph capture",
-          "workspace",
-          "leave-one-out",
-          "guard workload"
         ]
       }
     },
@@ -881,8 +443,8 @@
       },
       "revision": 2,
       "tier": "L3",
-      "title": "Hybrid GDN/Mamba + MLA DP idle-rank state troubleshooting workflow",
-      "token_estimate": 551,
+      "title": "Hermes workflow: hybrid GDN/Mamba + MLA DP idle-rank state correction",
+      "token_estimate": 552,
       "triggers": {
         "error_signatures": [
           "idle DP rank with no scheduled requests while peer is active",
@@ -895,6 +457,7 @@
           "GDN",
           "conv_state",
           "ssm_state",
+          "Hermes",
           "workflow",
           "skip_gdn_state_update",
           "HCCL",
@@ -990,296 +553,6 @@
     {
       "category": "axiom",
       "conditions": {
-        "framework": "vllm-ascend",
-        "model_family": [
-          "kimi-k3",
-          "hybrid-kda-gqa",
-          "mamba-hybrid"
-        ],
-        "soc": [
-          "Ascend910B",
-          "Ascend910_93",
-          "Ascend950"
-        ]
-      },
-      "domain_path": "vllm-ascend/models/kimi-k3-hybrid",
-      "evidence_strength": "software_contract",
-      "id": "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
-      "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
-      ],
-      "path": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms.md",
-      "provenance": {
-        "evidence_refs": [
-          "docs/evidence/k3-hybrid-transcript-provenance.json",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/6e8e56e03f14cabd74fa97482deafe594561d16aa829fb94866cabfdd965200b/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/061f6320b291045cfccfba33e62a2f06f1f4175c6ce9ca3e3d04bc0ef30ad530/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/d1e573822d2b0e234bdb5d6be1d304adbadf96bcae377a5acc3c01f5dedbc238/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/ea7876a55b7e5eb30b5d33a44b89ac1216c10bc4f3db2ad45b3ff3255bebd020/index.md"
-        ],
-        "source_digest": "cdd5c523ecadd81544bc3d12deba68bdc7889c96cbd10dbb3b52a88deaee0655",
-        "source_locator": "docs/evidence/k3-hybrid-transcript-provenance.json#s-k3-quarot-long-context",
-        "source_type": "session_distill",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L1",
-      "title": "Kimi K3 KDA/Mamba hybrid state, layout, and graph-capture invariants",
-      "token_estimate": 2239,
-      "triggers": {
-        "error_signatures": [
-          "a decode step turns non-finite only after a long prefill or after crossing a page or chunk boundary",
-          "output becomes repeated '!' or repeated token 0 while the health endpoint stays successful",
-          "a recurrent or conv-state slot contains data from a previous request after preemption or prefix reuse",
-          "ACLGraph replay reads a stale query_start_loc or a state buffer from the previous step",
-          "Triton and AscendC causal-conv or gated-delta-rule kernels disagree only on slot 0 or on an empty slot"
-        ],
-        "keywords": [
-          "Kimi K3",
-          "KDA",
-          "gated delta rule",
-          "Mamba",
-          "causal_conv1d",
-          "conv_state",
-          "recurrent_state",
-          "chunk_gated_delta_rule",
-          "fused_recurrent_gated_delta_rule",
-          "query_start_loc",
-          "cu_seqlens",
-          "hybrid cache",
-          "ACLGraph",
-          "Ascend910_93",
-          "Ascend950"
-        ]
-      }
-    },
-    {
-      "category": "workflow",
-      "conditions": {
-        "framework": "vllm-ascend",
-        "model_family": [
-          "kimi-k3",
-          "hybrid-kda-gqa",
-          "mamba-hybrid"
-        ]
-      },
-      "domain_path": "vllm-ascend/models/kimi-k3-hybrid",
-      "evidence_strength": "reproduced_empirical",
-      "id": "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
-      "inherits_from": [
-        "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
-        "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
-        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
-        "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
-        "unit-vllm-ascend-verification-and-state-parity-gates",
-        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
-      ],
-      "path": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow.md",
-      "provenance": {
-        "evidence_refs": [
-          "docs/evidence/k3-hybrid-transcript-provenance.json",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/c1818fdb07ecc530a5b51bd21dc5238d1ab83c88889708b10772066b4a6b6715/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/ea7876a55b7e5eb30b5d33a44b89ac1216c10bc4f3db2ad45b3ff3255bebd020/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/061f6320b291045cfccfba33e62a2f06f1f4175c6ce9ca3e3d04bc0ef30ad530/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0b56642daab083ed631393983685973b478dc935583b844114d32da7b0ed3c0a/index.md"
-        ],
-        "source_digest": "cdd5c523ecadd81544bc3d12deba68bdc7889c96cbd10dbb3b52a88deaee0655",
-        "source_locator": "docs/evidence/k3-hybrid-transcript-provenance.json#s-k3-mrv2-hybrid-cache",
-        "source_type": "session_distill",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L3",
-      "title": "Kimi K3 hybrid bring-up workflow: loader, hybrid cache, eager parity, ACLGraph",
-      "token_estimate": 4086,
-      "triggers": {
-        "error_signatures": [
-          "model loads but the first forward fails on a missing KDA or causal-conv operator",
-          "a hybrid cache manager rejects the mixed MLA/GQA/Mamba cache specification",
-          "decode output is correct on a cold request and diverges on a warm prefix-cache request",
-          "eager logits are finite but the first ACLGraph replay produces NaN or repeated '!'",
-          "decode latency is dominated by host synchronization or repeated graph re-capture"
-        ],
-        "keywords": [
-          "Kimi K3",
-          "hybrid cache",
-          "MambaCacheManager",
-          "KDA",
-          "GQA",
-          "TP",
-          "EP",
-          "sharding",
-          "eager parity",
-          "ACLGraph",
-          "TorchAir",
-          "piecewise",
-          "prefix cache",
-          "chunked prefill",
-          "state carryover",
-          "decode latency"
-        ]
-      }
-    },
-    {
-      "category": "sop",
-      "conditions": {
-        "framework": "vllm-ascend",
-        "symptom_class": [
-          "nan_inf",
-          "precision_divergence",
-          "garbled_output"
-        ]
-      },
-      "domain_path": "vllm-ascend/models/kimi-k3-hybrid",
-      "evidence_strength": "reproduced_empirical",
-      "id": "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
-      "inherits_from": [
-        "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms"
-      ],
-      "path": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop.md",
-      "provenance": {
-        "evidence_refs": [
-          "docs/evidence/k3-hybrid-transcript-provenance.json",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/6e8e56e03f14cabd74fa97482deafe594561d16aa829fb94866cabfdd965200b/index.md",
-          "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/fb3e496700cf29216ee2ee4aa8c85ccdc60604c39c90887d0bd52af6c889b5b4/index.md"
-        ],
-        "source_digest": "cdd5c523ecadd81544bc3d12deba68bdc7889c96cbd10dbb3b52a88deaee0655",
-        "source_locator": "docs/evidence/k3-hybrid-transcript-provenance.json#s-k3-quarot-long-context",
-        "source_type": "session_distill",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L2",
-      "title": "Kimi K3 NaN/Inf, QuaRot rotation, and RMSNorm precision bisection SOP",
-      "token_estimate": 3320,
-      "triggers": {
-        "error_signatures": [
-          "logits or a decoder hidden state become NaN or Inf at a specific layer after a long prefill",
-          "greedy output degenerates to repeated '!' or repeated token 0 while HTTP health remains 200",
-          "QuaRot/Hadamard fused output has a norm different from the input activation",
-          "fused RMSNorm matches an eager oracle without alias but diverges when input and residual share storage",
-          "KDA recurrent state is non-finite only on some runs of the same prompt"
-        ],
-        "keywords": [
-          "Kimi K3",
-          "NaN",
-          "Inf",
-          "QuaRot",
-          "Hadamard",
-          "RMSNorm",
-          "add_rms_norm",
-          "npu_rms_norm",
-          "KDA",
-          "recurrent_state",
-          "beta",
-          "log-space decay",
-          "forward hook",
-          "cosine similarity"
-        ]
-      }
-    },
-    {
-      "category": "workflow",
-      "conditions": {
-        "architecture": "moe",
-        "framework": "vllm-ascend",
-        "soc": [
-          "Ascend910B",
-          "Ascend910_93",
-          "Ascend950"
-        ]
-      },
-      "domain_path": "vllm-ascend/distributed",
-      "evidence_strength": "reproduced_empirical",
-      "id": "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
-      "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
-        "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
-      ],
-      "path": "vllm-ascend/distributed/unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow.md",
-      "provenance": {
-        "evidence_refs": [
-          "https://github.com/vllm-project/vllm-ascend/issues/4051",
-          "https://github.com/vllm-project/vllm-ascend/pull/5521",
-          "https://github.com/vllm-project/vllm-ascend/issues/495",
-          "https://github.com/vllm-project/vllm-ascend/pull/3005",
-          "https://github.com/vllm-project/vllm-ascend/pull/2681",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/4",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/12",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/187",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/421",
-          "https://gitcode.com/cann/cann-recipes-infer/issues/120"
-        ],
-        "source_digest": "aad16f59cf8332fc7142540739697eb7e69f26f5a92c63e8c4a3d1ab9376e453",
-        "source_locator": "cann/cannbot-knowledge/knowledge/model/inference/optimizations/experience/rules/moe_ep_dispatch_path_by_stage.md",
-        "source_type": "cannbot_runbook_and_transcript_distillation",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L3",
-      "title": "MoE EP communication-regime selection with All2All/MC2 and W8A8/W4A8 quantization workflow",
-      "token_estimate": 4434,
-      "triggers": {
-        "error_signatures": [
-          "MoeDistributeDispatchV2 do tiling failed or HCCL_BUFFSIZE is too SMALL during profile_run",
-          "npu_moe_init_routing rejects active_expert_range or topk_ids because of dtype",
-          "npu_grouped_matmul returns wrong rows or hits 507015 when one expert receives zero tokens",
-          "accuracy drops only after enabling W4A8 while the service still runs",
-          "activation quantization kernels are absent although a4w8 mode is configured",
-          "one DP or EP rank exits early on an empty batch and peers time out with EI0006"
-        ],
-        "keywords": [
-          "MoE",
-          "expert parallel",
-          "EP",
-          "TP",
-          "AllGather",
-          "All2All",
-          "double routing",
-          "MC2",
-          "npu_moe_distribute_dispatch_v2",
-          "npu_moe_distribute_combine_v2",
-          "npu_moe_gating_top_k_softmax",
-          "npu_moe_init_routing",
-          "npu_grouped_matmul",
-          "group_list_type",
-          "expert_token_num",
-          "W8A8",
-          "W4A8",
-          "W4A16",
-          "SmoothQuant",
-          "AWQ",
-          "GPTQ",
-          "per-token",
-          "per-channel",
-          "group_size",
-          "shared expert",
-          "dummy run",
-          "HCCL"
-        ]
-      }
-    },
-    {
-      "category": "axiom",
-      "conditions": {
         "npu_model": [
           "Ascend910",
           "Ascend910B",
@@ -1332,90 +605,6 @@
       }
     },
     {
-      "category": "sop",
-      "conditions": {
-        "framework": "vllm-ascend",
-        "serving_mode": [
-          "pd_disaggregated",
-          "multi_node_ep"
-        ],
-        "soc": [
-          "Ascend910B",
-          "Ascend910_93",
-          "Ascend950"
-        ]
-      },
-      "domain_path": "vllm-ascend/distributed",
-      "evidence_strength": "reproduced_empirical",
-      "id": "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
-      "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-hccl-and-dp-collective-invariants"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-hccl-and-dp-collective-invariants"
-      ],
-      "path": "vllm-ascend/distributed/unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop.md",
-      "provenance": {
-        "evidence_refs": [
-          "https://github.com/vllm-project/vllm-ascend/pull/1691",
-          "https://github.com/vllm-project/vllm-ascend/issues/4842",
-          "https://github.com/vllm-project/vllm-ascend/issues/5044",
-          "https://github.com/vllm-project/vllm-ascend/pull/2947",
-          "https://github.com/vllm-project/vllm-ascend/issues/4051",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/452",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/421",
-          "https://gitcode.com/cann/cann-recipes-infer/issues/160"
-        ],
-        "source_digest": "e5ac79ef5eed0a027306b53757acd1bcf3084287cd0ffdce7fc115b363a41e09",
-        "source_locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/mooncake_ascend_hixl_kv_transfer_bringup.md",
-        "source_type": "cannbot_runbook_and_transcript_distillation",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L2",
-      "title": "PD disaggregation with Mooncake/LlmDataDist KV transfer and MC2 dispatch/combine bring-up SOP",
-      "token_estimate": 3696,
-      "triggers": {
-        "error_signatures": [
-          "Mooncake Ascend backend initialize returns non-zero or reports USE_ASCEND_DIRECT missing",
-          "decode transfer fails with 103901 while plog shows mem type 0 but no mem type 1",
-          "KV block length or offset is wrong under torchair three-dimensional cache layout",
-          "prefill and decode have different TP sizes and decode reads permuted or stale KV heads",
-          "HCCL_BUFFSIZE is too SMALL or MoeDistributeDispatchV2 do tiling failed",
-          "EI0006 socket timeout, UB LINK ERROR or a missing rank during PD bring-up",
-          "decoded text is corrupted only at high concurrency because prefill released a KV block too early"
-        ],
-        "keywords": [
-          "PD disaggregation",
-          "prefill",
-          "decode",
-          "MooncakeConnector",
-          "MooncakeConnectorStoreV1",
-          "LlmDataDist",
-          "KVTransfer",
-          "HIXL",
-          "RoCE",
-          "HCCS",
-          "register_buffer",
-          "mem type",
-          "block_rank",
-          "asymmetric TP",
-          "num_kv_heads",
-          "MC2",
-          "Dispatch",
-          "Combine",
-          "HCCL_BUFFSIZE",
-          "moe_ep_group_mc2",
-          "fullmesh_v2",
-          "ranktable",
-          "Phy-ID",
-          "Ascend910_93"
-        ]
-      }
-    },
-    {
       "category": "workflow",
       "conditions": {
         "npu_model": [
@@ -1439,10 +628,12 @@
       "id": "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
       ],
       "inherits_from_closure": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-verification-and-state-parity-gates",
         "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
       ],
@@ -1456,10 +647,10 @@
         "source_type": "hermes_workflow_distillation",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 1,
       "tier": "L3",
       "title": "Hermes workflow: vllm-ascend TTFT vs TPOT/ITL bottleneck attribution and convergence",
-      "token_estimate": 715,
+      "token_estimate": 673,
       "triggers": {
         "error_signatures": [
           "TPOT or ITL regresses under decode concurrency while single-operator latency is unchanged",
@@ -1551,94 +742,6 @@
           "recurrent decode",
           "chunk_gated_delta_rule",
           "Ascend910_93"
-        ]
-      }
-    },
-    {
-      "category": "sop",
-      "conditions": {
-        "execution_mode": [
-          "aclgraph",
-          "torchair",
-          "piecewise_graph"
-        ],
-        "framework": "vllm-ascend"
-      },
-      "domain_path": "vllm-ascend/runtime/cannbot-runbooks",
-      "evidence_strength": "software_contract",
-      "id": "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop",
-      "inherits_from": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
-      ],
-      "inherits_from_closure": [
-        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
-        "unit-vllm-ascend-verification-and-state-parity-gates",
-        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
-      ],
-      "path": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop.md",
-      "provenance": {
-        "evidence_refs": [
-          "https://github.com/vllm-project/vllm-ascend/issues/2410",
-          "https://github.com/vllm-project/vllm-ascend/pull/2113",
-          "https://github.com/vllm-project/vllm-ascend/pull/3158",
-          "https://github.com/vllm-project/vllm-ascend/pull/2681",
-          "https://gitcode.com/cann/cann-recipes-infer/issues/80",
-          "https://gitcode.com/cann/cann-recipes-infer/issues/245",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/179",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/206",
-          "https://gitcode.com/cann/cann-recipes-infer/merge_requests/328"
-        ],
-        "experiment_status": "not_run_source_only",
-        "source_digest": "128f1eabeb7dac06a396cb33188f901698ed8948b78da4498b5a5f7d1153cece",
-        "source_locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/aclgraph_sq_cq_alloc_fail_capture_sizes_budget.md",
-        "source_type": "cannbot_runbook_distillation",
-        "supersedes": []
-      },
-      "revision": 1,
-      "tier": "L2",
-      "title": "TorchAir/ACLGraph execution and C8 KV-cache SOP for vllm-ascend",
-      "token_estimate": 3402,
-      "triggers": {
-        "error_signatures": [
-          "ACLGraph replay falls back to eager or recaptures a new shape after warmup",
-          "Alloc sq cq fail with 207005 or EL0006 during graph capture",
-          "positions, slot_mapping, block_tables or seq_lens disagree between capture and replay",
-          "C8 model raises \"enable_mla_prolog must be set to True\" or produces wrong logits after KV quantization",
-          "torch.compile reports a Meta or FakeTensor failure for a custom NPU operator",
-          "graph capture OOMs while steady-state memory is lower",
-          "multistream decode returns nondeterministic tokens without an exception"
-        ],
-        "keywords": [
-          "ACLGraph",
-          "TorchAir",
-          "torchair_graph_config",
-          "use_cached_graph",
-          "capture_sizes",
-          "graph_batch_sizes",
-          "piecewise",
-          "static buffer",
-          "positions",
-          "slot_mapping",
-          "block_tables",
-          "seq_lens",
-          "attn_metadata",
-          "C8",
-          "int8 KV cache",
-          "reshape_and_cache",
-          "FIA",
-          "FlashMLA",
-          "antiquant_scale",
-          "antiquant_offset",
-          "dequant_scale_key",
-          "register_fake",
-          "FakeTensor",
-          "Meta",
-          "symbolic shape",
-          "PYTORCH_NPU_ALLOC_CONF",
-          "expandable_segments",
-          "gpu_memory_utilization",
-          "Alloc sq cq"
         ]
       }
     },

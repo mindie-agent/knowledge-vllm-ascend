@@ -28,9 +28,9 @@ With community sharing (Opt-in) enabled, runtime work has four distinct stages; 
 1. **Authorized capture and redaction**: Stop/task capture preserves the public transcript projection only within the current authorization, runs deterministic redaction, and stores selected material. Capture does not create a graded unit.
 2. **Explicit selected-evidence native distillation**: the caller submits `inputs` and `task_state` through `distill_selected`. The native worker may return `propose_graded_units` or `noop`; proposals are locally staged. This operation is independent of Stop and does not discover transcripts, grant contribution consent, or advance the runtime pin.
 3. **Semantic review and C6 application**: the caller/reviewer is responsible for checking the proposal's meaning, conditions and evidence. `review_reference` records the review basis; it is not a signature and does not prove independent review occurred. Only reviewed complete unit bytes applied through `mindie-reviewed-change/1` and an index rebuild make the intended corpus change.
-4. **Separate contribution/publication**: external writes are governed by the contribution/publication path. When a batch is built for a graded corpus while legacy material drafts remain, `build_batch` raises `DistillationRequired` (`legacy_drafts_require_c6`) and requires C6 first; it does not silently generate a graded unit. Opening a PR based on `graded-v2`, merging remotely and installing on a client are separate outcomes and are not guaranteed.
+4. **Separate contribution/publication**: external writes are governed by the contribution/publication path. When a batch is built for a graded corpus while legacy material drafts remain, `build_batch` raises `DistillationRequired` (`legacy_drafts_require_c6`) and requires C6 first; it does not silently generate a graded unit. Opening a PR based on `main`, merging remotely and installing on a client are separate outcomes and are not guaranteed.
 
-This repository does not copy host installers or require host-specific paths in documentation. Installation and configuration are defined by the main repository. 0.0.3 plugins select the `graded-v2` branch and bind the exact digest of this domain's `publication-contract.json`; manual contributions start from a `graded-v2` checkout and PRs use `graded-v2` as their base.
+This repository does not copy host installers or require host-specific paths in documentation. Installation and configuration are defined by the main repository. Manual contributions start from a `main` checkout and PRs use `main` as their base. Installed hosts use the sources and revisions in their own configuration.
 
 ---
 
@@ -51,9 +51,9 @@ Conditions must be checkable premises, not "already fixed", "reviewer approved" 
 
 The unit path must be `<domain_path>/<unit_id>.md`. The body states the rule, procedure or transformation, plus failure conditions, counterexamples and limits. Frontmatter includes at least:
 
-`schema`, `id`, `revision`, `content_digest`, `title`, `category`, `tier`, `evidence_strength`, `domain_path`, `conditions`, `triggers`, `inherits_from`, `provenance`.
+`schema`, `id`, `revision`, `title`, `category`, `tier`, `evidence_strength`, `domain_path`, `conditions`, `triggers`, `inherits_from`, `provenance`.
 
-See the [format specification](package-format.en.md) for field semantics, digest computation and condition forms. A new unit starts at `revision: 1`; a semantic change increments it. A path-only move with unchanged body and semantic metadata keeps the revision and content digest.
+See the [format specification](package-format.en.md) for field semantics and condition forms. A new unit starts at `revision: 1`; a semantic change increments it. A path-only move with unchanged body and semantic metadata keeps the revision and content hash. Do not add the legacy `content_digest` frontmatter field; public references use the integer revision.
 
 ### 3.3 Validate before writing
 
@@ -120,20 +120,20 @@ Use placeholders such as `/home/<user>/...` when a path shape matters. Do not co
 
 ## 5. Two PR review paths
 
-`graded-v2` is the PR base for graded units; `main` retains the old material corpus and old contract bytes and does not accept graded-unit contributions. `publication-head` classifies changes by path:
+`main` is the PR base for graded units; `main` carries the current `publication-contract/2` declaration, and the old material archive under `docs/archive/material-v1/` is evidence rather than active corpus content. `publication-head` classifies changes by path:
 
 | Mode | Touched paths | Check outcome | Merge path |
 | --- | --- | --- | --- |
 | **content** | Unit Markdown, `feedback/**`, `index/**` | `success` | After format, digest, inheritance and privacy checks, the content review bot handles it under [`mindie-content-review/2`](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) |
 | **development** | `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**`, `.github/**`, `publication-contract.json` | `neutral` | No content-bot auto-merge; maintainer review under the [engineering design principles](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.en.md) |
 
-`success` means the candidate tree passed that check; it is not proof of semantic correctness, remote `graded-v2` update or installed native acceptance. `main` does not change with graded content. `neutral` is not a failure; it selects the maintainer review path.
+`success` means the candidate tree passed that check; it is not proof of semantic correctness, remote `main` update or installed native acceptance. `main` changes only when an actual change is merged. `neutral` is not a failure; it selects the maintainer review path.
 
 ---
 
 ## 6. Revisions, feedback and withdrawal
 
-- **Revision**: increment on a semantic change; keep revision and content digest on a path-only move. An old reference must fail explicitly after content changes, never silently point at new text.
+- **Revision**: increment on a semantic change; keep the revision and content hash on a path-only move. An old reference must fail explicitly after content changes, never silently point at new text.
 - **Feedback**: only for an exact revision the caller actually observed. `reason` is optional, single-line and at most 1000 characters; private local feedback is not published by default. Vote totals are descriptive, not confidence or an automatic promotion condition.
 - **Withdrawal**: remove the current unit through a reviewed change and state the reason. Do not describe a withdrawal as data loss; the old content remains in Git history.
 
@@ -142,10 +142,10 @@ Use placeholders such as `/home/<user>/...` when a path shape matters. Do not co
 ## 7. Do not
 
 - add the old `tasks/` layout or relabel old material on `main`/85ab as a graded unit;
-- hand-edit derived indexes, `publication-contract.json` or CI workflows, or rewrite the old material on `main`/85ab to fit documentation;
+- hand-edit derived indexes, `publication-contract.json` or CI workflows except in a separately reviewed maintenance change, or rewrite the old material on `main`/85ab to fit documentation;
 - replace a unit body or source with a model-generated summary;
 - claim "automatic semantic acceptance", "automatic promotion" or "installed means accepted"; those steps do not exist;
-- send graded-unit PRs to `main`; graded content uses `graded-v2` as its base;
+- target a nonexistent `graded-v2` branch for graded-unit PRs; use `main` as the base;
 - copy units between domains or force same-topic merges; use explicit routes.
 
 ---

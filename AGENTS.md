@@ -1,8 +1,8 @@
 # `knowledge-vllm-ascend` — Repository Guidelines for AI Agents & Maintainers
 
-The `graded-v2` branch of this repository is the canonical graded domain knowledge feed for `vllm-ascend` in [MindIE Agent](https://github.com/mindie-agent/mindie-agent). It contains **graded knowledge units** (`mindie-graded-unit/1`), their provenance and applicability conditions, plus the derived routing index and public feedback. `main` remains the old 0.0.2 material corpus with the old contract bytes and is not a graded tree. Runtime retrieval, capture, redaction and publication live in [`mindie-agent/knowledge`](https://github.com/mindie-agent/knowledge).
+The `main` branch of this repository is the canonical graded domain knowledge feed for `vllm-ascend` in [MindIE Agent](https://github.com/mindie-agent/mindie-agent). It contains **graded knowledge units** (`mindie-graded-unit/1`), their provenance and applicability conditions, plus the derived routing index and public feedback. `main` also carries the archived `material-v1` bytes under `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`; that archive is evidence and is not active retrieval content. Runtime retrieval, capture, redaction and publication live in [`mindie-agent/knowledge`](https://github.com/mindie-agent/knowledge).
 
-The old `tasks/` material layout is not part of `mindie-publication-contract/2` and is not in `graded-v2`. Its bytes remain on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c); `graded-v2` omits the local archive copy. Do not mix that layout back into the active corpus or re-label it as graded knowledge.
+The old `tasks/` material layout is not part of `mindie-publication-contract/2` and is not active content. Its archived bytes remain under `docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/` on [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main) and at immutable historical commit [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c). Do not mix that layout back into the active corpus or re-label it as graded knowledge.
 
 ---
 
@@ -12,7 +12,7 @@ The old `tasks/` material layout is not part of `mindie-publication-contract/2` 
 - **Derived indexes** live at `index/routing-manifest.json` and `index/shard-topology.json`. They are rebuilt from units; do not hand-edit them.
 - **Public feedback** lives at `feedback/votes-<id>.json` and uses `mindie-graded-feedback/1`.
 - **Metadata and documentation** live at the root (`README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `LICENSE`, `publication-contract.json`) and under `docs/**`.
-- **Unit evidence** lives under `docs/evidence/**`; the old material-v1 bytes remain on `main` and 85ab, not in this branch, and are not active retrieval content.
+- **Unit evidence** lives under `docs/evidence/**`; archived material-v1 bytes remain under `docs/archive/material-v1/` and 85ab, not in active retrieval content.
 - **Out of scope for this repository's release claim:** other domains. They use the same runtime interfaces through explicit `mindie://<domain>/...` routes, not copies of this corpus.
 
 Do not introduce a `tasks/` tree, a second unit layout, or a private/reserved directory (`index`, `feedback`, `docs`, `private`) as a `domain_path`.
@@ -34,10 +34,10 @@ A unit is valid only when all of the following hold:
 4. **Explicit conditions.** `conditions` is a non-empty mapping of premises that can be checked before use. Readiness state, a known fix, a reviewer conclusion or a desired outcome is not a condition.
 5. **Provenance.** `provenance.source_type`, `source_locator` and an exact `source_digest` (64 lowercase hex) are required. `evidence_refs` must be non-empty for `reproduced_empirical` and `L4`. `supersedes` lists stable IDs, not prose.
 6. **Non-empty body.** The body states the rule, procedure or transformation and its limits. The frontmatter is metadata, not a substitute for the body.
-7. **Exact content digest.** `content_digest` is `sha256:` plus the semantic digest over the canonical metadata-and-body projection, excluding `domain_path`, `revision` and `content_digest` itself. The routing manifest's `content_sha256` is the same digest without the prefix.
+7. **Content hash.** The runtime computes a semantic digest over the canonical metadata-and-body projection for change detection and exact Git checks. That digest is derived runtime state, not a persisted frontmatter field; do not add the legacy `content_digest` field. Public references use the integer `revision`, not a content hash.
 8. **Revision discipline.** A new unit starts at revision `1`. A semantic change increases the revision by one. A location-only move keeps the same revision and content hash. Never rewrite bytes under an existing revision.
 
-`revision` is an integer. References pin the bare 64-hex `content_sha256` after `@`; do not confuse it with the integer revision or with a legacy block revision.
+`revision` is an integer. References use `mindie://<domain>/units/<id>@<revision>`; do not confuse the revision with a legacy content digest or block revision.
 
 ---
 
@@ -59,15 +59,15 @@ A unit is valid only when all of the following hold:
 - `inherits_from` names stable unit IDs in the same corpus. The runtime resolves the complete closure at index build time and rejects missing parents and cycles.
 - Each inherited unit must independently match the task conditions. A child does not make a non-matching parent applicable.
 - Inherited bodies are included complete or omitted with a visible reason; never truncate a premise silently. Budget exclusion is reported.
-- Cross-domain reuse uses an explicit configured route and a pinned `mindie://<domain>/units/<id>@<sha256>` reference. Inheritance does not cross domains, and one domain's consent or unit is never copied into another.
+- Cross-domain reuse uses an explicit configured route and a pinned `mindie://<domain>/units/<id>@<revision>` reference. Inheritance does not cross domains, and one domain's consent or unit is never copied into another.
 - `index/routing-manifest.json` is the live inventory. `generation` identifies the exact reviewed corpus state; `index/shard-topology.json` describes shard pressure. Both are derived and must be rebuilt after unit changes.
 
 ---
 
 ## 5. Retrieval, explain and feedback contract
 
-- `knowledge_query(query?, limit?, conditions?, continuation?)` searches current units. `limit` is 1–20. It returns a digest-pinned `ref`, stable `unit_ref`, separate `feedback_ref`, match status and reasons. Excerpts are budgeted; inherited rules are complete.
-- `knowledge_explain(ref)` returns the full body for one current unit reference, plus frontmatter and closure. A pinned reference must match the current content hash; a replaced or withdrawn revision fails explicitly rather than returning different bytes.
+- `knowledge_query(query?, limit?, conditions?, continuation?)` searches current units. `limit` is 1–20. It returns a revision-pinned `ref`, stable `unit_ref`, separate `feedback_ref`, match status and reasons. Excerpts are budgeted; inherited rules are complete.
+- `knowledge_explain(ref)` returns the full body for one current unit reference, plus frontmatter and closure. A pinned reference must match the current revision; a replaced or withdrawn revision fails explicitly rather than returning different bytes.
 - `knowledge_feedback(ref, rating, reason?)` accepts `up` or `down` only for a revision actually observed by the caller. The reason is optional, single-line and bounded. It is a usefulness signal, not a correctness judgment, vote weight or promotion gate.
 - Query and explain observe a revision so that later feedback can bind it. Importing a feed does not mark anything observed.
 - Reading a reference does not establish applicability. The caller must still compare conditions with task facts.
@@ -86,12 +86,12 @@ The plan uses `mindie-reviewed-change/1` and must include:
 
 Validation covers the full inheritance graph, duplicate IDs/paths, revision rules and the destination path before any write. Application writes only the declared units, rebuilds the routing index and reports `applied`, `validated`, `failed` or `partial`; it does not commit, push or publish. There is no automatic semantic acceptance, no promotion of a proposal by a successful format check and no implicit retry after a partial local write. If a write fails, report the concrete state rather than retrying blindly.
 
-On `graded-v2`, `.github/workflows/check.yml` reads the publication contract from the branch trusted base, installs the pinned validator revision and validates candidate blobs without executing candidate code. Contributions target `graded-v2`; `main` is not the PR base for graded units. In `publication-contract/2`:
+On `main`, `.github/workflows/check.yml` reads the publication contract from the branch trusted base, installs the pinned validator revision and validates candidate blobs without executing candidate code. Contributions target `main`. In `publication-contract/2`:
 
 - **content** changes are unit files, feedback files and derived index files;
 - **development** changes are root documentation/configuration, `docs/**`, `.github/**` and `publication-contract.json`.
 
-Content validation can be `success`; development validation is `neutral` and requires maintainer review. Neither outcome is proof of semantic truth, remote `graded-v2` readback or installed native acceptance. Those are separate release results. `graded-v2` may receive content updates within this compatibility version while keeping the same `publication-contract/2` bytes; `main` is unchanged.
+Content validation can be `success`; development validation is `neutral` and requires maintainer review. Neither outcome is proof of semantic truth, remote `main` readback or installed native acceptance. Those are separate release results. `main` may receive content updates within this compatibility version while keeping the same `publication-contract/2` bytes.
 
 ---
 
