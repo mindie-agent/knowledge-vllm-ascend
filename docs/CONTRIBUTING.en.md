@@ -2,54 +2,158 @@
 
 [中文](../CONTRIBUTING.md) | **English** · [Back to Homepage](README.en.md)
 
-Thank you for contributing troubleshooting experience and improvements to `knowledge-vllm-ascend`! To keep every public package **authentic, leak-free, and reliably searchable across all clients**, this repository enforces automated schema checks, fail-closed privacy redaction, and a two-track review workflow.
+Thank you for contributing reusable `vllm-ascend` engineering knowledge with explicit limits. The contribution unit is a **graded knowledge unit** (`mindie-graded-unit/1`), not a chat transcript or a generalized summary. Every unit carries provenance, applicability conditions, evidence strength and a revision. Deterministic checks validate format, privacy and the inheritance graph; review decides whether the claim is sound.
 
 ---
 
-## 1. Two Ways to Contribute
+## 1. What you can contribute
 
-### Option A: Automated Contribution via MindIE Agent (Recommended ✨)
+- **A new unit**: a SOP, workflow, measurement conclusion or code transformation with complete provenance and conditions.
+- **A revision**: a substantive change to an existing unit's body, conditions or provenance. A semantic change increments `revision` and preserves the old content in history.
+- **A withdrawal**: removal of a unit from the current corpus through a reviewed change. The old revision remains in Git history.
+- **Public feedback**: `up` / `down` for an exact content revision actually observed. Feedback is not a unit and never edits a body.
 
-When using [`mindie-agent-cc`](https://github.com/mindie-agent/mindie-agent-cc), [`mindie-agent-codex`](https://github.com/mindie-agent/mindie-agent-codex), or [`mindie-agent-kimi`](https://github.com/mindie-agent/mindie-agent-kimi) with **Community Sharing (Opt-in)** enabled, you don't need to hand-craft YAML headers or Markdown manifests.
-
-After you finish an engineering task, the local [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) runtime handles the entire pipeline in the background:
-1. **Projects Public Messages Only**: Keeps user prompts and visible assistant replies while stripping tool call noise, hidden reasoning traces, and system prompts;
-2. **Runs Double Deterministic Redaction**: Scans text with pinned Gitleaks and `mindie_knowledge.redact` (ruleset `r3`) without letting an LLM rewrite your technical findings;
-3. **Indexes & Opens a PR**: Generates block titles and `index.md` navigation summaries via a small native worker, packs a `mindie-contribution/1` batch, and opens a Pull Request against this repository.
-
-### Option B: Manual Corrections, Appends, or Withdrawals (Pull Request)
-
-Contributors and maintainers can also open Pull Requests directly to refine navigation metadata, append follow-up observations, or withdraw outdated packages:
-- **Replacing or Updating Block Text**: The bytes inside `blocks/<block_id>.md` are **immutable** under that `block_id`. If you need to edit a block's body (for example, to redact an overlooked token or fix a command), create a new `<64-hex-block-id>.md` file, remove the superseded block file, and recompute the `sha256` digest, block list, and task `revision` in `index.md`.
-- **Metadata-Only Edits**: If you are only improving titles, summaries, or applicability conditions in `index.md` without changing any `blocks/*.md` body bytes, keep the existing `block_id` values intact.
-- **Withdrawing a Package**: Delete the entire `tasks/<task_id>/` directory in a PR and explain the reason in the PR description. Once merged, `mindie-knowledge sync` automatically marks the task as withdrawn on client machines.
+Do not submit: unverifiable versions, hardware or performance numbers; a `single_observation` dressed up as `reproduced_empirical`; a gold patch, oracle verdict or held-out answer in a query condition or unit body; a unit copied from another domain with only the domain name changed.
 
 ---
 
-## 2. Format & Privacy Rules (Enforced by CI)
+## 2. Contribute through MindIE Agent (recommended)
 
-Every PR is validated by GitHub Actions (`publication-head`) in zero-trust mode—reading candidate files strictly as immutable Git blobs without ever executing code from the PR:
+Codex, Claude Code, Kimi and DSH all connect through their own **native plugins**. Install and enable the plugin for your host by following the main repository's installation guide:
 
-1. **Package Topology & Hash Integrity**:
-   - Every task package lives under `tasks/<64-lowercase-hex-task-id>/` and contains `index.md` (`mindie-material-task/1`) plus its referenced `blocks/<64-lowercase-hex-block-id>.md` files (`mindie-material-block/1`).
-   - Every file under `blocks/` must be listed in `index.md` with an exact matching `sha256` digest; unreferenced files are rejected. See the [Package Format Specification](package-format.en.md).
-2. **Zero Private or Sensitive Data (Fail-Closed Redaction)**:
-   - **PR titles, PR descriptions, and all committed files** are scanned by `mindie_knowledge.redact` (`r3`).
-   - Never include API keys, tokens, private key fragments, internal IPv4/IPv6 addresses, numbered machine identifiers, `<user>@<host>` login targets, personal home paths (use placeholders like `/home/<user>/...`), or internal ticket IDs.
-   - You can run the privacy check locally before pushing:
-     ```bash
-     python3 -m mindie_knowledge.redact --check README.md CONTRIBUTING.md docs
-     ```
-3. **Root Directory Allowlist**:
-   - Only `publication-contract.json` and standard root metadata files (`README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `LICENSE`) may reside at the repository root. Keep English docs and format specifications under `docs/`.
+**<https://github.com/mindie-agent/mindie-agent>**
+
+With community sharing (Opt-in) enabled, runtime work has four distinct stages; task exit itself does not promote captured material into a graded unit:
+
+1. **Authorized capture and redaction**: Stop/task capture preserves the public transcript projection only within the current authorization, runs deterministic redaction, and stores selected material. Capture does not create a graded unit.
+2. **Explicit selected-evidence native distillation**: the caller submits `inputs` and `task_state` through `distill_selected`. The native worker may return `propose_graded_units` or `noop`; proposals are locally staged. This operation is independent of Stop and does not discover transcripts, grant contribution consent, or advance the runtime pin.
+3. **Semantic review and C6 application**: the caller/reviewer is responsible for checking the proposal's meaning, conditions and evidence. `review_reference` records the review basis; it is not a signature and does not prove independent review occurred. Only reviewed complete unit bytes applied through `mindie-reviewed-change/1` and an index rebuild make the intended corpus change.
+4. **Separate contribution/publication**: external writes are governed by the contribution/publication path. When a batch is built for a graded corpus while legacy material drafts remain, `build_batch` raises `DistillationRequired` (`legacy_drafts_require_c6`) and requires C6 first; it does not silently generate a graded unit. Opening a PR based on `graded-v2`, merging remotely and installing on a client are separate outcomes and are not guaranteed.
+
+This repository does not copy host installers or require host-specific paths in documentation. Installation and configuration are defined by the main repository. 0.0.3 plugins select the `graded-v2` branch and bind the exact digest of this domain's `publication-contract.json`; manual contributions start from a `graded-v2` checkout and PRs use `graded-v2` as their base.
 
 ---
 
-## 3. Content PRs vs. Development PRs
+## 3. Submit a reviewed change manually (C6)
 
-The repository validator automatically classifies each PR by its touched file paths:
+### 3.1 Gather verifiable facts
 
-| PR Mode | Touched Paths | `publication-head` Check | Review & Merge Path |
+Decide the question the unit answers, then collect:
+
+- source type and locator (for example `owner/repo@<40-hex>:path`, or a redacted evidence record path);
+- the exact source digest (SHA-256);
+- facts the task actually observed: repository and commit, hardware, CANN/driver/firmware, framework versions, input shapes, dtype, measurement or verification limits;
+- evidence strength and its boundary: `hardware_spec`, `reproduced_empirical`, `single_observation` or `hypothesis`.
+
+Conditions must be checkable premises, not "already fixed", "reviewer approved" or "next step". Do not invent an unobserved version. Missing and `unknown` facts do not match at query time.
+
+### 3.2 Write the complete unit, not a summary replacement
+
+The unit path must be `<domain_path>/<unit_id>.md`. The body states the rule, procedure or transformation, plus failure conditions, counterexamples and limits. Frontmatter includes at least:
+
+`schema`, `id`, `revision`, `content_digest`, `title`, `category`, `tier`, `evidence_strength`, `domain_path`, `conditions`, `triggers`, `inherits_from`, `provenance`.
+
+See the [format specification](package-format.en.md) for field semantics, digest computation and condition forms. A new unit starts at `revision: 1`; a semantic change increments it. A path-only move with unchanged body and semantic metadata keeps the revision and content digest.
+
+### 3.3 Validate before writing
+
+A reviewed change uses a `mindie-reviewed-change/1` plan containing:
+
+- `review_reference`: the review basis. It records where approval came from; it is not a signature and does not by itself prove independent review;
+- `base_generation`: the current routing `generation` the plan is based on;
+- `changes`: the complete rendered content for each changed unit, or a withdrawal; each item carries the stable `id`, `expected_content_sha256`, destination `path` and `content`.
+
+Run the read-only validation first:
+
+```bash
+python3 scripts/apply_reviewed_change.py --root . --plan reviewed-change.json
+```
+
+It checks the complete inheritance graph, duplicate IDs/paths, revision rules and destination paths, then prints the writes/removals it would perform. It does not modify files. If `base_generation` is stale, prepare a new plan against the current corpus; do not bypass the check.
+
+### 3.4 Apply only after semantic review
+
+Add `--apply` only after review:
+
+```bash
+python3 scripts/apply_reviewed_change.py --root . --plan reviewed-change.json --apply
+```
+
+Application writes the declared units, removes declared old files and rebuilds `index/routing-manifest.json` and `index/shard-topology.json`. It does not commit, push or publish. If it returns `partial` or `failed`, preserve the actual state and error; do not assume success or retry blindly.
+
+### 3.5 Check the derived index
+
+```bash
+python3 scripts/build_routing_index.py --root . --check
+```
+
+The command validates the unit graph and confirms both derived JSON files match the current units. Do not hand-edit `index/`; rebuild with the same command if it is stale.
+
+### 3.6 Privacy and publication checks
+
+At minimum:
+
+```bash
+python3 -m mindie_knowledge.redact --check README.md AGENTS.md CONTRIBUTING.md docs
+python3 -m mindie_knowledge.publication_check \
+  --repo . --revision "$(git rev-parse HEAD)" --domain vllm-ascend
+```
+
+Also run the installed pinned Gitleaks 8.30.1 over changed public files. These must be real deterministic checks. Do not add an allowlist, `.gitleaksignore` or `gitleaks:allow` to suppress a result. If an example triggers a false positive, keep the finding and use equivalent harmless Markdown syntax rather than modifying the scanner or deleting the fact.
+
+`publication_check` requires a complete 40-character Git commit. Commit the candidate tree locally before validating it.
+
+---
+
+## 4. Privacy red lines
+
+Do not publish:
+
+- API keys, tokens, private keys, cookies or authentication headers;
+- internal IPv4/IPv6 addresses, numbered machine names or `<user>@<host>` login strings;
+- personal home directories, private workspace paths, internal ticket IDs or non-public benchmark/held-out/oracle identifiers;
+- any source content that is not confirmed public.
+
+Use placeholders such as `/home/<user>/...` when a path shape matters. Do not copy identifiers already reviewed in the old material or evidence on `main`/85ab into new prose or examples.
+
+---
+
+## 5. Two PR review paths
+
+`graded-v2` is the PR base for graded units; `main` retains the old material corpus and old contract bytes and does not accept graded-unit contributions. `publication-head` classifies changes by path:
+
+| Mode | Touched paths | Check outcome | Merge path |
 | --- | --- | --- | --- |
-| **Content Contribution (`content`)** | Only `tasks/**` or `feedback/**` | `success` | Reviewed and auto-merged by the repository review bot under the [`mindie-content-review/2`](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) contract once all checks pass |
-| **Engineering / Docs Change (`development`)** | Touches `README.md`, `CONTRIBUTING.md`, `docs/**`, `.github/**`, or `publication-contract.json` | `neutral` | **Never auto-merged by the bot**; requires a [Design Principles Review](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.en.md) in the PR description and maintainer review |
+| **content** | Unit Markdown, `feedback/**`, `index/**` | `success` | After format, digest, inheritance and privacy checks, the content review bot handles it under [`mindie-content-review/2`](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) |
+| **development** | `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**`, `.github/**`, `publication-contract.json` | `neutral` | No content-bot auto-merge; maintainer review under the [engineering design principles](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.en.md) |
+
+`success` means the candidate tree passed that check; it is not proof of semantic correctness, remote `graded-v2` update or installed native acceptance. `main` does not change with graded content. `neutral` is not a failure; it selects the maintainer review path.
+
+---
+
+## 6. Revisions, feedback and withdrawal
+
+- **Revision**: increment on a semantic change; keep revision and content digest on a path-only move. An old reference must fail explicitly after content changes, never silently point at new text.
+- **Feedback**: only for an exact revision the caller actually observed. `reason` is optional, single-line and at most 1000 characters; private local feedback is not published by default. Vote totals are descriptive, not confidence or an automatic promotion condition.
+- **Withdrawal**: remove the current unit through a reviewed change and state the reason. Do not describe a withdrawal as data loss; the old content remains in Git history.
+
+---
+
+## 7. Do not
+
+- add the old `tasks/` layout or relabel old material on `main`/85ab as a graded unit;
+- hand-edit derived indexes, `publication-contract.json` or CI workflows, or rewrite the old material on `main`/85ab to fit documentation;
+- replace a unit body or source with a model-generated summary;
+- claim "automatic semantic acceptance", "automatic promotion" or "installed means accepted"; those steps do not exist;
+- send graded-unit PRs to `main`; graded content uses `graded-v2` as its base;
+- copy units between domains or force same-topic merges; use explicit routes.
+
+---
+
+## 8. Related documents
+
+- [Unit format specification](package-format.en.md) · [中文](package-format.md)
+- [Repository boundaries and agent rules](../AGENTS.md)
+- [Live routing inventory](../index/routing-manifest.json)
+- [Knowledge runtime](https://github.com/mindie-agent/knowledge)
+- [Review bot contract](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md)

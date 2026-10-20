@@ -1,0 +1,521 @@
+{
+  "build_elapsed_ms": 2.67633399926126,
+  "closure": {
+    "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-idle-dp-gdn-state": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
+    "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-verification-and-state-parity-gates": []
+  },
+  "generation": "0950695e1d6fbc4c854307c5743a692c9ff057692c961490bc919f46b6479f60",
+  "id_path": {
+    "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
+    "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow.md",
+    "unit-vllm-ascend-idle-dp-gdn-state": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
+    "unit-vllm-ascend-npu-runtime-and-graph-invariants": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
+    "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
+    "unit-vllm-ascend-verification-and-state-parity-gates": "_common/unit-vllm-ascend-verification-and-state-parity-gates.md"
+  },
+  "query_budget_excludes_build": true,
+  "schema_version": "mindie-routing-manifest/1",
+  "token_estimator": "utf8_bytes_div_4_ceiling",
+  "unit_count": 7,
+  "units": [
+    {
+      "category": "workflow",
+      "conditions": {
+        "model_family": [
+          "qwen3_5",
+          "Qwen3.5",
+          "gated_deltanet"
+        ],
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend"
+        ]
+      },
+      "domain_path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/worker/patch_qwen3_5.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/worker/__init__.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/__init__.py",
+          "https://github.com/huggingface/transformers/blob/a08ace4bbd97e721c98751deec37d87b026acadc/src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+          "https://huggingface.co/Qwen/Qwen3.5-0.8B"
+        ],
+        "source_digest": "d48fbf9acefff670b66fc9941de53b725607d8239153bad1ee7b79fdacd56bdd",
+        "source_locator": "vllm-project/vllm-ascend@0f289fa2a8a381a644a5f329af61715a73ec2aec:vllm_ascend/patch/worker/patch_qwen3_5.py",
+        "source_type": "hermes_workflow_distillation",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L3",
+      "title": "Hermes workflow: 0-day Qwen3.5 GatedDeltaNet + Attention bring-up on vllm-ascend",
+      "token_estimate": 1986,
+      "triggers": {
+        "error_signatures": [
+          "torch_npu.npu_recurrent_gated_delta_rule does not support ssm_state inputs in float32 format",
+          "Qwen3.5 GDN prefill logits diverge from the CPU float32 reference",
+          "GDN decode uses a stale query_start_loc or num_accepted_tokens",
+          "single-token decode and multi-token continuation disagree at the first position"
+        ],
+        "keywords": [
+          "Qwen3.5",
+          "qwen3_5",
+          "GatedDeltaNet",
+          "decode",
+          "prefill",
+          "query_start_loc",
+          "num_accepted_tokens",
+          "speculative decode",
+          "ssm_state",
+          "conv_state",
+          "Hermes",
+          "reviewed_change",
+          "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "vllm-ascend-idle-dp"
+        ]
+      },
+      "domain_path": "integration/custom-ops",
+      "evidence_strength": "single_observation",
+      "id": "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
+      "provenance": {
+        "evidence_refs": [
+          "docs/evidence/unit-vllm-ascend-custom-op-gates-import-retry-and-nz-review.json",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L397-L456",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L299-L316",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L656-L786",
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L249-L286"
+        ],
+        "source_digest": "b04fd7d5698c9a1ad9cb1470fe4ce593e1e21bbdd00747c2d797850becc43aa9",
+        "source_locator": "docs/evidence/unit-vllm-ascend-custom-op-gates-import-retry-and-nz-review.json",
+        "source_type": "ecosystem_repo",
+        "supersedes": []
+      },
+      "revision": 2,
+      "tier": "L2",
+      "title": "Ascend custom-op imports, registration and NZ selection have distinct gates",
+      "token_estimate": 987,
+      "triggers": {
+        "error_signatures": [],
+        "keywords": [
+          "vllm-ascend",
+          "ascend",
+          "custom-op",
+          "imports",
+          "registration",
+          "and",
+          "nz",
+          "selection",
+          "have",
+          "distinct",
+          "gates",
+          "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "workflow",
+      "conditions": {
+        "affected_state": {
+          "exact_set": [
+            "conv_state",
+            "ssm_state"
+          ]
+        },
+        "dp": 2,
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "vllm-ascend-idle-dp"
+        ]
+      },
+      "domain_path": "vllm-ascend/runtime/idle-dp-gdn-state",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/pull/15655",
+          "https://github.com/vllm-project/vllm-ascend/pull/15510",
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/tests/ut/worker/test_model_runner_v1.py"
+        ],
+        "source_digest": "61ee8bc56d4ac0e1a7f43d1804bfe41c1a6699181774938907c97174f2348343",
+        "source_locator": "vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:vllm_ascend/worker/model_runner_v1.py",
+        "source_type": "hermes_workflow_distillation",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L3",
+      "title": "Hermes workflow: hybrid GDN/Mamba + MLA DP idle-rank state correction",
+      "token_estimate": 1805,
+      "triggers": {
+        "error_signatures": [
+          "idle DP rank with no scheduled requests while peer is active",
+          "cached GDN conv_state or ssm_state overwritten after an idle dummy step",
+          "later requests on the formerly idle rank diverge",
+          "two-rank DP run hangs in coordinate_batch_across_dp"
+        ],
+        "keywords": [
+          "idle DP",
+          "GDN",
+          "conv_state",
+          "ssm_state",
+          "Hermes",
+          "workflow",
+          "skip_gdn_state_update",
+          "HCCL",
+          "state checksum",
+          "DP2 TP1",
+          "Ascend910_93",
+          "reviewed_change"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "affected_state": {
+          "exact_set": [
+            "conv_state",
+            "ssm_state"
+          ]
+        },
+        "dp": 2,
+        "idle_rank_state": "no_scheduled_requests",
+        "model": [
+          "Kimi K3 hybrid Gated DeltaNet/GDN plus MLA attention with MoE",
+          "Kimi K3 hybrid GDN/MLA + MoE",
+          "Kimi K3"
+        ],
+        "npu_count": 2,
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "peer_rank_state": [
+          "active_requests",
+          "active"
+        ],
+        "repository": [
+          "vllm-ascend-idle-dp",
+          "vllm-project/vllm-ascend",
+          "vllm-ascend"
+        ]
+      },
+      "domain_path": "vllm-ascend/runtime/idle-dp-gdn-state",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-ascend-idle-dp-gdn-state",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/pull/15655",
+          "https://github.com/vllm-project/vllm-ascend/pull/15510",
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/tests/ut/worker/test_model_runner_v1.py"
+        ],
+        "source_digest": "61ee8bc56d4ac0e1a7f43d1804bfe41c1a6699181774938907c97174f2348343",
+        "source_locator": "https://github.com/vllm-project/vllm-ascend/pull/15655",
+        "source_type": "runtime_reproduction_with_source_diff",
+        "supersedes": []
+      },
+      "revision": 2,
+      "tier": "L2",
+      "title": "Idle-DP dummy run and cached GDN recurrent state: verified diagnosis",
+      "token_estimate": 1330,
+      "triggers": {
+        "error_signatures": [
+          "idle DP rank with no scheduled requests while peer is active",
+          "cached GDN conv_state or ssm_state corrupted after an idle step",
+          "later requests on the formerly idle rank diverge"
+        ],
+        "keywords": [
+          "idle DP",
+          "GDN",
+          "conv_state",
+          "ssm_state",
+          "dummy_run",
+          "skip_gdn_state_update",
+          "Kimi K3",
+          "PR15655",
+          "HCCL",
+          "state checksum",
+          "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "axiom",
+      "conditions": {
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "vllm-ascend-idle-dp"
+        ]
+      },
+      "domain_path": "_common",
+      "evidence_strength": "hardware_spec",
+      "id": "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "inherits_from": [],
+      "inherits_from_closure": [],
+      "path": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py"
+        ],
+        "source_digest": "61ee8bc56d4ac0e1a7f43d1804bfe41c1a6699181774938907c97174f2348343",
+        "source_locator": "vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:vllm_ascend/worker/model_runner_v1.py",
+        "source_type": "runtime_architecture_specification",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L1",
+      "title": "Ascend NPU runtime and graph invariants in vllm-ascend model_runner_v1",
+      "token_estimate": 1806,
+      "triggers": {
+        "error_signatures": [
+          "idle DP rank hangs or diverges because a zero-token step skipped the DP collective",
+          "GDN conv_state or ssm_state changes after a zero-token dummy step",
+          "decode logits diverge after query_start_loc or num_accepted_tokens reuse",
+          "torch.ops._C_ascend is missing or an NZ-layout weight is read as ND"
+        ],
+        "keywords": [
+          "vllm-ascend",
+          "model_runner_v1",
+          "dummy_run",
+          "skip_gdn_state_update",
+          "coordinate_batch_across_dp",
+          "GDN",
+          "GatedDeltaNet",
+          "conv_state",
+          "ssm_state",
+          "query_start_loc",
+          "num_accepted_tokens",
+          "_C_ascend",
+          "NZ",
+          "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "model_family": [
+          "qwen3_5",
+          "Qwen3.5",
+          "gated_deltanet"
+        ],
+        "model_repository": "Qwen/Qwen3.5-0.8B",
+        "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "vllm-ascend-idle-dp"
+        ],
+        "source0_repository": "https://github.com/vllm-project/vllm-ascend",
+        "source0_revision": "a78a00e0b1b618f26a3bfce2519055b40cf4bf1e"
+      },
+      "domain_path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
+      "evidence_strength": "single_observation",
+      "id": "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/worker/patch_qwen3_5.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/worker/__init__.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/__init__.py",
+          "https://github.com/huggingface/transformers/blob/a08ace4bbd97e721c98751deec37d87b026acadc/src/transformers/models/qwen3_5/modeling_qwen3_5.py"
+        ],
+        "experiment_status": "not_run_source_only",
+        "source_digest": "d48fbf9acefff670b66fc9941de53b725607d8239153bad1ee7b79fdacd56bdd",
+        "source_locator": "vllm-project/vllm-ascend@0f289fa2a8a381a644a5f329af61715a73ec2aec:vllm_ascend/patch/worker/patch_qwen3_5.py",
+        "source_type": "public_source",
+        "supersedes": []
+      },
+      "revision": 2,
+      "tier": "L2",
+      "title": "Qwen3.5 GatedDeltaNet decode adaptation in vLLM-Ascend (historical PR7109)",
+      "token_estimate": 3071,
+      "triggers": {
+        "error_signatures": [
+          "torch_npu.npu_recurrent_gated_delta_rule does not support ssm_state inputs in float32 format",
+          "Qwen3_5GatedDeltaNet reuses Qwen3NextGatedDeltaNet._forward_core but AscendC ops lack float32 ssm_state support",
+          "worker import is version-gated by not vllm_version_is(\"v0.16.0\")"
+        ],
+        "keywords": [
+          "qwen3.5",
+          "qwen3_5",
+          "gated deltanet",
+          "linear attention",
+          "ssm_state",
+          "vllm-ascend",
+          "text-only prefill",
+          "recurrent decode",
+          "chunk_gated_delta_rule",
+          "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "measurement",
+      "conditions": {
+        "npu_model": [
+          "Ascend910",
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "vllm-ascend-idle-dp"
+        ]
+      },
+      "domain_path": "_common",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-ascend-verification-and-state-parity-gates",
+      "inherits_from": [],
+      "inherits_from_closure": [],
+      "path": "_common/unit-vllm-ascend-verification-and-state-parity-gates.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/tests/ut/worker/test_model_runner_v1.py"
+        ],
+        "source_digest": "11e7ef8d243dcca647e6ed35e524a5f261606182e5a6deb39fa9c1dbd8acb6a3",
+        "source_locator": "vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:tests/ut/worker/test_model_runner_v1.py",
+        "source_type": "verification_contract",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L1",
+      "title": "vllm-ascend verification and state-parity gates (metadata, single-rank, multi-rank)",
+      "token_estimate": 1726,
+      "triggers": {
+        "error_signatures": [
+          "unit test passes with mocked metadata but no NPU state checksum was taken",
+          "single-rank logits match while idle-rank conv_state or ssm_state changed",
+          "two-rank DP run hangs in HCCL before the idle-rank parity assertion",
+          "a source-only fix is promoted to reviewed_change without Probe 2 or Probe 3"
+        ],
+        "keywords": [
+          "vllm-ascend",
+          "verification",
+          "state parity",
+          "checksum",
+          "fp32 reference",
+          "HCCL",
+          "DP",
+          "TP",
+          "probe",
+          "idle rank",
+          "reviewed_change",
+          "Hermes"
+        ]
+      }
+    }
+  ]
+}

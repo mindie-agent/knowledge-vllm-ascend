@@ -1,4 +1,4 @@
-name: Material package checks
+name: Knowledge publication checks
 
 on:
   pull_request_target:
@@ -61,7 +61,7 @@ jobs:
           contract = json.loads(raw)
           validator = contract.get('validator', {})
           revision = validator.get('revision', '')
-          if (contract.get('schema') != 'mindie-publication-contract/1'
+          if (contract.get('schema') not in {'mindie-publication-contract/1', 'mindie-publication-contract/2'}
                   or contract.get('domain') != 'vllm-ascend'
                   or validator.get('repository') != 'mindie-agent/knowledge'
                   or not re.fullmatch(r'[0-9a-f]{40}', revision)):
@@ -140,7 +140,7 @@ jobs:
                                           expected_sha256=os.environ['TRUSTED_CONTRACT_SHA256'])
               if trusted['contract']['validator']['revision'] != os.environ['KNOWLEDGE_VALIDATOR_SHA']:
                   raise SystemExit('Trusted validator receipt mismatch')
-              classification = classify_changes(repo, base, expected)
+              classification = classify_changes(repo, base, expected, schema=trusted['contract']['schema'])
               ordinary = os.environ['GITHUB_EVENT_NAME'] != 'pull_request_target' or classification['content_only']
               checked = validate(repo, expected, 'vllm-ascend', base_revision=base,
                                  expected_contract_sha256=trusted['sha256'] if ordinary else None)

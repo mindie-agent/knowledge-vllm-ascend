@@ -1,234 +1,212 @@
 <h1 align="center">MindIE Knowledge · vLLM-Ascend</h1>
 
 <p align="center">
-  <strong>面向昇腾（Ascend NPU）与 <code>vLLM-Ascend</code> 推理工程的开源实战经验与排障知识库</strong><br>
-  <sub>Part of <a href="https://github.com/mindie-agent/mindie-agent">MindIE Agent</a> · 由 <a href="https://github.com/mindie-agent/knowledge"><code>mindie-knowledge</code></a> 驱动本地秒级检索与双向自进化闭环</sub>
+  <strong>面向 Ascend NPU 与 <code>vLLM-Ascend</code> 的条件化工程知识库</strong><br>
+  <sub>Part of <a href="https://github.com/mindie-agent/mindie-agent">MindIE Agent</a> · 由 <a href="https://github.com/mindie-agent/knowledge"><code>mindie-knowledge</code></a> 提供本地检索、精确全文读取与修订反馈</sub>
 </p>
 
 <p align="center">
   <a href="https://github.com/mindie-agent/mindie-agent"><img src="https://img.shields.io/badge/MindIE%20Agent-Ecosystem-7045f5.svg" alt="MindIE Agent Ecosystem"></a>
   <a href="https://github.com/mindie-agent/knowledge"><img src="https://img.shields.io/badge/runtime-mindie--knowledge-0284c7.svg" alt="mindie-knowledge"></a>
   <a href="publication-contract.json"><img src="https://img.shields.io/badge/domain-vllm--ascend-0f766e.svg" alt="Domain vllm-ascend"></a>
-  <a href="publication-contract.json"><img src="https://img.shields.io/badge/redaction-gitleaks%20%2B%20r3-d97757.svg" alt="Redaction Gitleaks + r3"></a>
+  <a href="AGENTS.md"><img src="https://img.shields.io/badge/schema-mindie--graded--unit%2F1-0f766e.svg" alt="Graded unit schema"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/corpus-CC--BY--4.0-0d9488.svg" alt="License CC-BY-4.0"></a>
 </p>
 
 <p align="center">
-  <strong>中文</strong> · <a href="docs/README.en.md">English</a> · <a href="#-一句话装好并接入知识库">⚡ 一句话安装</a> · <a href="#-为什么需要这个知识库">✨ 为什么需要它</a> · <a href="#️-双层知识闭环与脱敏流水线">🏗️ 闭环架构</a> · <a href="#-一个真实的知识包长什么样">📦 知识包拆解</a> · <a href="docs/package-format.md">📐 格式规范</a> · <a href="CONTRIBUTING.md">🤝 参与贡献</a>
+  <strong>中文</strong> · <a href="docs/README.en.md">English</a> · <a href="#-接入">接入</a> · <a href="#-为什么使用知识单元">为什么</a> · <a href="#-检索与全文读取">检索</a> · <a href="#-当前单元">当前单元</a> · <a href="docs/package-format.md">📐 格式规范</a> · <a href="CONTRIBUTING.md">🤝 参与贡献</a>
 </p>
 
 ---
 
-## ⚡ 一句话装好并接入知识库
+## 这是什么
 
-你不需要手动 `git clone` 本仓库，也不需要手写复杂的检索脚本。
+本仓库的 `graded-v2` 分支承载 MindIE Agent `0.0.3` 的 `vllm-ascend` 领域分级知识源。它保存的是**分级知识单元**（graded unit，`mindie-graded-unit/1`）：一条可复用的判断、步骤或代码变换，连同它的来源、适用条件、证据强度和修订号。
 
-打开你日常使用的 **Claude Code**、**OpenAI Codex CLI** 或 **Kimi Code**，直接把下面这句话发给你的 Agent：
+知识单元不是聊天记录摘要，也不是“放之四海皆准”的最佳实践。每条单元都明确回答两个问题：
 
-```text
-帮我安装一下这个 https://github.com/mindie-agent/mindie-agent
+- 在哪些**可核验的前提**下，这条结论成立；
+- 它依据什么来源和证据，强度到什么程度。
+
+查询时，运行时把任务实际观测到的事实与单元声明的条件逐项比较。条件不满足、缺失或未知，都不会被当作“差不多适用”。
+
+> `graded-v2` 分支使用 `mindie-publication-contract/2` 和 `mindie-graded-unit/1`；`main` 保持旧的 material-v1 语料和旧 contract 字节，供 0.0.2 消费者使用，不是 graded 树。实时单元清单以 [`index/routing-manifest.json`](index/routing-manifest.json) 为准；本文中的表格只列出本次检查时清单中的单元，不是固定计数。
+
+---
+
+## ⚡ 接入
+
+MindIE Agent 支持 **Codex、Claude Code、Kimi、DSH** 四种宿主，各自通过原生插件安装。请按主仓库的安装指南选择对应宿主：
+
+**<https://github.com/mindie-agent/mindie-agent>**
+
+插件就绪后会连接 [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) 运行时，同步本领域内容并建立本地索引。只读的 `knowledge_query` / `knowledge_explain` 不要求开启社区共享；是否允许采集和贡献由用户显式决定。
+
+本仓库不再复制各宿主的安装脚本或本机路径。宿主安装、插件配置与升级以主仓库说明为准。0.0.3 插件显式选择 `graded-v2` 分支，并绑定本领域 `publication-contract.json` 的精确摘要；贡献 PR 以 `graded-v2` 为 base。
+
+---
+
+## ✨ 为什么使用知识单元
+
+| 只看摘要 | 本仓库的知识单元 |
+| --- | --- |
+| 结论被压缩成语境不明的“经验”，版本、前提和失败分支容易丢失 | 单元正文保留具体条件、步骤、反例与边界；来源通过 `provenance` 绑定 |
+| 检索命中后不知道是否适用于当前环境 | 查询先比较任务观测条件；不匹配或未知时明确排除，并给出原因 |
+| 旧结论被静默覆盖 | 修订号、内容摘要和精确引用使旧观测可追溯；被替换的引用会显式失败 |
+| 只能看到片段，无法核对全文 | `knowledge_query` 返回带摘要的候选；`knowledge_explain` 按精确摘要读取完整正文 |
+
+知识单元可以来自已审核的公开材料、源码、规范或实验记录。允许使用模型辅助提炼，但**模型输出只是草案**：它必须保留来源和证据边界，经过确定性格式/隐私检查和语义审核，才能通过已审核变更进入当前语料。不能把失败实验写成 `reproduced_empirical`，不能编造硬件、版本或性能数据，也不能用模型改写替代来源。
+
+原先的 `material-v1` 任务材料不在 `graded-v2` 分支内；它们保留在 `main` 和不可变历史提交 85ab 中，见[旧材料与历史](#-旧材料与历史)。旧材料是证据，不参与当前单元检索，也不会被重新标记为 graded unit。
+
+---
+
+## 🔎 检索与全文读取
+
+一次典型使用包括：先查询，再按精确引用读全文，可选地记录反馈；跨领域时使用显式路由。
+
+### 1. 用任务实际观测到的事实查询
+
+`knowledge_query` 接受查询文本、可选的条件映射和条数上限：
+
+```python
+knowledge_query(
+    query="custom op import registration NZ selection",
+    conditions={
+        "repository": "vllm-project/vllm-ascend",
+        "revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c",
+    },
+)
 ```
 
-安装完成后，你的 Agent 会自动绑定 [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) 引擎，将本仓库（`knowledge-vllm-ascend`）同步到本地并建立 **BM25 全文与引用索引**。之后你在开发 `vllm` / `vllm-ascend` 时遇到算子报错、HCCL 通信超时、ACLGraph 捕获异常或精度对齐问题，Agent 就能秒级检索本仓库的真实排障记录。
+`conditions` 只放**当前任务实际观测到**的软件版本、源码提交、硬件、输入形状等事实。不要把单元自己声明的条件抄进查询来“保证命中”，也不要把 gold patch、oracle 判定、heldout 答案或修复后的结论当作查询事实。
 
-<details>
-<summary>🤖 <b>AI Agent 自动安装与配置指南（当用户让你安装或接入本知识库时请按此执行）</b></summary>
+缺失的条件、`unknown` 值和无法比较的版本都会得到 `condition_unknown`，默认不进入匹配结果。这是正确行为，不是检索失败。所有声明条件都成立时才是 `matched`；任一条件明确不符则是 `mismatch`。
 
-> **给 AI Agent 的说明**：
-> 1. **完整安装 MindIE Agent（含本知识库自动同步与检索）**：
->    请直接读取主仓库主页 [`https://github.com/mindie-agent/mindie-agent`](https://github.com/mindie-agent/mindie-agent) 中的自动安装引导，识别你所在的宿主环境（Claude Code / OpenAI Codex CLI / Kimi Code CLI）并完成插件安装。插件就绪后会自动从 `mindie-agent/knowledge-vllm-ascend` 拉取最新知识包。
-> 2. **仅使用开发者 CLI 独立同步与状态检查（`mindie-knowledge`）**：
->    如果你在独立开发环境中使用 [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) 命令行工具，可执行：
->    ```bash
->    # 安装 mindie-knowledge 引擎
->    python3 -m pip install "mindie-knowledge @ git+https://github.com/mindie-agent/knowledge.git"
->
->    # 同步最新公开知识包到本地只读缓存（无需调用大模型，即使关闭社区共享也可正常同步）
->    mindie-knowledge sync --config domain.json
->
->    # 查看本地知识库状态、已同步条目数与索引健康度
->    mindie-knowledge status --config domain.json
->    mindie-knowledge sharing-status --config domain.json
->    ```
-> 3. **在 Agent 会话中按需检索与精读**：
->    - 先调用 `knowledge_query(query="...")` 搜索匹配的原文分块摘录与导航引用；
->    - 再调用 `knowledge_explain(ref="mindie://vllm-ascend/<task-id>/blocks/<block-id>@<sha256>")` 按需展开具体分块的完整排障上下文；
->    - 若某条经验在实机任务中帮到了你（或发现已过期），可调用 `knowledge_feedback(ref="mindie://vllm-ascend/<task-id>@<observed-revision>", rating="up"|"down", reason="...")` 记录真实有用性反馈。
+### 2. 按返回的引用读取完整正文
 
-</details>
+查询结果会给出带内容摘要的 `ref`、稳定的 `unit_ref` 和独立的 `feedback_ref`。`knowledge_explain` 读取该精确修订的完整正文、frontmatter、继承闭包和适用性说明：
 
----
-
-## ✨ 为什么需要这个知识库？
-
-在昇腾（Ascend NPU）上开发和调试 `vLLM-Ascend` 时，最有价值的工程经验往往不是教科书式的概念，而是**真实的排障现场**：
-- 为什么容器里设了 `ASCEND_RT_VISIBLE_DEVICES=8` 却报错找不到设备，如何在导入 `torch_npu` 前做逻辑设备归一化？
-- 验证 `torch_npu.npu_rms_norm` 的 FP16/BF16 精度时，为什么直接用 FP32 输入算 CPU 参考值会引入额外舍入误差？
-- `npu_fused_infer_attention_score_v2` 接入 attention sink 时，对应哪个上游 PR 和 CANN 算子签名？
-
-传统做法要么让这些经验随着聊天窗口关闭而消失，要么用大模型写成“过度概括的二手总结”，把关键命令、报错栈、失败尝试和适用边界全都抹掉了。
-
-**`knowledge-vllm-ascend` 采用了完全不同的思路：**
-
-| 维度 | 传统 LLM 总结 / 散落 Wiki ❌ | `knowledge-vllm-ascend` 知识包 ✅ |
-| --- | --- | --- |
-| **正文真实性** | 大模型缩写改写，常漏掉关键环境变量、版本号或失败分支 | **原文无损保留**：每个 `blocks/<block_id>.md` 保存经脱敏后的真实公开对话分块，绝不用大模型篡改技术正文 |
-| **检索效率** | 动辄几万字原始日志塞爆上下文，或者搜不到关键标识符 | **两级按需阅读**：`index.md` 提供任务导航大纲与分块摘要，Agent 先看目录，再按需点开对应分块 |
-| **隐私与安全** | 担心带出内网 IP、机器编号、个人路径或 Token，不敢公开分享 | **双层强制脱敏**：本地入库与 PR 入库均经过 Gitleaks + `mindie_knowledge.redact`（`r3`）确定性扫描，发现敏感信息直接拦截 |
-| **质量演化** | 静态文档没人维护，过时结论误导后续任务 | **独立版本化反馈**：支持针对精确观测版本（`@<revision>`）投 `up` / `down` 并附带实机验证原因，辅助持续维护 |
-
----
-
-## 🏗️ 双层知识闭环与脱敏流水线
-
-本仓库作为公共权威订阅源（**Public Feed**），与开发者本地的私有经验层（**Local Experience Loop**）协同构成完整的双向飞轮：
-
-```mermaid
-flowchart TB
-  subgraph Local["💻 开发者本地环境 (mindie-knowledge Runtime)"]
-    direction TB
-    Turn["1. 公开可见对话提取<br/>(仅保留用户输入与助手可见回复，剔除工具噪音与隐藏推理)"]
-    Redact["2. 双重确定性脱敏门禁<br/>(Gitleaks 8.30.1 + redact r3 规则集，不调大模型改写正文)"]
-    Store["3. 本地 Markdown 分块与索引<br/>(materials/ 16KiB 无损分块 + 小模型生成导航 + 本地 ReMe BM25 索引)"]
-    Outbox["4. 确定性发件箱 (Opt-in)<br/>(二次脱敏复检 · 打包 mindie-contribution/1 批次 · 只读远程对账)"]
-    Turn --> Redact --> Store --> Outbox
-  end
-
-  subgraph Public["🌐 公共工程知识库 (mindie-agent/knowledge-vllm-ascend)"]
-    direction TB
-    CI["5. 零信任 Git Blob 校验门禁<br/>(publication-head 检查契约、Schema、哈希绑定与隐私扫描)"]
-    Bot["6. 仓库审核 Bot 复核<br/>(mindie-content-review/2 审查合规性并自动合入纯内容 PR)"]
-    Corpus[("📚 Canonical Feed<br/>tasks/&lt;task-id&gt;/index.md + blocks/*.md<br/>feedback/votes-*.json")]
-    CI --> Bot --> Corpus
-  end
-
-  Outbox -- "自动提交 PR (仅当用户开启社区共享)" --> CI
-  Corpus -- "mindie-knowledge sync<br/>流式校验 + 原子切换本地视图" --> Store
+```python
+knowledge_explain(
+    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+)
 ```
 
----
+引用中的 `@` 后是**裸 64 位内容摘要**（`content_sha256`），不是修订号。单元被语义修改后，旧引用会明确报告已被替换，不会静默返回新内容；仅移动路径、不改变内容的单元保留原摘要和修订号。
 
-## 📦 一个真实的知识包长什么样？
+读取成功只说明你拿到了这段内容，不说明它自动适用于当前任务。仍需逐项比较条件。
 
-本仓库中的每个任务都以**内容寻址的不可变分块 + 结构化清单**形式存储在 `tasks/<64位十六进制任务ID>/` 下。下面是仓库中一个真实的昇腾 `torch_npu.npu_rms_norm` 精度验证知识包示例（节选）：
+### 3. 记录本地有用性反馈
 
-### 1. 任务导航清单：`tasks/<task_id>/index.md`
+在实际任务中验证某条单元后，可以可选地提交 `up` / `down`：
 
-`index.md` 顶部是 YAML Frontmatter（声明 `mindie-material-task/1` 清单、`mindie-entry/3` 检索元数据以及每个分块的 `sha256` 指纹），正文则是供 Agent 快速浏览的导航摘要：
-
-```yaml
----
-schema: mindie-material-task/1
-task_id: c3f998fdce9eecfbf1171624d6f791d4fc8e4e1b2bf7636f59dfa05e37327815
-status: complete
-entry:
-  schema: mindie-entry/3
-  domain: vllm-ascend
-  kind: experience
-  entry_id: c3f998fdce9eecfbf1171624d6f791d4fc8e4e1b2bf7636f59dfa05e37327815
-  conditions:
-    torch_npu_version: 2.10.0.post2
-    torch_version: 2.10.0+cpu
-  title: Bounded Ascend torch_npu RMSNorm validation with dtype-rounded FP16/BF16 references
-  summary: A bounded one-logical-device check of torch_npu.npu_rms_norm for shape [7, 2048]...
-blocks:
-  - block_id: 89bafb72f7ba1dc374e81c1f4c302ab4f20d7fbb1edc0afe568356190bc89f99
-    indexed: true
-    sha256: 3ab4baa8e56d7ce2f61e54813b70ccdf5fcef8aadee2356d947dc6ae095211b8
-    title: Bounded Ascend torch_npu RMSNorm validation with dtype-rounded FP16/BF16 references
-    summary: A bounded one-logical-device check of torch_npu.npu_rms_norm...
----
+```python
+knowledge_feedback(
+    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+    rating="up",
+    reason="Recorded after reproducing the import gate difference in the observed task.",
+)
 ```
 
-### 2. 脱敏后的原文分块：`tasks/<task_id>/blocks/<block_id>.md`
+- 反馈绑定**实际被返回过的精确内容修订**；没有观测过的修订不能被评价。
+- `reason` 可选，单行，最多 1000 字符；本地私密反馈默认不外发。
+- 反馈是描述性信号，不是正确性证明、置信度或自动晋升依据。没有反馈不代表内容无效，也不代表无人使用。
+- 公开反馈文件使用 `mindie-graded-feedback/1`，只聚合与当前内容摘要一致的投票，旧内容摘要的投票保持独立。
 
-当 Agent 认为某个分块与当前问题高度相关时，会按引用读取对应的 `blocks/<block_id>.md`，获取未经大模型删改的完整代码与适用边界：
+### 4. 显式领域路由
 
-```markdown
----
-block_id: 89bafb72f7ba1dc374e81c1f4c302ab4f20d7fbb1edc0afe568356190bc89f99
-schema: mindie-material-block/1
-source_range:
-  body_end: 2503
-  body_start: 0
----
+跨领域知识通过显式引用访问，例如 `mindie://operators/units/<unit-id>@<sha256>`。引用中的域名决定由哪个已配置领域引擎处理；未知或未配置的领域会明确失败，不会静默回退到默认领域。
 
-Problem and background: verify numerical correctness of torch_npu.npu_rms_norm on a real Ascend NPU
-for shape [7, 2048], using seed 20260921 and epsilon 1e-6...
-
-Reference and correction method: generate FP32 random tensors, round each input to the tested dtype
-on CPU, and compute the reference in FP32 from those rounded values:
-
-x_cpu = x32.to(dtype)
-w_cpu = w32.to(dtype)
-x = x_cpu.npu()
-w = w_cpu.npu()
-y, _ = torch_npu.npu_rms_norm(x, w, epsilon=epsilon)
-torch.npu.synchronize()
-xf = x_cpu.float()
-wf = w_cpu.float()
-reference = xf * torch.rsqrt((xf * xf).mean(-1, keepdim=True) + epsilon) * wf
-```
-
-### 3. 独立有用性反馈：`feedback/votes-<id>.json`
-
-其他 Agent 在实机任务中复用了这条经验后，会针对当时读到的精确修订号（`revision`）提交有用性评价：
-
-```json
-{
-  "schema": "mindie-feedback/1",
-  "votes": [
-    {
-      "entry_id": "c3f998fdce9eecfbf1171624d6f791d4fc8e4e1b2bf7636f59dfa05e37327815",
-      "rating": "up",
-      "reason": "Gives the exact dtype-rounded CPU reference pattern for npu_rms_norm together with the atol=rtol=4*finfo(dtype).eps rule; directly reusable when writing operator accuracy checks.",
-      "revision": "937d2219f062ff5b1992faf75d885e68736497a0228032136f29cabc1cfc060b",
-      "root_id": "5459766cc74b745fc5069b1042dc25ab7c34db62afc3b339a319c22f7227a1e5",
-      "vote_id": "1cc64dc5135c586faa95be0761c20ced6e8318fa8d3b9b174741d041c6f1f4aa"
-    }
-  ]
-}
-```
+运行时可以配置任意领域。`0.0.3` 的发布范围是 `vllm-ascend` 和 `operators` 两个领域，但这不是把运行时写死为两个领域。本仓库不复制 `operators` 单元，也不把两个领域的同主题内容强行合并。
 
 ---
 
-## 🗂️ 仓库目录结构
+## 📚 当前单元
+
+[`index/routing-manifest.json`](index/routing-manifest.json) 是唯一的实时清单，记录当前单元的稳定 ID、路径、层级、证据强度、条件、内容摘要、继承闭包和 token 估算。下表列出本次检查时清单中的单元；清单仍是权威，新增单元只有在其 Markdown 文件和重建后的清单同时存在时，才成为当前内容。
+
+| 单元 | 层级 / 类别 | 证据强度 | 固定引用 |
+| --- | --- | --- | --- |
+| [`unit-vllm-ascend-custom-op-gates-import-retry-and-nz`](integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba` |
+| [`unit-vllm-ascend-idle-dp-gdn-state`](vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md) | L2 / `sop` | `hypothesis` | `mindie://vllm-ascend/units/unit-vllm-ascend-idle-dp-gdn-state@72f2bfadc7899c951e711b81719ce6b5854cbfe6dd343b00bc35d75b221deb00` |
+| [`unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation`](vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation@33661ebd978f03c8355b1728e082fb8937bb5bf245bea38557d069def80ef14c` |
+
+这些单元都是源码范围的 L2 SOP，不是硬件性能结论。custom-op 单元绑定 `vllm-project/vllm-ascend` 的源码提交 `175ef4d49c2072f9233619636f0309f4f88b4e2c`；idle-DP GDN 单元是 `hypothesis`，条件绑定 base commit `c3394206bdd00b132580ae439555b4f1a70d5bf6`、模型和状态上下文；Qwen3.5 单元是历史 PR7109 的 `single_observation`，条件绑定模型和源码 revision。不要把 `hypothesis` 或单次观察升级为复现测量；每个单元的精确条件以其 frontmatter 和正文为准。
+
+---
+
+## 🗂️ 仓库结构
 
 ```text
 knowledge-vllm-ascend/
-├── publication-contract.json          # 数据格式版本、指定校验器 commit 与审核契约声明
-├── tasks/
-│   └── <64-hex-task-id>/              # 单个完整任务知识包
-│       ├── index.md                   # 任务清单与检索导航 (mindie-material-task/1 + mindie-entry/3)
-│       └── blocks/
-│           └── <64-hex-block-id>.md   # 不可变脱敏对话正文分块 (mindie-material-block/1)
+├── publication-contract.json           # contract/2、格式版本与 validator pin
+├── AGENTS.md                           # 维护者与 AI Agent 的仓库边界
+├── CONTRIBUTING.md                     # 贡献与审核流程
+├── index/
+│   ├── routing-manifest.json           # 由单元派生的实时路由清单
+│   └── shard-topology.json             # 由单元派生的分片拓扑
+├── <domain_path>/
+│   └── <unit_id>.md                    # 单元正文 + frontmatter，路径与稳定 ID 绑定
 ├── feedback/
-│   └── votes-<id>.json                # 独立有用性反馈记录 (mindie-feedback/1)
+│   └── votes-<id>.json                 # mindie-graded-feedback/1 公开反馈
 └── docs/
-    ├── README.en.md                   # 英文版仓库主页 (English Homepage)
-    ├── CONTRIBUTING.en.md             # 英文版贡献指南 (English Contributing Guide)
-    ├── package-format.md              # 任务知识包格式规范（中文）
-    └── package-format.en.md           # 任务知识包格式规范（英文）
+    ├── README.en.md
+    ├── CONTRIBUTING.en.md
+    ├── package-format.md
+    ├── package-format.en.md
+    └── evidence/                       # 来源与审核记录
 ```
 
-> [!NOTE]
-> **为什么英文主页放在 `docs/README.en.md`？**
-> 为了保证已发布的 `mindie-knowledge` 订阅校验器能够严格按照根目录白名单校验所有文件，仓库根目录仅放置标准元数据文件（`README.md`、`CONTRIBUTING.md`、`AGENTS.md`、`LICENSE`、`publication-contract.json`），英文版文档与格式规范统一收纳在 [`docs/`](docs/) 目录下。
+单元路径必须是 `<domain_path>/<unit_id>.md`。`domain_path` 是规范化的仓库相对目录，用于路由和分片，不参与稳定 ID；`unit_id` 以 `unit-` 开头，由小写单词和连字符组成。`index/` 中的两个 JSON 是派生数据，由运行时重建，不应手工编辑。本分支只发布 contract/2 内容；旧 `material-v1` 的本地 archive 副本不在 `graded-v2` 内。
+
+格式字段、摘要计算、条件匹配、继承、反馈和已审核变更的完整规则见[格式规范](docs/package-format.md)。
 
 ---
 
-## 📚 文档与相关仓库
+## 🗃️ 旧材料与历史
 
-| 主题 | 中文文档 | English |
+旧的 `material-v1` 任务语料不在 `graded-v2` 分支内。它保留在 [`main`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/main)（供 0.0.2 消费者继续使用）和不可变历史提交 [`85ab134f333b06ac3873df6affbf3bf6ec71978c`](https://github.com/mindie-agent/knowledge-vllm-ascend/tree/85ab134f333b06ac3873df6affbf3bf6ec71978c) 中。`graded-v2` 不移动、重写或重新标记这些材料，也不在分支内保留本地 archive 副本。
+
+历史迁移元数据记录了 663 个任务包、2,387 个文件、1,723 个分块和 1 个反馈文件；这些原始 blob 身份保留在 `main` 和 85ab 中。
+
+- 旧材料**不**进入当前 graded unit 检索；`mindie-graded-unit/1` 的语料树不混入旧 `tasks/` 布局。
+- 旧材料不是 graded knowledge，也不会被当作当前结论。
+- `main` 的公开历史和 85ab 的不可变字节保持原样，不是重新生成的内容。
+- 不修改 `main`/85ab 中的旧材料、迁移元数据或 blob 身份来让当前分支看起来更整洁。
+
+---
+
+## ✅ 发布与验证
+
+在 `graded-v2` 分支上，[`publication-contract.json`](publication-contract.json) 声明 `mindie-publication-contract/2`、数据格式和发布检查使用的不可变 validator 修订。`.github/workflows/check.yml` 从该分支的可信基准确读取契约，安装精确的 validator，并以 Git blob 方式校验候选内容，不执行候选代码。
+
+需要区分三个独立事实：
+
+1. **本地/候选树验证**：格式、摘要、继承图、索引一致性、隐私扫描是否通过；
+2. **远端发布**：`graded-v2` 的实际回读结果；`main` 保持旧 material 语料和旧 contract 字节，不随本分支发布而改变。
+3. **已安装宿主验收**：具体宿主安装该修订后，原生查询、读取、反馈和路由是否实际可用。
+
+一个通过验证的候选树不自动证明后两项，也不把文档变更变成内容自动合入。`graded-v2` 可以在兼容版本内接收内容更新，而保持同一 `publication-contract/2` 字节；`main` 不会随之改变。正式 assets、远端 `graded-v2` 发布和 paid native acceptance 是独立结果；本地准备好的内容不等于 published proof。
+
+文档与工程文件属于 development 审核路径；单元、反馈和派生索引属于 content 审核路径。两条路径的检查结论和合入方式不同，详见[贡献指南](CONTRIBUTING.md)。
+
+---
+
+## 📖 文档与相关仓库
+
+| 主题 | 中文 | English |
 | --- | --- | --- |
-| **任务知识包格式规范** | [docs/package-format.md](docs/package-format.md) | [docs/package-format.en.md](docs/package-format.en.md) |
-| **参与贡献指南** | [CONTRIBUTING.md](CONTRIBUTING.md) | [docs/CONTRIBUTING.en.md](docs/CONTRIBUTING.en.md) |
-| **知识运行时引擎 (`mindie-knowledge`)** | [mindie-agent/knowledge](https://github.com/mindie-agent/knowledge) | [English README](https://github.com/mindie-agent/knowledge/blob/main/README.en.md) |
-| **仓库审核 Bot 契约 (`mindie-content-review/2`)** | [repository-bot-contract.zh.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.zh.md) | [repository-bot-contract.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) |
-| **MindIE Agent 工程设计原则** | [design-principles.md](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.md) | [design-principles.en.md](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.en.md) |
+| **单元格式规范** | [docs/package-format.md](docs/package-format.md) | [docs/package-format.en.md](docs/package-format.en.md) |
+| **贡献与审核** | [CONTRIBUTING.md](CONTRIBUTING.md) | [docs/CONTRIBUTING.en.md](docs/CONTRIBUTING.en.md) |
+| **仓库边界** | [AGENTS.md](AGENTS.md) | — |
+| **实时单元清单** | [index/routing-manifest.json](index/routing-manifest.json) | — |
+| **知识运行时** | [mindie-agent/knowledge](https://github.com/mindie-agent/knowledge) | [English README](https://github.com/mindie-agent/knowledge/blob/main/README.en.md) |
+| **审核 Bot 契约** | [repository-bot-contract.zh.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.zh.md) | [repository-bot-contract.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) |
+| **主仓库安装指南** | [mindie-agent](https://github.com/mindie-agent/mindie-agent) | — |
 
 ---
 
 ## 📄 许可证
 
-本仓库中的公开工程知识包与文档采用 [Creative Commons Attribution 4.0 International (CC-BY-4.0)](LICENSE) 协议开源。知识包仅供参考，实际工程决策请始终以当前环境现象与实机验证结果为准。
+本仓库的公开知识单元与文档采用 [Creative Commons Attribution 4.0 International (CC-BY-4.0)](LICENSE)。知识单元是工程参考，不替代当前环境中的实机验证；适用性始终以任务实际观测和单元声明的条件为准。

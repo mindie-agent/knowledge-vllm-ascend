@@ -1,0 +1,94 @@
+{
+  "index": 3,
+  "decision": "accepted_subset",
+  "domain": "vllm-ascend",
+  "level": "L2",
+  "title": "Ascend custom-op imports, registration and NZ selection have distinct gates",
+  "mechanism": "At vLLM-Ascend revision 175ef4d49c2072f9233619636f0309f4f88b4e2c, enable_custom_op lazily memoizes its result. Batch-invariant mode or an A5 device sets it false before extension import. Otherwise the extension and meta-registration imports are attempted even while torch.compiler.is_compiling is true; only the initial environment bootstrap is skipped while compiling. An ImportError containing libcust_opapi.so permits one non-compiling retry after adding the vendor library path. That retry imports meta_registration before vllm_ascend_C, reversing the initial order. Other ImportErrors set the result false; exceptions of other types propagate. register_ascend_customop separately registers the operation map, adding GateLinear only for a resolved DeepSeek MLA model and substituting selected implementations on 310P. Its completion flag is set after the registration loop, so an exception can leave earlier registrations applied while the flag remains false. NZ selection is another independent rule: float32 and meta tensors are excluded; 310P then selects NZ; otherwise weight_nz_mode disables it at zero, permits bf16/fp16 only at two, and permits other dtypes when truthy. The adjacent VLLM_ASCEND_ENABLE_NZ comment does not name the value this function actually reads.",
+  "corrections": [
+    "Remove the blanket fail-closed description: non-ImportError exceptions propagate, and registration can partially apply.",
+    "Compiler mode skips bootstrap, not the initial imports.",
+    "Classify this adaptation mechanism once in vllm-ascend; do not duplicate the unit in infer-ops-compat.",
+    "NZ policy reads weight_nz_mode rather than the adjacent comment's environment-variable name."
+  ],
+  "source_scope": "Root accepted only the rewritten mechanism. Independent Cursor reading and its broader findings remain in the immutable author packet. Root source reading is enumerated separately.",
+  "supporting_ranges": [
+    {
+      "path": "vllm_ascend/utils.py",
+      "line_start": 397,
+      "line_end": 456,
+      "source_revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c",
+      "source_sha256": "72106910f27c5509b645a1bde8f30d0099526c2fa676df592d0c5ad1ef08c780",
+      "range_sha256": "1890857fcc5c62116edcd95f6a6556670b8190aa82d59e926465704886f660e3",
+      "git_blob_oid": "5c6ff92a33ca78e9ff620f9a51e35a8d9047b33b",
+      "unit_byte_start": 0,
+      "unit_ids": [
+        "source:vllm-ascend:175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/utils.py:0-41390"
+      ],
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L397-L456",
+      "unit_byte_end": 41390,
+      "unit_content_sha256": "bdf1ba1bc20ee13a1bf7b2d336a6b977d0ec8f52c4e4fe87438e47547ad6a168"
+    },
+    {
+      "path": "vllm_ascend/utils.py",
+      "line_start": 299,
+      "line_end": 316,
+      "source_revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c",
+      "source_sha256": "72106910f27c5509b645a1bde8f30d0099526c2fa676df592d0c5ad1ef08c780",
+      "range_sha256": "261206e24f9a2749f36e4df2778b728729f18eac0449fb02b8cabd0d7feda65f",
+      "git_blob_oid": "5c6ff92a33ca78e9ff620f9a51e35a8d9047b33b",
+      "unit_byte_start": 0,
+      "unit_ids": [
+        "source:vllm-ascend:175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/utils.py:0-41390"
+      ],
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L299-L316",
+      "unit_byte_end": 41390,
+      "unit_content_sha256": "bdf1ba1bc20ee13a1bf7b2d336a6b977d0ec8f52c4e4fe87438e47547ad6a168"
+    },
+    {
+      "path": "vllm_ascend/utils.py",
+      "line_start": 656,
+      "line_end": 786,
+      "source_revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c",
+      "source_sha256": "72106910f27c5509b645a1bde8f30d0099526c2fa676df592d0c5ad1ef08c780",
+      "range_sha256": "591a6fce304c3f9105299a425d57c947beb59ff0a29124434a26943ddf6d6b06",
+      "git_blob_oid": "5c6ff92a33ca78e9ff620f9a51e35a8d9047b33b",
+      "unit_byte_start": 0,
+      "unit_ids": [
+        "source:vllm-ascend:175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/utils.py:0-41390"
+      ],
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L656-L786",
+      "unit_byte_end": 41390,
+      "unit_content_sha256": "bdf1ba1bc20ee13a1bf7b2d336a6b977d0ec8f52c4e4fe87438e47547ad6a168"
+    },
+    {
+      "path": "vllm_ascend/utils.py",
+      "line_start": 249,
+      "line_end": 286,
+      "source_revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c",
+      "source_sha256": "72106910f27c5509b645a1bde8f30d0099526c2fa676df592d0c5ad1ef08c780",
+      "range_sha256": "a6129f0a2b2720043cc2e061a6081b1cfb0c3cb676299fbffc8ce11f1180fbf3",
+      "git_blob_oid": "5c6ff92a33ca78e9ff620f9a51e35a8d9047b33b",
+      "unit_byte_start": 0,
+      "unit_ids": [
+        "source:vllm-ascend:175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/utils.py:0-41390"
+      ],
+      "url": "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L249-L286",
+      "unit_byte_end": 41390,
+      "unit_content_sha256": "bdf1ba1bc20ee13a1bf7b2d336a6b977d0ec8f52c4e4fe87438e47547ad6a168"
+    }
+  ],
+  "source_revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c",
+  "accepted_body_sha256": "058f1e42b9a0d5c8ca1a93a7112a310b85f05847f5c6bb20fb7fc4f0fb12bcbb",
+  "adoption_boundary": "Use these source gates to diagnose an Ascend integration at this revision. This unit does not establish extension availability, operator correctness or performance on any device.",
+  "schema_version": "mindie-reviewed-source-record/1",
+  "source_repository": "vllm-project/vllm-ascend",
+  "editorial_packet_sha256": "1cbbc4984273868cf6257e174d7680c57086c59107f3e302a61dc3da4df8639e",
+  "evidence_strength": "single_observation",
+  "execution": "not_performed",
+  "original_artifact_sha256": {
+    "original_review_output": "eaaa8fa64a58a53c9a41b464b080be934e68f0afc95205a74cdb9c59ed8a7392",
+    "original_receipt": "dc31a1fa41257b6d967c59fb4a3de44299280e39ab8c45164f8c2add4aff6fce",
+    "original_admission": "964f3f063bd530926ac3467501ba998d5370353f8438b0e0f83ac850a9519805"
+  }
+}
