@@ -1,19 +1,23 @@
 {
   "closure": {
-    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": []
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [],
+    "unit-vllm-ascend-idle-dp-gdn-state": [],
+    "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": []
   },
-  "digest": "1afbdf330eb5f88f95af4056b11764e591ea31e0cf2d6500761da909aeb40c3a",
+  "digest": "32fc873ee53796d64acaff5f0ba0d9c2c114271bf9047d33b1de43ae5b8c9ab8",
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 4430,
-      "estimated_tokens": 730,
+      "bytes": 23028,
+      "estimated_tokens": 4399,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
-        "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+        "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
+        "unit-vllm-ascend-idle-dp-gdn-state",
+        "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
       ],
-      "units": 1
+      "units": 3
     },
     "domains": [
       {
@@ -28,11 +32,25 @@
           "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
         ],
         "units": 1
+      },
+      {
+        "automatic": false,
+        "bytes": 18598,
+        "estimated_tokens": 3669,
+        "exceeds": [],
+        "kind": "federation",
+        "path": "vllm-ascend",
+        "recommended_action": "review_federation_boundary",
+        "unit_ids": [
+          "unit-vllm-ascend-idle-dp-gdn-state",
+          "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
+        ],
+        "units": 2
       }
     ]
   },
-  "index_build_elapsed_ms": 0.2311669522896409,
-  "index_digest": "8164c09d0a8f8a0cfbe65163ba206cbbc04cb825f090c1c4ba5af1f62b98f298",
+  "index_build_elapsed_ms": 0.9447080083191395,
+  "index_digest": "3c87b9ee09774438959518197f023a3ea5b800eb08b705d650ddcf209bdbdda5",
   "leaves": [
     {
       "automatic": false,
@@ -44,6 +62,32 @@
       "recommended_action": "review_leaf_split",
       "unit_ids": [
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5156,
+      "estimated_tokens": 818,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/runtime/idle-dp-gdn-state",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-idle-dp-gdn-state"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 13442,
+      "estimated_tokens": 2851,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
       ],
       "units": 1
     }
@@ -62,9 +106,23 @@
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
       ],
       "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 18598,
+      "estimated_tokens": 3669,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/runtime",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-idle-dp-gdn-state",
+        "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation"
+      ],
+      "units": 2
     }
   ],
-  "unit_count": 1,
+  "unit_count": 3,
   "units": {
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": {
       "bytes": 4430,
@@ -75,6 +133,28 @@
       "evidence_strength": "single_observation",
       "inherits_from": [],
       "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-idle-dp-gdn-state": {
+      "bytes": 5156,
+      "category": "sop",
+      "content_sha256": "72f2bfadc7899c951e711b81719ce6b5854cbfe6dd343b00bc35d75b221deb00",
+      "domain_path": "vllm-ascend/runtime/idle-dp-gdn-state",
+      "estimated_tokens": 818,
+      "evidence_strength": "hypothesis",
+      "inherits_from": [],
+      "path": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": {
+      "bytes": 13442,
+      "category": "sop",
+      "content_sha256": "33661ebd978f03c8355b1728e082fb8937bb5bf245bea38557d069def80ef14c",
+      "domain_path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
+      "estimated_tokens": 2851,
+      "evidence_strength": "single_observation",
+      "inherits_from": [],
+      "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
       "tier": "L2"
     }
   }

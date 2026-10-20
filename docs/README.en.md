@@ -1,234 +1,215 @@
 <h1 align="center">MindIE Knowledge · vLLM-Ascend</h1>
 
 <p align="center">
-  <strong>Open-Source Troubleshooting Corpus & Real-World Engineering Experience for Ascend NPU and <code>vLLM-Ascend</code></strong><br>
-  <sub>Part of <a href="https://github.com/mindie-agent/mindie-agent">MindIE Agent</a> · Powered by <a href="https://github.com/mindie-agent/knowledge"><code>mindie-knowledge</code></a> for sub-second local BM25 retrieval and self-evolving experience loops</sub>
+  <strong>Conditional engineering knowledge for Ascend NPUs and <code>vLLM-Ascend</code></strong><br>
+  <sub>Part of <a href="https://github.com/mindie-agent/mindie-agent">MindIE Agent</a> · Local retrieval, exact full-body reads and revision feedback via <a href="https://github.com/mindie-agent/knowledge"><code>mindie-knowledge</code></a></sub>
 </p>
 
 <p align="center">
   <a href="https://github.com/mindie-agent/mindie-agent"><img src="https://img.shields.io/badge/MindIE%20Agent-Ecosystem-7045f5.svg" alt="MindIE Agent Ecosystem"></a>
   <a href="https://github.com/mindie-agent/knowledge"><img src="https://img.shields.io/badge/runtime-mindie--knowledge-0284c7.svg" alt="mindie-knowledge"></a>
   <a href="../publication-contract.json"><img src="https://img.shields.io/badge/domain-vllm--ascend-0f766e.svg" alt="Domain vllm-ascend"></a>
-  <a href="../publication-contract.json"><img src="https://img.shields.io/badge/redaction-gitleaks%20%2B%20r3-d97757.svg" alt="Redaction Gitleaks + r3"></a>
+  <a href="../AGENTS.md"><img src="https://img.shields.io/badge/schema-mindie--graded--unit%2F1-0f766e.svg" alt="Graded unit schema"></a>
   <a href="../LICENSE"><img src="https://img.shields.io/badge/corpus-CC--BY--4.0-0d9488.svg" alt="License CC-BY-4.0"></a>
 </p>
 
 <p align="center">
-  <a href="../README.md">中文</a> · <strong>English</strong> · <a href="#-one-sentence-agent-native-install">⚡ One-Sentence Install</a> · <a href="#-why-this-corpus-exists">✨ Why It Exists</a> · <a href="#️-two-layer-loop--redaction-pipeline">🏗️ Architecture</a> · <a href="#-inside-a-real-knowledge-package">📦 Package Anatomy</a> · <a href="package-format.en.md">📐 Format Spec</a> · <a href="CONTRIBUTING.en.md">🤝 Contributing</a>
+  <a href="../README.md">中文</a> · <strong>English</strong> · <a href="#-connect">Connect</a> · <a href="#-why-graded-units">Why</a> · <a href="#-query-and-read">Query</a> · <a href="#-current-units">Current units</a> · <a href="package-format.en.md">📐 Format</a> · <a href="CONTRIBUTING.en.md">🤝 Contributing</a>
 </p>
 
 ---
 
-## ⚡ One-Sentence Agent-Native Install
+## What this repository is
 
-You never need to manually clone this repository or wire up custom search scripts.
+This is the `vllm-ascend` domain knowledge source for MindIE Agent `0.0.3`. It stores **graded knowledge units** (`mindie-graded-unit/1`): a reusable rule, procedure or code transformation together with its provenance, applicability conditions, evidence strength and revision.
 
-Open **Claude Code**, **OpenAI Codex CLI**, or **Kimi Code**, and send this single sentence to your Agent:
+A unit is not a chat summary and not a universal best practice. It answers two questions:
 
-```text
-帮我安装一下这个 https://github.com/mindie-agent/mindie-agent
+- under which **checkable premises** does this conclusion hold;
+- which source and evidence support it, and how strong that evidence is.
+
+At query time the runtime compares the task's observed facts with each declared condition. A condition that is unmet, missing or unknown is never treated as "close enough".
+
+> This repository uses `mindie-publication-contract/2` and `mindie-graded-unit/1`. [`index/routing-manifest.json`](../index/routing-manifest.json) is the live inventory; the table below lists the units present in the manifest at this check, not a fixed count.
+
+---
+
+## ⚡ Connect
+
+MindIE Agent supports **Codex, Claude Code, Kimi and DSH**, each through its own native plugin. Follow the main repository's installation guide for your host:
+
+**<https://github.com/mindie-agent/mindie-agent>**
+
+Once installed, the plugin connects to the [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) runtime, syncs this domain and builds a local index. Read-only `knowledge_query` / `knowledge_explain` does not require community sharing; capture and contribution remain explicit user choices.
+
+This repository does not copy host installers or local paths. Host installation, plugin configuration and upgrades are defined by the main repository.
+
+---
+
+## ✨ Why graded units
+
+| Summaries alone | Units in this repository |
+| --- | --- |
+| Conclusions lose versions, premises and failure branches | The body keeps concrete conditions, steps, counterexamples and limits; provenance binds the source |
+| A search hit does not tell you whether it fits your environment | Query compares observed task facts first; mismatch or unknown is reported explicitly |
+| Old conclusions are silently overwritten | Revision, content digest and pinned references preserve old observations; replaced references fail explicitly |
+| You see only an excerpt and cannot verify the whole claim | `knowledge_query` returns summarized candidates; `knowledge_explain` reads the full body by exact digest |
+
+A unit may be distilled from reviewed public material, source code, specifications or experiment records. Model assistance is allowed, but **model output is only a proposal**: it must retain provenance and evidence limits and pass deterministic format/privacy checks and semantic review before a reviewed change admits it. A failed experiment cannot be relabeled `reproduced_empirical`; hardware, versions and performance data cannot be invented; model rewriting cannot replace the source.
+
+The original `material-v1` task material is retained as an archive, described under [Archive and history](#-archive-and-history). Archived material is evidence, not active retrieval content, and is never relabeled as a graded unit.
+
+---
+
+## 🔎 Query and read
+
+The normal flow is: query first, read the full body by pinned reference, then optionally record feedback.
+
+### 1. Query with facts the task actually observed
+
+`knowledge_query` accepts a query string, an optional condition mapping and a result limit:
+
+```python
+knowledge_query(
+    query="custom op import registration NZ selection",
+    conditions={
+        "repository": "vllm-project/vllm-ascend",
+        "revision": "175ef4d49c2072f9233619636f0309f4f88b4e2c",
+    },
+)
 ```
 
-Once installed, your Agent automatically connects to the [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) runtime, syncs this corpus (`knowledge-vllm-ascend`) to your machine, and builds a local **BM25 and citation index**. Whenever you hit an Ascend NPU operator failure, HCCL timeout, ACLGraph capture bug, or numerical accuracy mismatch while working on `vllm` / `vllm-ascend`, your Agent can search real troubleshooting records in milliseconds.
+`conditions` contains only facts the current task **actually observed**: software versions, source commits, hardware, input shapes and similar. Do not copy a unit's own declared conditions into the query to force a match, and do not use a gold patch, oracle verdict, held-out answer or post-fix conclusion as an observed fact.
 
-<details>
-<summary>🤖 <b>AI Agent Auto-Install & Configuration Guide (Instructions for AI Agents)</b></summary>
+Missing conditions, `unknown` values and incomparable versions produce `condition_unknown` and are excluded by default. That is correct behavior, not a retrieval failure. All declared conditions holding is `matched`; any explicit contradiction is `mismatch`.
 
-> **Instructions for AI Agents**:
-> 1. **Full MindIE Agent Installation (Recommended — includes automatic sync & retrieval for this corpus)**:
->    Read the main repository homepage at [`https://github.com/mindie-agent/mindie-agent`](https://github.com/mindie-agent/mindie-agent), detect your host client (Claude Code / OpenAI Codex CLI / Kimi Code CLI), and execute the matching plugin installation commands. Once installed, the plugin automatically syncs `mindie-agent/knowledge-vllm-ascend`.
-> 2. **Standalone Developer CLI Usage (`mindie-knowledge`)**:
->    If you are running the [`mindie-knowledge`](https://github.com/mindie-agent/knowledge) CLI directly in a standalone environment:
->    ```bash
->    # Install the mindie-knowledge engine
->    python3 -m pip install "mindie-knowledge @ git+https://github.com/mindie-agent/knowledge.git"
->
->    # Sync the latest public packages to your local read-only cache (zero model calls; works even when community sharing is off)
->    mindie-knowledge sync --config domain.json
->
->    # Inspect local corpus health, synced entry counts, and sharing status
->    mindie-knowledge status --config domain.json
->    mindie-knowledge sharing-status --config domain.json
->    ```
-> 3. **On-Demand Retrieval & Reading inside Agent Sessions**:
->    - Call `knowledge_query(query="...")` first to search matching material excerpts and task navigation outlines;
->    - Call `knowledge_explain(ref="mindie://vllm-ascend/<task-id>/blocks/<block-id>@<sha256>")` on demand to read the exact unedited block body;
->    - After verifying whether an entry helped in real work, optionally call `knowledge_feedback(ref="mindie://vllm-ascend/<task-id>@<observed-revision>", rating="up"|"down", reason="...")` to record usefulness feedback.
+### 2. Read the full body through the returned reference
 
-</details>
+A query result carries a digest-pinned `ref`, a stable `unit_ref` and a separate `feedback_ref`. `knowledge_explain` returns the full body, frontmatter, inheritance closure and applicability note for that exact revision:
 
----
-
-## ✨ Why This Corpus Exists
-
-When developing or debugging `vLLM-Ascend` on Ascend NPUs, the hardest engineering problems rarely have textbook answers. What saves hours is **real troubleshooting evidence**:
-- Why does setting `ASCEND_RT_VISIBLE_DEVICES=8` inside a container fail to find a device, and how should logical device visibility be normalized before importing `torch_npu`?
-- When verifying `torch_npu.npu_rms_norm` in FP16/BF16, why does computing the CPU reference directly from unrounded FP32 inputs conflate input-cast rounding with operator error?
-- Which upstream PRs and CANN operator signatures wire up learnable attention sink in `npu_fused_infer_attention_score_v2`?
-
-Usually, these hard-won lessons either vanish when a chat session closes or get flattened by an LLM into vague summaries that strip out the exact commands, stack traces, failed hypotheses, and hardware caveats.
-
-**`knowledge-vllm-ascend` takes a fundamentally different approach:**
-
-| Dimension | Traditional LLM Summaries / Ad-hoc Wikis ❌ | `knowledge-vllm-ascend` Packages ✅ |
-| --- | --- | --- |
-| **Fidelity to Source** | Rewritten by LLMs; frequently drops critical flags, versions, or failed attempts | **Lossless Redacted Material**: Every `blocks/<block_id>.md` preserves the actual public conversation turns after deterministic redaction—never rewritten by an LLM |
-| **Retrieval Efficiency** | Dumping huge raw logs blows up context windows; vague summaries miss exact symbols | **Two-Stage Reading**: `index.md` provides a lightweight outline and per-block summaries so Agents browse first and open specific blocks on demand |
-| **Privacy & Safety** | Engineers hesitate to share because logs contain internal IPs, hostnames, paths, or tokens | **Double Fail-Closed Redaction**: Both local intake and repository CI run Gitleaks + `mindie_knowledge.redact` (`r3`), blocking any sensitive token before publication |
-| **Quality Evolution** | Static pages rot silently and mislead future debugging | **Revision-Bound Feedback**: Agents record `up` / `down` votes tied to the exact observed revision (`@<revision>`) after real task verification |
-
----
-
-## 🏗️ Two-Layer Loop & Redaction Pipeline
-
-This repository serves as the **Public Canonical Feed**, working in tandem with each developer's **Local Experience Loop**:
-
-```mermaid
-flowchart TB
-  subgraph Local["💻 Developer Local Runtime (mindie-knowledge)"]
-    direction TB
-    Turn["1. Public Transcript Projection<br/>(Keeps user prompts & visible assistant replies; strips tool noise & hidden reasoning)"]
-    Redact["2. Deterministic Redaction Gate<br/>(Gitleaks 8.30.1 + redact r3 ruleset; zero LLM rewriting of body text)"]
-    Store["3. Local Markdown Blocks & Index<br/>(Lossless 16 KiB blocks in materials/ + small-model navigation + local ReMe BM25 index)"]
-    Outbox["4. Deterministic Outbox (Opt-in)<br/>(Second redaction scan · packs mindie-contribution/1 batch · read-only PR reconciliation)"]
-    Turn --> Redact --> Store --> Outbox
-  end
-
-  subgraph Public["🌐 Public Knowledge Repository (mindie-agent/knowledge-vllm-ascend)"]
-    direction TB
-    CI["5. Zero-Trust Git Blob Validation<br/>(publication-head verifies contract, schemas, SHA-256 bindings & privacy rules)"]
-    Bot["6. Repository Review Bot<br/>(mindie-content-review/2 checks safety & auto-merges pure content PRs)"]
-    Corpus[("📚 Canonical Feed<br/>tasks/&lt;task-id&gt;/index.md + blocks/*.md<br/>feedback/votes-*.json")]
-    CI --> Bot --> Corpus
-  end
-
-  Outbox -- "Opens PR (only when user opts into community sharing)" --> CI
-  Corpus -- "mindie-knowledge sync<br/>streaming verification + atomic local view switch" --> Store
+```python
+knowledge_explain(
+    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+)
 ```
 
----
+The hash after `@` is the **bare 64-character content digest** (`content_sha256`), not the revision number. After a semantic edit, an old reference fails explicitly instead of silently returning new bytes. A location-only move keeps the digest and revision.
 
-## 📦 Inside a Real Knowledge Package
+Reading a reference only means you received that content; it does not make the unit applicable. Compare its conditions with the task facts.
 
-Every task package lives under `tasks/<64-hex-task-id>/` and combines a **structured navigation manifest** with **immutable, hash-bound material blocks**. Below is an excerpt from a real package in this repository verifying `torch_npu.npu_rms_norm` on Ascend NPU:
+### 3. Record local usefulness feedback
 
-### 1. Task Manifest: `tasks/<task_id>/index.md`
+After testing a unit in real work, optionally submit `up` / `down`:
 
-`index.md` starts with YAML frontmatter declaring the `mindie-material-task/1` manifest, an embedded `mindie-entry/3` header, and the exact `sha256` digest of every referenced block:
-
-```yaml
----
-schema: mindie-material-task/1
-task_id: c3f998fdce9eecfbf1171624d6f791d4fc8e4e1b2bf7636f59dfa05e37327815
-status: complete
-entry:
-  schema: mindie-entry/3
-  domain: vllm-ascend
-  kind: experience
-  entry_id: c3f998fdce9eecfbf1171624d6f791d4fc8e4e1b2bf7636f59dfa05e37327815
-  conditions:
-    torch_npu_version: 2.10.0.post2
-    torch_version: 2.10.0+cpu
-  title: Bounded Ascend torch_npu RMSNorm validation with dtype-rounded FP16/BF16 references
-  summary: A bounded one-logical-device check of torch_npu.npu_rms_norm for shape [7, 2048]...
-blocks:
-  - block_id: 89bafb72f7ba1dc374e81c1f4c302ab4f20d7fbb1edc0afe568356190bc89f99
-    indexed: true
-    sha256: 3ab4baa8e56d7ce2f61e54813b70ccdf5fcef8aadee2356d947dc6ae095211b8
-    title: Bounded Ascend torch_npu RMSNorm validation with dtype-rounded FP16/BF16 references
-    summary: A bounded one-logical-device check of torch_npu.npu_rms_norm...
----
+```python
+knowledge_feedback(
+    ref="mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba",
+    rating="up",
+    reason="Recorded after reproducing the import gate difference in the observed task.",
+)
 ```
 
-### 2. Redacted Material Block: `tasks/<task_id>/blocks/<block_id>.md`
+- Feedback binds the **exact content revision actually returned**; an unobserved revision cannot be rated.
+- `reason` is optional, single-line and at most 1000 characters. Private local feedback is not published by default.
+- Feedback is a descriptive signal, not proof of correctness, confidence or an automatic promotion gate. No feedback does not mean a unit is invalid or unused.
+- Public feedback uses `mindie-graded-feedback/1` and counts only votes for the current content digest. Votes for older digests remain distinct local history.
 
-When an Agent needs the exact reproduction code or caveats, it reads `blocks/<block_id>.md`:
+### 4. Explicit domain routes
 
-```markdown
----
-block_id: 89bafb72f7ba1dc374e81c1f4c302ab4f20d7fbb1edc0afe568356190bc89f99
-schema: mindie-material-block/1
-source_range:
-  body_end: 2503
-  body_start: 0
----
+Cross-domain knowledge is read through an explicit reference such as `mindie://operators/units/<unit-id>@<sha256>`. The domain in the reference selects the configured domain engine; an unknown or unconfigured domain fails explicitly instead of falling back to a default.
 
-Problem and background: verify numerical correctness of torch_npu.npu_rms_norm on a real Ascend NPU
-for shape [7, 2048], using seed 20260921 and epsilon 1e-6...
-
-Reference and correction method: generate FP32 random tensors, round each input to the tested dtype
-on CPU, and compute the reference in FP32 from those rounded values:
-
-x_cpu = x32.to(dtype)
-w_cpu = w32.to(dtype)
-x = x_cpu.npu()
-w = w_cpu.npu()
-y, _ = torch_npu.npu_rms_norm(x, w, epsilon=epsilon)
-torch.npu.synchronize()
-xf = x_cpu.float()
-wf = w_cpu.float()
-reference = xf * torch.rsqrt((xf * xf).mean(-1, keepdim=True) + epsilon) * wf
-```
-
-### 3. Independent Usefulness Feedback: `feedback/votes-<id>.json`
-
-After applying this pattern in a subsequent task, a consuming Agent records a vote bound to the exact revision it observed:
-
-```json
-{
-  "schema": "mindie-feedback/1",
-  "votes": [
-    {
-      "entry_id": "c3f998fdce9eecfbf1171624d6f791d4fc8e4e1b2bf7636f59dfa05e37327815",
-      "rating": "up",
-      "reason": "Gives the exact dtype-rounded CPU reference pattern for npu_rms_norm together with the atol=rtol=4*finfo(dtype).eps rule; directly reusable when writing operator accuracy checks.",
-      "revision": "937d2219f062ff5b1992faf75d885e68736497a0228032136f29cabc1cfc060b",
-      "root_id": "5459766cc74b745fc5069b1042dc25ab7c34db62afc3b339a319c22f7227a1e5",
-      "vote_id": "1cc64dc5135c586faa95be0761c20ced6e8318fa8d3b9b174741d041c6f1f4aa"
-    }
-  ]
-}
-```
+The runtime can host arbitrary domains. The `0.0.3` release scope covers `vllm-ascend` and `operators`, but that is not a hardcode of the runtime to exactly two domains. This repository does not copy `operators` units or force same-topic merges across domains.
 
 ---
 
-## 🗂️ Repository Layout
+## 📚 Current units
+
+[`index/routing-manifest.json`](../index/routing-manifest.json) is the only live inventory. It records stable IDs, paths, tiers, evidence strength, conditions, content digests, inheritance closures and token estimates. The table lists the units present in the manifest at this check; the manifest remains authoritative. A new unit becomes current only when its Markdown file and rebuilt manifest both exist.
+
+| Unit | Tier / category | Evidence strength | Pinned reference |
+| --- | --- | --- | --- |
+| [`unit-vllm-ascend-custom-op-gates-import-retry-and-nz`](../integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-custom-op-gates-import-retry-and-nz@025b36835f18326dda7ef09ea380c8a4da9fd8d34eb3f39841010f302e3501ba` |
+| [`unit-vllm-ascend-idle-dp-gdn-state`](../vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md) | L2 / `sop` | `hypothesis` | `mindie://vllm-ascend/units/unit-vllm-ascend-idle-dp-gdn-state@72f2bfadc7899c951e711b81719ce6b5854cbfe6dd343b00bc35d75b221deb00` |
+| [`unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation`](../vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md) | L2 / `sop` | `single_observation` | `mindie://vllm-ascend/units/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation@33661ebd978f03c8355b1728e082fb8937bb5bf245bea38557d069def80ef14c` |
+
+These are source-scoped L2 SOPs, not hardware performance results. The custom-op unit binds source revision `175ef4d49c2072f9233619636f0309f4f88b4e2c` of `vllm-project/vllm-ascend`; the idle-DP GDN unit is a `hypothesis` with base commit `c3394206bdd00b132580ae439555b4f1a70d5bf6` and model/state context; the Qwen3.5 unit is a `single_observation` of the historical PR7109 and binds model and source revisions. Do not upgrade a hypothesis or single observation to reproduced measurement; exact conditions are in each unit's frontmatter and body.
+
+---
+
+## 🗂️ Repository layout
 
 ```text
 knowledge-vllm-ascend/
-├── publication-contract.json          # Schema versions, pinned validator commit, and review contract
-├── tasks/
-│   └── <64-hex-task-id>/              # Complete task knowledge package
-│       ├── index.md                   # Task manifest & navigation (mindie-material-task/1 + mindie-entry/3)
-│       └── blocks/
-│           └── <64-hex-block-id>.md   # Immutable redacted material block (mindie-material-block/1)
+├── publication-contract.json           # contract/2, formats and validator pin
+├── AGENTS.md                           # maintainer and AI-agent boundaries
+├── CONTRIBUTING.md                     # contribution and review flow
+├── index/
+│   ├── routing-manifest.json           # derived live routing inventory
+│   └── shard-topology.json             # derived shard topology
+├── <domain_path>/
+│   └── <unit_id>.md                    # body + frontmatter; path bound to stable ID
 ├── feedback/
-│   └── votes-<id>.json                # Independent usefulness feedback records (mindie-feedback/1)
+│   └── votes-<id>.json                 # mindie-graded-feedback/1 public feedback
 └── docs/
-    ├── README.en.md                   # English Homepage (this file)
-    ├── CONTRIBUTING.en.md             # English Contributing Guide
-    ├── package-format.md              # Package Format Specification (Chinese)
-    └── package-format.en.md           # Package Format Specification (English)
+    ├── README.en.md
+    ├── CONTRIBUTING.en.md
+    ├── package-format.md
+    ├── package-format.en.md
+    ├── evidence/                       # sources and review records
+    └── archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/
 ```
 
-> [!NOTE]
-> **Why is `README.en.md` inside `docs/`?**
-> Deployed `mindie-knowledge` feed validators enforce a strict root metadata allowlist (`README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `LICENSE`, `publication-contract.json`). Keeping English documentation and format specifications under `docs/` ensures seamless compatibility across all deployed clients.
+A unit path must be `<domain_path>/<unit_id>.md`. `domain_path` is a normalized repository-relative directory used for routing and sharding; it is not part of stable identity. `unit_id` starts with `unit-` and uses lowercase words and hyphens. The two JSON files under `index/` are derived and rebuilt by the runtime; do not hand-edit them.
+
+The complete field, digest, condition, inheritance, feedback and reviewed-change rules are in the [format specification](package-format.en.md).
 
 ---
 
-## 📚 Documentation & Ecosystem Links
+## 🗃️ Archive and history
 
-| Topic | English | 中文文档 |
+The old `material-v1` corpus is preserved at:
+
+[`docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/`](archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/)
+
+The migration record at [`docs/evidence/material-v1-migration.json`](evidence/material-v1-migration.json) covers 663 task packages, 2,387 archived files, 1,723 blocks and 1 feedback file. Every archived file retains its original Git blob object ID, showing that these bytes are preserved historical evidence rather than regenerated or rewritten units.
+
+- Archived material is **not** active graded-unit content; the `mindie-graded-unit/1` corpus does not mix in the old `tasks/` layout.
+- Archived content is not relabeled as graded knowledge or presented as a current conclusion.
+- The earlier public state and public history remain in Git history. The archive retains existing bytes and original blob identities rather than replacing them.
+- Do not edit archived files, the migration record or blob identities to make the current tree look tidier.
+
+---
+
+## ✅ Publication and validation
+
+[`publication-contract.json`](../publication-contract.json) declares `mindie-publication-contract/2`, the data formats and the immutable validator revision used by publication checks. `.github/workflows/check.yml` reads that contract from the trusted base, installs the exact validator and validates candidate content as Git blobs without executing candidate code.
+
+Keep three facts separate:
+
+1. **Local/candidate tree validation**: whether format, digests, inheritance, index consistency and privacy scans pass;
+2. **Remote publication**: the actual readback of `main`;
+3. **Installed native acceptance**: whether a specific host can actually use query, explain, feedback and routing after installing that revision.
+
+A validated candidate tree does not prove the latter two, and a documentation change does not become an automatic content merge. The publication contract, its pin and release/validation evidence each record the facts they cover. This document does not claim any step that is not recorded there.
+
+Documentation and engineering files follow the development review path; units, feedback and derived indexes follow the content path. The two paths have different check outcomes and merge rules; see the [contributing guide](CONTRIBUTING.en.md).
+
+---
+
+## 📖 Documentation and related repositories
+
+| Topic | English | 中文 |
 | --- | --- | --- |
-| **Package Format Specification** | [docs/package-format.en.md](package-format.en.md) | [docs/package-format.md](package-format.md) |
-| **Contributing Guide** | [docs/CONTRIBUTING.en.md](CONTRIBUTING.en.md) | [CONTRIBUTING.md](../CONTRIBUTING.md) |
-| **Knowledge Runtime Engine (`mindie-knowledge`)** | [README.en.md](https://github.com/mindie-agent/knowledge/blob/main/README.en.md) | [mindie-agent/knowledge](https://github.com/mindie-agent/knowledge) |
-| **Repository Review Bot Contract (`mindie-content-review/2`)** | [repository-bot-contract.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) | [repository-bot-contract.zh.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.zh.md) |
-| **MindIE Agent Engineering Design Principles** | [design-principles.en.md](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.en.md) | [design-principles.md](https://github.com/mindie-agent/mindie-agent/blob/main/docs/design-principles.md) |
+| **Unit format specification** | [package-format.en.md](package-format.en.md) | [package-format.md](package-format.md) |
+| **Contributing and review** | [CONTRIBUTING.en.md](CONTRIBUTING.en.md) | [CONTRIBUTING.md](../CONTRIBUTING.md) |
+| **Repository boundaries** | [AGENTS.md](../AGENTS.md) | — |
+| **Live unit inventory** | [index/routing-manifest.json](../index/routing-manifest.json) | — |
+| **Knowledge runtime** | [English README](https://github.com/mindie-agent/knowledge/blob/main/README.en.md) | [mindie-agent/knowledge](https://github.com/mindie-agent/knowledge) |
+| **Review bot contract** | [repository-bot-contract.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.md) | [repository-bot-contract.zh.md](https://github.com/mindie-agent/knowledge/blob/main/docs/repository-bot-contract.zh.md) |
+| **Main installation guide** | [mindie-agent](https://github.com/mindie-agent/mindie-agent) | — |
 
 ---
 
 ## 📄 License
 
-All public engineering knowledge packages and documentation in this repository are licensed under [Creative Commons Attribution 4.0 International (CC-BY-4.0)](../LICENSE). Knowledge entries are provided for engineering reference only—always verify against your actual hardware and software environment.
+Public knowledge units and documentation in this repository are licensed under [Creative Commons Attribution 4.0 International (CC-BY-4.0)](../LICENSE). Units are engineering reference material, not a substitute for verification in your current environment; applicability always depends on observed task facts and the unit's declared conditions.

@@ -1,17 +1,21 @@
 {
-  "build_elapsed_ms": 0.2311669522896409,
+  "build_elapsed_ms": 0.9447080083191395,
   "closure": {
-    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": []
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [],
+    "unit-vllm-ascend-idle-dp-gdn-state": [],
+    "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": []
   },
-  "digest": "8164c09d0a8f8a0cfbe65163ba206cbbc04cb825f090c1c4ba5af1f62b98f298",
-  "generation": "27939dc22c63c48869ef60cfdeff2a8ffef803895819d5c14e843386eb84a36c",
+  "digest": "3c87b9ee09774438959518197f023a3ea5b800eb08b705d650ddcf209bdbdda5",
+  "generation": "9f744a4db125c20c6657b870f9188de98fbf5f41953567d7c708e59b82f30238",
   "id_path": {
-    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md"
+    "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
+    "unit-vllm-ascend-idle-dp-gdn-state": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
+    "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md"
   },
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 1,
+  "unit_count": 3,
   "units": [
     {
       "category": "sop",
@@ -59,6 +63,132 @@
           "have",
           "distinct",
           "gates"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "closure_digest": "sha256:5788206e35252d9078710f6082ce29d81661abfeca4db38628a2a48b87e7fb4e",
+      "conditions": {
+        "affected_state": {
+          "exact_set": [
+            "conv_state",
+            "ssm_state"
+          ]
+        },
+        "base_commit": "c3394206bdd00b132580ae439555b4f1a70d5bf6",
+        "dp": 2,
+        "idle_rank_state": "no_scheduled_requests",
+        "model": [
+          "Kimi K3 hybrid Gated DeltaNet/GDN plus MLA attention with MoE",
+          "Kimi K3 hybrid GDN/MLA + MoE",
+          "Kimi K3"
+        ],
+        "npu_count": 2,
+        "npu_model": "Ascend910",
+        "peer_rank_state": [
+          "active_requests",
+          "active"
+        ],
+        "repository": [
+          "vllm-ascend-idle-dp",
+          "vllm-project/vllm-ascend",
+          "vllm-ascend"
+        ]
+      },
+      "content_digest": "sha256:72f2bfadc7899c951e711b81719ce6b5854cbfe6dd343b00bc35d75b221deb00",
+      "content_sha256": "72f2bfadc7899c951e711b81719ce6b5854cbfe6dd343b00bc35d75b221deb00",
+      "domain_path": "vllm-ascend/runtime/idle-dp-gdn-state",
+      "evidence_strength": "hypothesis",
+      "id": "unit-vllm-ascend-idle-dp-gdn-state",
+      "inherits_from": [],
+      "inherits_from_closure": [],
+      "path": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/pull/15655",
+          "https://github.com/vllm-project/vllm-ascend/pull/15510",
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/tests/ut/worker/test_model_runner_v1.py"
+        ],
+        "experiment_status": "not_run",
+        "source_digest": "61ee8bc56d4ac0e1a7f43d1804bfe41c1a6699181774938907c97174f2348343",
+        "source_locator": "https://github.com/vllm-project/vllm-ascend/pull/15655",
+        "source_type": "public_source_diff_and_task_input",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "Idle-DP dummy run and cached GDN recurrent state: source-scoped diagnosis",
+      "token_estimate": 818,
+      "triggers": {
+        "error_signatures": [
+          "idle DP rank with no scheduled requests while peer is active",
+          "cached GDN conv_state or ssm_state corrupted after an idle step",
+          "later requests on the formerly idle rank diverge"
+        ],
+        "keywords": [
+          "idle DP",
+          "GDN",
+          "conv_state",
+          "ssm_state",
+          "dummy_run",
+          "skip_gdn_state_update",
+          "Kimi K3",
+          "PR15655"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "closure_digest": "sha256:08f2e72469bb76b9526f3e77043549acb6db2ae26e440523d7531fca4f4474f1",
+      "conditions": {
+        "model_repository": "Qwen/Qwen3.5-0.8B",
+        "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+        "source0_repository": "https://github.com/vllm-project/vllm-ascend",
+        "source0_revision": "a78a00e0b1b618f26a3bfce2519055b40cf4bf1e"
+      },
+      "content_digest": "sha256:33661ebd978f03c8355b1728e082fb8937bb5bf245bea38557d069def80ef14c",
+      "content_sha256": "33661ebd978f03c8355b1728e082fb8937bb5bf245bea38557d069def80ef14c",
+      "domain_path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode",
+      "evidence_strength": "single_observation",
+      "id": "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
+      "inherits_from": [],
+      "inherits_from_closure": [],
+      "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/worker/patch_qwen3_5.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/worker/__init__.py",
+          "https://github.com/vllm-project/vllm-ascend/blob/0f289fa2a8a381a644a5f329af61715a73ec2aec/vllm_ascend/patch/__init__.py",
+          "https://github.com/huggingface/transformers/blob/a08ace4bbd97e721c98751deec37d87b026acadc/src/transformers/models/qwen3_5/modeling_qwen3_5.py"
+        ],
+        "experiment_status": "not_run_source_only",
+        "source_digest": "d48fbf9acefff670b66fc9941de53b725607d8239153bad1ee7b79fdacd56bdd",
+        "source_locator": "vllm-project/vllm-ascend@0f289fa2a8a381a644a5f329af61715a73ec2aec:vllm_ascend/patch/worker/patch_qwen3_5.py",
+        "source_type": "public_source",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "Qwen3.5 GatedDeltaNet decode adaptation in vLLM-Ascend (historical PR7109)",
+      "token_estimate": 2851,
+      "triggers": {
+        "error_signatures": [
+          "torch_npu.npu_recurrent_gated_delta_rule does not support ssm_state inputs in float32 format",
+          "Qwen3_5GatedDeltaNet reuses Qwen3NextGatedDeltaNet._forward_core but AscendC ops lack float32 ssm_state support",
+          "worker import is version-gated by not vllm_version_is(\"v0.16.0\")"
+        ],
+        "keywords": [
+          "qwen3.5",
+          "qwen3_5",
+          "gated deltanet",
+          "linear attention",
+          "ssm_state",
+          "vllm-ascend",
+          "text-only prefill",
+          "recurrent decode",
+          "chunk_gated_delta_rule"
         ]
       }
     }
