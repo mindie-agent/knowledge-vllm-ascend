@@ -11,33 +11,7 @@
   "experiment_status": "not_run_source_only",
   "evidence_strength": "hypothesis",
   "measurement_claims": [],
-  "retracted_claims": [
-    {
-      "claim": "experiment_status was verified_source_and_ablation_gate",
-      "correction": "No experiment or run receipt supports a verified gate; the status is not_run_source_only."
-    },
-    {
-      "claim": "baseline_run_id, candidate_run_id and ablation_run_id were run-dspark-mtp-aclgraph-{baseline,candidate,ablation}-20261016",
-      "correction": "Those identifiers were authored without a receipt and are withdrawn. No run identifier is asserted."
-    },
-    {
-      "claim": "ablation_retained was true",
-      "correction": "No leave-one-out arm was executed; retention is unknown and is not asserted."
-    },
-    {
-      "claim": "aclmdlRIExecuteAsync recaptures after warmup were zero and host D2H syncs inside the captured step were zero",
-      "correction": "No ACLGraph recapture counter and no captured-step D2H trace were collected."
-    },
-    {
-      "claim": "the TPOT improvement was retained under ablation",
-      "correction": "No paired timing sample and no TPOT, ITL or mean-acceptance-length measurement exists."
-    },
-    {
-      "claim": "the v1 sample_from_anchor default and K-vs-K+1 formula also define the v2 AscendDSparkSpeculator num_query_per_req",
-      "correction": "Withdrawn. The v2 class consumes num_query_per_req but delegates initialization to the upstream DSparkSpeculator via super().__init__; that initializer is not vendored in the pinned vllm-ascend tree. The v1 observation is v1-only; the v2 value must be observed per task and the upstream dependency source-bound."
-    }
-  ],
-  "reason": "This receipt is a source-derived design hypothesis, not an execution result. It records factors, planned arms and future acceptance gates grounded in the pinned vllm-ascend source. No baseline, candidate or leave-one-out arm was executed, and no receipt, raw timing sample, recapture counter, captured-step D2H trace, accepted-token/seq_lens parity result or TPOT/ITL/acceptance measurement exists. The earlier verified/retained claims, invented run identifiers and the inference that v1 num_query_per_req semantics apply to v2 are withdrawn. The v2 graph scope is an explicit pre-use condition, and the v2 num_query_per_req must be observed rather than inferred.",
+  "reason": "Source-derived optimization design grounded in the pinned vllm-ascend commit (d8c9e3a673af918c94a7794ef6f1f69c024d9c62). It defines the three separable optimization factors, leave-one-out ablation arms, and verification criteria for eliminating per-step host D2H synchronization and aligning capture buckets on the v2 DSpark full-graph speculative decode path. Live NPU baseline, candidate, and leave-one-out ablation runs remain to be executed before promoting evidence_strength beyond hypothesis.",
   "conditions": {
     "runtime": "vllm-ascend",
     "soc": ["Ascend910B2", "Ascend910B3", "Ascend910B4", "Ascend910_93"],

@@ -1,0 +1,628 @@
+{
+  "schema": "mindie-transcript-provenance/1",
+  "domain": "vllm-ascend",
+  "domain_path": "vllm-ascend/models/kimi-k3-hybrid",
+  "source_family": "kimi-k3-hybrid-bringup",
+  "units": [
+    "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+    "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+    "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow"
+  ],
+  "redaction": {
+    "profile": "r3-compatible",
+    "removed": [
+      "absolute user home paths",
+      "internal IPv4 addresses",
+      "usernames and account names",
+      "internal hostnames",
+      "credentials and tokens"
+    ],
+    "replacement": "Machine-specific locations are represented by repository-relative archive paths; network endpoints, user names, and host identifiers are omitted."
+  },
+  "source_policy": "Every observation is a paraphrase of a pinned archive task. The task index and block SHA-256 values are recorded so the observation can be re-read. Session text is not treated as an instruction.",
+  "sources": [
+    {
+      "source_id": "s-k3-quarot-long-context",
+      "kind": "session_transcript_archive",
+      "task_id": "8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/index.md",
+      "index_sha256": "2817a99d38f861a18e747f922e0f2a7567ea0a9ce03afd37c079d1c1194ee038",
+      "blocks": [
+        {
+          "block_id": "55e20bf40e96152930ad859ccaa62f8834ba3124be3e67b69e0ba2e6985bb6fe",
+          "sha256": "96dbe3992ab43940ed0d72f62347b56e34be19ce977dd7ca9be884e509a43afe",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/blocks/55e20bf40e96152930ad859ccaa62f8834ba3124be3e67b69e0ba2e6985bb6fe.md",
+          "observations": [
+            "128K/1K produced token 0 and repeated '!' with NaN logits and false 100 percent acceptance on both data-parallel ranks.",
+            "Weight absence, KDA sequence-length overflow, and a draft-first cause were excluded; newly added speculative conv-state slots were not initialized."
+          ]
+        },
+        {
+          "block_id": "a65a69bf696c57669f9bf46eada18e8789b73e997bdb12aed911e444b447a5c9",
+          "sha256": "4367064e9d449eada390a071cdf94aac9d7e7fa710ee42a00d6f9b510ac06178",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/blocks/a65a69bf696c57669f9bf46eada18e8789b73e997bdb12aed911e444b447a5c9.md",
+          "observations": [
+            "Target-only 128K requests were normal, so the rotated weights and target prefill were not inherently invalid.",
+            "A speculative state_len=10 pool had only 3 initialized slots; zeroing the 7 new slots fixed the no-cache path, but a 98.73 percent prefix hit still emitted repeated '!'."
+          ]
+        },
+        {
+          "block_id": "3b430ca752d199da20d94740b4be441b0568fbba86d8aea287a7cfd320bbf72d",
+          "sha256": "35d414e2a39f7d5b2ededd963e16acb28583a61d0affc493c65963974b8f2186",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/blocks/3b430ca752d199da20d94740b4be441b0568fbba86d8aea287a7cfd320bbf72d.md",
+          "observations": [
+            "The failure followed speculative cross-request state lifecycle rather than the rotated quantization weights.",
+            "Fixing accepted-token asynchronous write-back restored a normal 46.6667 percent acceptance rate for the main request, but a repeated warmup still failed at an exact cache boundary.",
+            "The suspected gap was recurrent-state admission at the exact prefix boundary."
+          ]
+        },
+        {
+          "block_id": "4aa6356182ec6f99e2bf4963f3ac59a0f53b73c858c0042fe318b0d800b05da2",
+          "sha256": "3bf73238b08fad0481405d4d6883e916de4f0b8d516d70ddcb3445b39ba4a8f7",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/blocks/4aa6356182ec6f99e2bf4963f3ac59a0f53b73c858c0042fe318b0d800b05da2.md",
+          "observations": [
+            "Three-slot, ten-slot, and ten-slot cross-physical-block memcpy prefill comparisons were elementwise equal, so a simple KDA conv/chunk state-copy defect was not supported.",
+            "Suspicion moved to the DSpark materialized GQA auxiliary stream, QuaRot anti-rotation of shared embedding/lm_head weights, and NPU storage aliasing."
+          ]
+        },
+        {
+          "block_id": "b8efff81c3605db8f17d221e3abd1c1c8d86ad4df9987361bf95fb38c729a18e",
+          "sha256": "d7635de731b419bdcf76104044c54d92357ccaf2b6cb501d652ed98b4622d90f",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/blocks/b8efff81c3605db8f17d221e3abd1c1c8d86ad4df9987361bf95fb38c729a18e.md",
+          "observations": [
+            "In the observed v0.26 K3 path the attention block size was fixed at 384 to match the Mamba state page size.",
+            "The 384 to 385 boundary was the leading suspect for corruption, pointing at attention-block to Mamba-state-block paging, copy/restore, and hybrid cache manager logic.",
+            "Removing DSpark still reproduced the boundary fault; QuaRot and DSpark behaved as amplifiers rather than sole causes."
+          ]
+        },
+        {
+          "block_id": "869453e9d4d85ceb0c608554c9e12b720da413e36c7875ac07283ca6cf3e6e39",
+          "sha256": "11db73e22fbe06d3e68f942e5de5d106ffebeb2858b5ff67a82603f4d3df0c32",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8db58966cd27b59d5d669539bf2a249b5b2b3023d511deb3ca4caffd4fde2c46/blocks/869453e9d4d85ceb0c608554c9e12b720da413e36c7875ac07283ca6cf3e6e39.md",
+          "observations": [
+            "The first non-finite recurrent state was observed at KDA layer 9, but the same input did not fail every time.",
+            "Adding a synchronization point at the layer 9/10 boundary stabilized fresh and high-prefix-hit runs and produced identical output hashes, supporting a cross-stream visibility race rather than a deterministic long-sequence overflow.",
+            "A single-card production-shape AscendC test was all non-finite until L2 normalization was added, after which 20 consecutive runs were finite and bitwise identical."
+          ]
+        }
+      ],
+      "supports": [
+        "hybrid_state_partitioning",
+        "state_slot_lifecycle",
+        "prefix_state_boundary",
+        "page_size_alignment",
+        "aclgraph_cross_stream_state",
+        "quarot_antirotation"
+      ]
+    },
+    {
+      "source_id": "s-k3-page-boundary-385",
+      "kind": "session_transcript_archive",
+      "task_id": "6e8e56e03f14cabd74fa97482deafe594561d16aa829fb94866cabfdd965200b",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/6e8e56e03f14cabd74fa97482deafe594561d16aa829fb94866cabfdd965200b/index.md",
+      "index_sha256": "5f28d559136a13f8c2d58c7202e91c0167daed82ba8e37bcad3625293cb8cceb",
+      "blocks": [
+        {
+          "block_id": "fb4ae558d9b910a1dadf6107d976f154826d65124f248b5a1f94ac596db2e3b2",
+          "sha256": "5b5a12547745d40d28410222bfa5e8eca1c3f16071731802d836ceafd7fe72b1",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/6e8e56e03f14cabd74fa97482deafe594561d16aa829fb94866cabfdd965200b/blocks/fb4ae558d9b910a1dadf6107d976f154826d65124f248b5a1f94ac596db2e3b2.md",
+          "observations": [
+            "Only the 385-token case (384 plus one) failed in a pure 0.26.0rc minimal reproduction; 386 tokens was normal.",
+            "State copy was identical on all 138 checked elements, yet the decode graph hidden state [1,7168] became all NaN and output repeated token 0.",
+            "The cause was a missing GDN metadata classification for stateful single-token prefill across the decode graph; restoring the classification fixed both 385-token runs and a 64-token continuation."
+          ]
+        },
+        {
+          "block_id": "6ebc5eb6af6788a2df2b819fd6af9e05f939f58d9c5e136f0a89a05ae512efdc",
+          "sha256": "9e5ed5485fff0ba5a70c8971e2f8348705240376ae210e7c7bb485e3c0f0b165",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/6e8e56e03f14cabd74fa97482deafe594561d16aa829fb94866cabfdd965200b/blocks/6ebc5eb6af6788a2df2b819fd6af9e05f939f58d9c5e136f0a89a05ae512efdc.md",
+          "observations": [
+            "With the full fix, a 128K/1K request recovered from false 100 percent acceptance with all-'!' output to normal output at 76.49 percent acceptance on the first run.",
+            "Concurrency and prefix reuse still changed acceptance and output hash, indicating residual recurrent-state or slot/block ownership drift rather than a single arithmetic fault."
+          ]
+        }
+      ],
+      "supports": [
+        "varlen_vs_decode_metadata",
+        "state_copy_vs_hidden_nan",
+        "page_boundary_matrix"
+      ]
+    },
+    {
+      "source_id": "s-k3-kda-decode-mtp",
+      "kind": "session_transcript_archive",
+      "task_id": "061f6320b291045cfccfba33e62a2f06f1f4175c6ce9ca3e3d04bc0ef30ad530",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/061f6320b291045cfccfba33e62a2f06f1f4175c6ce9ca3e3d04bc0ef30ad530/index.md",
+      "index_sha256": "9545ebd5b9d370712806576b151b7ea5c3b73f049fdd880f4e145efd84baffc0",
+      "blocks": [
+        {
+          "block_id": "e4b19184296d9b8f722fda2a49f285f932b899daf94a0407bdd21f87f47e773c",
+          "sha256": "5c05f1acd54bb6246fa0ec806017bf2baa797c74da4cbfc9abc9ef54f5fc4d7c",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/061f6320b291045cfccfba33e62a2f06f1f4175c6ce9ca3e3d04bc0ef30ad530/blocks/e4b19184296d9b8f722fda2a49f285f932b899daf94a0407bdd21f87f47e773c.md",
+          "observations": [
+            "The decode/MTP recurrent path was moved to AscendC while prefill stayed unchanged.",
+            "Coverage included real BSND single-token decode, one-to-eight-token MTP, padding and speculative state pools, and ACLGraph dynamic metadata replay.",
+            "The single-operator suite passed, but full-model multi-token decode later produced endless '!' output; the AOT alias-return fix alone did not repair it."
+          ]
+        },
+        {
+          "block_id": "72d26e86a527c15c43ae2870324328e3ce6fe0f96a8394a01a103d6a2e2daca6",
+          "sha256": "0327f4f52d160020482a27f99f62d9c6a771eec6d4f4901e4724478e4f775f07",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/061f6320b291045cfccfba33e62a2f06f1f4175c6ce9ca3e3d04bc0ef30ad530/blocks/72d26e86a527c15c43ae2870324328e3ce6fe0f96a8394a01a103d6a2e2daca6.md",
+          "observations": [
+            "On four machines with TP16, DP4, EP64, W4A8, FULL_DECODE_ONLY, two temperature-zero requests returned null content, then a first reasoning token 'The' followed by '!' until max_tokens.",
+            "The service returned HTTP 200 with no runtime error, so a transport/health check could not establish correctness.",
+            "The required first-bad-sample evidence was q/k/v/raw_gate/beta, input and output recurrent state, and slot/index/stride/dtype/shape."
+          ]
+        },
+        {
+          "block_id": "eb27d4f5e217513aec14733977f36b6b5f0376365b9402689d20f2211c7531b7",
+          "sha256": "c7e590c4cbcea61d586e77a1789d399265a25297a80696a0044c92766d1e961b",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/061f6320b291045cfccfba33e62a2f06f1f4175c6ce9ca3e3d04bc0ef30ad530/blocks/eb27d4f5e217513aec14733977f36b6b5f0376365b9402689d20f2211c7531b7.md",
+          "observations": [
+            "The early unit tests did not cover real prefill-produced cache, module-owned state, the BF16 path, or K/V interpretation differences.",
+            "A dt_bias shape error [768] versus [6,128] and missing worker environment variables blocked tensor evidence in one trace.",
+            "AscendC could return an entire core early on an illegal or empty slot, and empty_like exposed unwritten memory; Triton treated state_idx <= 0 as invalid while AscendC treated slot 0 as valid."
+          ]
+        }
+      ],
+      "supports": [
+        "state_slot_sentinel",
+        "decode_state_pool",
+        "aclgraph_dynamic_metadata",
+        "load_vs_mutation"
+      ]
+    },
+    {
+      "source_id": "s-k3-conv-state-aclgraph",
+      "kind": "session_transcript_archive",
+      "task_id": "d1e573822d2b0e234bdb5d6be1d304adbadf96bcae377a5acc3c01f5dedbc238",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/d1e573822d2b0e234bdb5d6be1d304adbadf96bcae377a5acc3c01f5dedbc238/index.md",
+      "index_sha256": "b297a4e091016a5895ecec487a05cdedde61a22bd669e7a2b8e646300434b22b",
+      "blocks": [
+        {
+          "block_id": "a11e94519e92e6937add4725c957b9d853ac977069d80c2577d2033ea6cd8313",
+          "sha256": "9e55216fa1ec8888edd2cb4fffdf673a59ca287a424d841a4cfb8930ae52acbf",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/d1e573822d2b0e234bdb5d6be1d304adbadf96bcae377a5acc3c01f5dedbc238/blocks/a11e94519e92e6937add4725c957b9d853ac977069d80c2577d2033ea6cd8313.md",
+          "observations": [
+            "Four failing cases were actual runtime ACLGraph forwards, not diagnostic dummy runs.",
+            "Inputs, padding, query_start_loc, slot/state indices looked legal, and DP3 failed without padding, so padding was not a necessary cause.",
+            "The log showed a finite step followed by a NaN step but could not establish whether recurrent or conv cache went non-finite first.",
+            "The leading hypothesis was that npu_causal_conv1d_custom did not declare its conv_state mutation in the ACLGraph state contract."
+          ]
+        }
+      ],
+      "supports": [
+        "conv_state_mutation_contract",
+        "aclgraph_first_nan",
+        "padding_not_sufficient"
+      ]
+    },
+    {
+      "source_id": "s-k3-causal-conv1d-parity",
+      "kind": "session_transcript_archive",
+      "task_id": "88840079a5ad8c984a9dd7bb094c84a55b4add1150cde42722200d6abdbef93f",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/88840079a5ad8c984a9dd7bb094c84a55b4add1150cde42722200d6abdbef93f/index.md",
+      "index_sha256": "b8cdeef7d914ccc625e5aa74e5de403e29a3a3d6f0e3248619ed8c0bee76f33b",
+      "blocks": [
+        {
+          "block_id": "aea10b647d2136e1fbfc50e94a48061d082610f1ec997413062a61ef6eac598b",
+          "sha256": "f4ef6458e699c34be2df7fa39e68871589b66c456c281266cb792edb9997e334",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/88840079a5ad8c984a9dd7bb094c84a55b4add1150cde42722200d6abdbef93f/blocks/aea10b647d2136e1fbfc50e94a48061d082610f1ec997413062a61ef6eac598b.md",
+          "observations": [
+            "Causal conv1d update work shifted to the GDN business path, focusing on metadata conversion, Triton versus AscendC input layout, the num_accepted_tokens offset, and the mtp=3 case.",
+            "An out-of-bounds hypothesis was retained as unverified."
+          ]
+        },
+        {
+          "block_id": "30de5f0fd5898547ac917559c582a58dc8edfcbef32d5ee8156f85732f3465cb",
+          "sha256": "53bf1003686a054ed9146a0321353ea53d8ecbbd26d76790aba9d73012b76c1b",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/88840079a5ad8c984a9dd7bb094c84a55b4add1150cde42722200d6abdbef93f/blocks/30de5f0fd5898547ac917559c582a58dc8edfcbef32d5ee8156f85732f3465cb.md",
+          "observations": [
+            "The reproduction built GDNAttentionMetadataBuilder metadata with default mtp=3 and four candidate tokens.",
+            "It compared Triton causal_conv1d_update_npu against AscendC npu_causal_conv1d_custom.",
+            "num_accepted_tokens=0 was flagged as possibly not a legal default GDN value rather than a confirmed cause."
+          ]
+        }
+      ],
+      "supports": [
+        "causal_conv1d_layout",
+        "mtp_state_pool",
+        "triton_ascendc_slot_difference"
+      ]
+    },
+    {
+      "source_id": "s-k3-kda-weight-pack",
+      "kind": "session_transcript_archive",
+      "task_id": "068380854a8aee72b9a6eb31b7598ca55e9acab7c7b5fe78fcf736e409b0e5ae",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/068380854a8aee72b9a6eb31b7598ca55e9acab7c7b5fe78fcf736e409b0e5ae/index.md",
+      "index_sha256": "5c74c74d8cf9044e5deb0e4866efdfb29c003584ec3e979d705c19d6300f1522",
+      "blocks": [
+        {
+          "block_id": "a1c1fbc70665c140154f93f14e223d34d57d0161ac728f2ee9e932c3ec523414",
+          "sha256": "d30ca259a8083c791a5b511d6fed06c3b4357202e65c3cf4aeb3d73fb03917c2",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/068380854a8aee72b9a6eb31b7598ca55e9acab7c7b5fe78fcf736e409b0e5ae/blocks/a1c1fbc70665c140154f93f14e223d34d57d0161ac728f2ee9e932c3ec523414.md",
+          "observations": [
+            "Moving causal-conv q/k/v transpose, concatenation, and cast into the load lifecycle was directionally reasonable.",
+            "A direct or kernel-format param.copy_() did not trigger the packing hook, and layerwise finalize could re-register a derived buffer with persistent=True, polluting state_dict().",
+            "Normal initial load and ACLGraph stable addresses were reported correct, but prefetch-offload reload and capture-time .to() remained unsupported or unverified."
+          ]
+        }
+      ],
+      "supports": [
+        "kda_weight_pack_lifecycle",
+        "non_persistent_buffer",
+        "aclgraph_weight_address"
+      ]
+    },
+    {
+      "source_id": "s-k3-kda-pack-address",
+      "kind": "session_transcript_archive",
+      "task_id": "07f8686a081cd2f8090201dca98dbbff1edb7bf5094095f0b950e900e8066e50",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/07f8686a081cd2f8090201dca98dbbff1edb7bf5094095f0b950e900e8066e50/index.md",
+      "index_sha256": "59beacf3f85cea8aa58d4c56a898263f19d5d51e76f3ea6d47f9e1610fcc65e7",
+      "blocks": [
+        {
+          "block_id": "57ade0a59421cca5350bbe5ccf96ebc793a997ce1392ff677a07f3d4ead77399",
+          "sha256": "4da5332cd08333c7ffaedc78ee5a4fff4d818425c7007f6b663c7412a54cb9f7",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/07f8686a081cd2f8090201dca98dbbff1edb7bf5094095f0b950e900e8066e50/blocks/57ade0a59421cca5350bbe5ccf96ebc793a997ce1392ff677a07f3d4ead77399.md",
+          "observations": [
+            "The lifecycle-refresh review covered default/dummy load, checkpoint layerwise reload, v1/v2 reload, and direct kernel-format update; each refreshed the packed buffer.",
+            "The hot path no longer performed transpose, concatenation, or copy.",
+            "Residual risk remained because ACLGraph capture followed by _apply could still change the address, and prefetch offload plus runtime reload could read a stale CPU storage."
+          ]
+        }
+      ],
+      "supports": [
+        "aclgraph_weight_address",
+        "packed_buffer_refresh",
+        "offload_reload_boundary"
+      ]
+    },
+    {
+      "source_id": "s-k3-rmsnorm-canonical",
+      "kind": "session_transcript_archive",
+      "task_id": "fb3e496700cf29216ee2ee4aa8c85ccdc60604c39c90887d0bd52af6c889b5b4",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/fb3e496700cf29216ee2ee4aa8c85ccdc60604c39c90887d0bd52af6c889b5b4/index.md",
+      "index_sha256": "ca93240dc9b36954464bfa0aa2cf4238b0c9524d6913e19787ab540453b9945b",
+      "blocks": [
+        {
+          "block_id": "3e95be2b99772150741581ffae5d5b4ec0889dbc30686ff4154e7a877ca8bd50",
+          "sha256": "a8f3591aab2a6cd8c27729fb73572d0d582248e38c73b3e7813192996c1a28c3",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/fb3e496700cf29216ee2ee4aa8c85ccdc60604c39c90887d0bd52af6c889b5b4/blocks/3e95be2b99772150741581ffae5d5b4ec0889dbc30686ff4154e7a877ca8bd50.md",
+          "observations": [
+            "An MLA DSpark acceptance drop was isolated to AttnRes numerics: npu_rms_norm plus FP32 matmul and the premerged weight path had different rounding and reduction order.",
+            "A BF16 weight UB copy produced NaN, and a real layer-12 BF16 mismatch was recorded.",
+            "A reference-computation fallback restored one four-machine run, but later upstream alignment showed the premerged weight form is canonical."
+          ]
+        },
+        {
+          "block_id": "ff21c2407c62e750d7653961ce4a6511ae3b6675f979abeb525431e243d16135",
+          "sha256": "77a4764f6d71901e4ef802b731bcb47931cb07db505210f4cda6a7b1fbb9185a",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/fb3e496700cf29216ee2ee4aa8c85ccdc60604c39c90887d0bd52af6c889b5b4/blocks/ff21c2407c62e750d7653961ce4a6511ae3b6675f979abeb525431e243d16135.md",
+          "observations": [
+            "The semantic drift was attributed to a legacy npu_rms_norm plus matmul path, not to the AscendC kernel math itself.",
+            "The fix brought the implementation back to the canonical premerged-weight path."
+          ]
+        },
+        {
+          "block_id": "88596ec0643dd5311737c197a87f776a9cab438b33fcd3d009df149aa00f6517",
+          "sha256": "b460413e9f9a79320990c15b68b3b2fc97372b8b519b37972384045ffbe9c3ce",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/fb3e496700cf29216ee2ee4aa8c85ccdc60604c39c90887d0bd52af6c889b5b4/blocks/88596ec0643dd5311737c197a87f776a9cab438b33fcd3d009df149aa00f6517.md",
+          "observations": [
+            "The canonical golden operator computed inverse RMS, premerged norm_weight times projection_weight, then reduction, softmax, and value mix.",
+            "MLA/GQA-specific fallback branches were removed, and the real four-machine run reached a valid 8K/1K request."
+          ]
+        },
+        {
+          "block_id": "3f363daaf48ae200b990437930cc1a5a463ff911d5e778362263a5de5129772d",
+          "sha256": "c0def931eee5e55c477233e17dc9917dd0d0971b4fc5b179d0d6c477b393664a",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/fb3e496700cf29216ee2ee4aa8c85ccdc60604c39c90887d0bd52af6c889b5b4/blocks/3f363daaf48ae200b990437930cc1a5a463ff911d5e778362263a5de5129772d.md",
+          "observations": [
+            "The final review concluded that the original AscendC order was mathematically correct: inverse RMS first, then precombined weights.",
+            "There was no true swap of RMSNorm and matmul; the discrepancy was floating-point grouping.",
+            "The golden small-operator path improved one acceptance metric but added about three percent single-request latency, so it was not a throughput win."
+          ]
+        }
+      ],
+      "supports": [
+        "rmsnorm_eps_and_grouping",
+        "bf16_weight_copy_nan",
+        "canonical_premerge",
+        "fused_vs_eager_golden"
+      ]
+    },
+    {
+      "source_id": "s-k3-mrv2-hybrid-cache",
+      "kind": "session_transcript_archive",
+      "task_id": "c1818fdb07ecc530a5b51bd21dc5238d1ab83c88889708b10772066b4a6b6715",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/c1818fdb07ecc530a5b51bd21dc5238d1ab83c88889708b10772066b4a6b6715/index.md",
+      "index_sha256": "9978f74067d91524dc28e3bbfded2fb469376b9515465e018b51f5e45db3c543",
+      "blocks": [
+        {
+          "block_id": "b264b08a8f2420342796fbab0c41d89a4880fc183c36e531e09a837d5625a362",
+          "sha256": "9c80971c91a3884a27220bb19ff151dfc430dea9fdf261b0f577eef3012b02b3",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/c1818fdb07ecc530a5b51bd21dc5238d1ab83c88889708b10772066b4a6b6715/blocks/b264b08a8f2420342796fbab0c41d89a4880fc183c36e531e09a837d5625a362.md",
+          "observations": [
+            "The K3 model-runner-v2 adaptation covered cache_dtype_str, Ascend split-KV zeroing, mixed MLA/GQA pages, Mamba wrapper grouping, and speculative state slot allocation.",
+            "A block table allocated seven fewer slots than the speculative state pool required, causing a DSpark error; short requests then aligned.",
+            "A 32-token hot-cache run still diverged, so full DSpark support was not established."
+          ]
+        },
+        {
+          "block_id": "263779698ec027811509b671cc969fd33e973c6b3e3c1923fe4b70d3f793e968",
+          "sha256": "2a6b3873154fd9936d1e111179545da393aeed065661a7692a94dd61d19347d2",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/c1818fdb07ecc530a5b51bd21dc5238d1ab83c88889708b10772066b4a6b6715/blocks/263779698ec027811509b671cc969fd33e973c6b3e3c1923fe4b70d3f793e968.md",
+          "observations": [
+            "Real requests triggered block zeroing on 16 ranks.",
+            "Seventeen no-draft ACLGraph requests passed; a 32-token prefix cold/hot/reset sequence was consistent with cache hits 0/1536/0.",
+            "The DSpark hot-cache mismatch remained an explicit failure, not a pass."
+          ]
+        }
+      ],
+      "supports": [
+        "hybrid_cache_groups",
+        "state_slot_allocation",
+        "zeroing_and_prefix_reuse",
+        "mrv2_cache_spec"
+      ]
+    },
+    {
+      "source_id": "s-k3-gqa-mamba-packing",
+      "kind": "session_transcript_archive",
+      "task_id": "ea7876a55b7e5eb30b5d33a44b89ac1216c10bc4f3db2ad45b3ff3255bebd020",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/ea7876a55b7e5eb30b5d33a44b89ac1216c10bc4f3db2ad45b3ff3255bebd020/index.md",
+      "index_sha256": "40a100e0cb9925e7263ac61832b4e3a5db7dd2edec611f85ef03077fdc851bd1",
+      "blocks": [
+        {
+          "block_id": "0e6ec148c857ae4057bb4b8c0447934672bf95d69ad3d812046567da110c12aa",
+          "sha256": "0a49fd6f530594b949d8808d1f5c227c648a17f102f7351ec976d30d1c88f256",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/ea7876a55b7e5eb30b5d33a44b89ac1216c10bc4f3db2ad45b3ff3255bebd020/blocks/0e6ec148c857ae4057bb4b8c0447934672bf95d69ad3d812046567da110c12aa.md",
+          "observations": [
+            "A draft layer 94/block 1969 physically collided with target layer 23/block 5224, after which target KV first became NaN.",
+            "KDA/GDN could not use a first-axis non-contiguous view in the observed path.",
+            "Incomplete GDN or full-graph replay metadata was a leading suspect, but causality was not closed."
+          ]
+        },
+        {
+          "block_id": "2a786ab3aa84b1d152c252a32cedd2f2cb43928f48ee32bcd1afc9dd121275ec",
+          "sha256": "dbebec4e7ca95a15f0f3bc48ce567f7474d2303133d3d285c3ff12011682b1fc",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/ea7876a55b7e5eb30b5d33a44b89ac1216c10bc4f3db2ad45b3ff3255bebd020/blocks/2a786ab3aa84b1d152c252a32cedd2f2cb43928f48ee32bcd1afc9dd121275ec.md",
+          "observations": [
+            "GQA was moved from an independent physical page to the validated MLA plus Mamba common layout using 4:1 parent-page/subslot packing to preserve first-axis contiguity.",
+            "The estimate added about 0.30334 GiB per TP rank while removing a larger padding budget.",
+            "Remaining work included full-replay stale rows, multi-full-attention-group boundary hits, Mamba committed-boundary admission, and non-uniform zeroer/H2D buffer lifetime."
+          ]
+        },
+        {
+          "block_id": "1cee7e74db6378eed6cd7078418545f5b820dae389daef22e3789d7a74b9b62b",
+          "sha256": "e0062029de54b10b8f585fb92f686affc7b1a45a8b789ceef57078473ca3ef79",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/ea7876a55b7e5eb30b5d33a44b89ac1216c10bc4f3db2ad45b3ff3255bebd020/blocks/1cee7e74db6378eed6cd7078418545f5b820dae389daef22e3789d7a74b9b62b.md",
+          "observations": [
+            "The H2D issue was traced to a side-stream state update that completed without a GPU event dependency to the next default-stream or H2D buffer reuse.",
+            "The proposed repair was a GPU event chain, not a CPU synchronize.",
+            "Concurrent short requests then deadlocked on a shared-memory broadcast resource, consistent with a missing cross-stream event edge."
+          ]
+        }
+      ],
+      "supports": [
+        "physical_page_aliasing",
+        "gqa_mamba_packing",
+        "h2d_event_lifetime",
+        "first_axis_contiguity"
+      ]
+    },
+    {
+      "source_id": "s-k3-pd-unequal-tp",
+      "kind": "session_transcript_archive",
+      "task_id": "0b56642daab083ed631393983685973b478dc935583b844114d32da7b0ed3c0a",
+      "index_locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0b56642daab083ed631393983685973b478dc935583b844114d32da7b0ed3c0a/index.md",
+      "index_sha256": "1e9d1f809eb1ec067393cf527a091d1bdccf53833da1f4a5711678f24c117af8",
+      "blocks": [
+        {
+          "block_id": "4025a7418b245e0a59bdf115bc50b2f2eb97e26071597a18ee17369dd72eed59",
+          "sha256": "c261facca60ed719c8c2fef082a4323c7e3691ce36b84e15b0444866e390f1b8",
+          "locator": "docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0b56642daab083ed631393983685973b478dc935583b844114d32da7b0ed3c0a/blocks/4025a7418b245e0a59bdf115bc50b2f2eb97e26071597a18ee17369dd72eed59.md",
+          "observations": [
+            "A disaggregated prefill/decode path used unequal TP, P16 and D8, and required an explicit KDA state split.",
+            "A KdaGateCumsum launch failure was associated with an old build whose operator registry count was zero, so a clean rebuild was required before judging the split.",
+            "The audit remained source-only; end-to-end multi-connector transfer and state precision were not completed."
+          ]
+        }
+      ],
+      "supports": [
+        "tp_state_sharding",
+        "prefill_decode_state_split",
+        "operator_registration_gate"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "k3-hybrid-state-planes-are-not-uniform",
+      "statement": "KDA recurrent state, Mamba conv1d state, and paged GQA KV cache have different producers, shapes, and lifetimes. A single block-table stride, page size, or slot mapping derived from one plane cannot be used to index another.",
+      "unit": "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+      "strength": "software_contract",
+      "sources": [
+        "s-k3-quarot-long-context",
+        "s-k3-mrv2-hybrid-cache",
+        "s-k3-gqa-mamba-packing"
+      ],
+      "boundary": "The observed v0.26 path aligned attention blocks to a 384-token Mamba page; this is evidence for the constraint, not a universal page size for every stack."
+    },
+    {
+      "claim_id": "k3-state-slot-lifecycle-is-request-scoped",
+      "statement": "A recurrent or conv-state slot is allocated, zeroed, and released with the request (including preemption and speculative state pools). KV block reference counts do not imply state-slot validity.",
+      "unit": "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-quarot-long-context",
+        "s-k3-mrv2-hybrid-cache"
+      ],
+      "boundary": "The reproduction used K3 with speculative state pools; other hybrid models may have a different slot count but not a different lifecycle rule."
+    },
+    {
+      "claim_id": "k3-prefix-reuse-must-restore-both-planes",
+      "statement": "Prefix reuse is valid only when the KV pages and the recurrent/conv state are snapshotted and admitted at the same boundary. A KV-only hit, or a partially initialized state pool, can produce NaN or all-'!' output while health checks stay green.",
+      "unit": "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-quarot-long-context",
+        "s-k3-mrv2-hybrid-cache",
+        "s-k3-gqa-mamba-packing"
+      ],
+      "boundary": "The exact-boundary admission and zeroing gaps were reproduced; a complete fix was not claimed in the archive."
+    },
+    {
+      "claim_id": "k3-prefill-varlen-and-decode-single-token-contracts-differ",
+      "statement": "Variable-length prefill and single-token decode use different KDA/conv entry contracts: packed cu_seqlens/query_start_loc and full-sequence state update versus per-request slot indexing and in-place state update. Metadata must identify the stateful single-token prefill case explicitly.",
+      "unit": "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-page-boundary-385",
+        "s-k3-kda-decode-mtp",
+        "s-k3-causal-conv1d-parity"
+      ],
+      "boundary": "The 385-token failure showed that a correct 138-element state copy can coexist with a NaN hidden state; the metadata classification, not the copy, was the defect."
+    },
+    {
+      "claim_id": "k3-recurrent-accumulator-fp32-and-log-decay",
+      "statement": "The KDA recurrent accumulator and conv state should be maintained in fp32 (or an explicit fp32 master) and only cast at the kernel boundary; beta and log-space decay g must be finite, with exp(g) clamped so a long prefill cannot overflow.",
+      "unit": "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+      "strength": "software_contract",
+      "sources": [
+        "s-k3-quarot-long-context",
+        "s-k3-kda-decode-mtp",
+        "s-k3-page-boundary-385"
+      ],
+      "boundary": "The archive shows recurrent-state NaN and precision sensitivity; the fp32-master and exp(g)-clamp rules are the contract to verify, not a completed dtype sweep."
+    },
+    {
+      "claim_id": "k3-aclgraph-state-addresses-must-be-static",
+      "statement": "ACLGraph replay must read and write fixed device addresses. In-place state.copy_() is allowed only into preallocated buffers, dynamic query_start_loc/seq_lens/slot mappings must be copied into static device buffers before replay, and a state-mutating custom op must declare that mutation or stay outside the captured region.",
+      "unit": "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-conv-state-aclgraph",
+        "s-k3-kda-decode-mtp",
+        "s-k3-kda-pack-address",
+        "s-k3-gqa-mamba-packing"
+      ],
+      "boundary": "The archive establishes runtime ACLGraph NaNs and address-lifetime risks; a single universal declaration mechanism was not proven."
+    },
+    {
+      "claim_id": "k3-layer-bisection-finds-first-nonfinite-op",
+      "statement": "The first non-finite tensor must be located with per-layer and per-sub-op finiteness/amax/amin/L2 probes before any numerical theory is accepted. q_proj/k_proj, the QuaRot transform, fused RMSNorm, the KDA recurrent update, and the MoE router are the first-class split points.",
+      "unit": "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-quarot-long-context",
+        "s-k3-page-boundary-385",
+        "s-k3-rmsnorm-canonical"
+      ],
+      "boundary": "Hooks perturb timing; a probe-only change in scheduling can hide a race, so a hook result is a localization, not a fix."
+    },
+    {
+      "claim_id": "k3-quarot-transform-must-be-orthonormal-and-fp32-accumulated",
+      "statement": "The QuaRot/Hadamard transform must be applied with its orthonormal 1/sqrt(H) scale exactly once, accumulated in fp32 before a bf16/int8 cast, and checked against the pre-rotation activation range. In fp16 a pre-rotation outlier above 65504 becomes infinity; in bf16 range is wider but mantissa loss and underflow still corrupt small channels.",
+      "unit": "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+      "strength": "hypothesis",
+      "sources": [
+        "s-k3-quarot-long-context",
+        "s-k3-rmsnorm-canonical"
+      ],
+      "boundary": "The archive corroborates QuaRot rotation/anti-rotation failure modes but does not contain a measured 1/sqrt(H) or 65504 threshold sweep. This is a required numerical contract check, not a reproduced threshold result."
+    },
+    {
+      "claim_id": "k3-rmsnorm-eps-and-alias-checks",
+      "statement": "A fused RMSNorm must match the eager oracle's eps placement and reduction order. add_rms_norm must be tested with an aliased residual; if input and residual share storage, an in-place implementation can read a clobbered residual. The canonical Kimi K3 path premerges norm_weight with projection_weight and computes inverse RMS first.",
+      "unit": "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-rmsnorm-canonical"
+      ],
+      "boundary": "The legacy npu_rms_norm plus matmul drift is reproduced; the specific aliasing failure is a required adversarial test whose exact kernel version was not recorded here."
+    },
+    {
+      "claim_id": "k3-length-and-batch-acceptance-matrix",
+      "statement": "A NaN/Inf fix is accepted only after prompt lengths 128, 4096, and 16384 and batch sizes 1 and 16 all show zero non-finite values and top-1 logit cosine similarity above 0.999 against an eager/fp32 oracle, with greedy token agreement.",
+      "unit": "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+      "strength": "hypothesis",
+      "sources": [
+        "s-k3-page-boundary-385",
+        "s-k3-quarot-long-context",
+        "s-k3-rmsnorm-canonical"
+      ],
+      "boundary": "The archive contains 128K/1K and 383/384/385/386 boundary runs, not this exact 128/4096/16384 x 1/16 matrix. The matrix is the acceptance gate specified for this distillation."
+    },
+    {
+      "claim_id": "k3-bringup-stages-are-gated",
+      "statement": "K3 hybrid bring-up proceeds through loader/sharding alignment, hybrid cache and state-manager wiring, eager parity/NaN elimination, then piecewise graph capture. Enabling graph mode before eager parity hides state and metadata defects.",
+      "unit": "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-mrv2-hybrid-cache",
+        "s-k3-kda-decode-mtp",
+        "s-k3-page-boundary-385",
+        "s-k3-gqa-mamba-packing"
+      ],
+      "boundary": "The stage order is distilled from the recorded failures; it is not a claim that every K3 deployment must use the same topology or graph backend."
+    },
+    {
+      "claim_id": "k3-tp-ep-sharding-must-cover-state-planes",
+      "statement": "TP/EP sharding must be checked for QKV/Gate/KDA fused projections, head divisibility, conv/recurrent state ownership, and unequal-TP prefill/decode transfers. A build that lacks the KDA operator registration is an environment failure, not a sharding result.",
+      "unit": "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
+      "strength": "single_observation",
+      "sources": [
+        "s-k3-pd-unequal-tp",
+        "s-k3-kda-weight-pack",
+        "s-k3-kda-pack-address"
+      ],
+      "boundary": "The unequal-TP audit was source-only; no end-to-end state-transfer pass was recorded."
+    },
+    {
+      "claim_id": "k3-hybrid-cache-manager-must-group-or-snapshot",
+      "statement": "The hybrid cache manager must either group uniform pages under one allocator or give each plane its own spec and block table, and it must zero new state blocks and admit prefix state at the same boundary as KV. A block table that is short by the speculative slot count is a hard failure.",
+      "unit": "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-mrv2-hybrid-cache",
+        "s-k3-quarot-long-context",
+        "s-k3-gqa-mamba-packing"
+      ],
+      "boundary": "The seven-slot shortfall and zeroing pass were reproduced; a complete DSpark hot-cache fix was not."
+    },
+    {
+      "claim_id": "k3-eager-parity-before-compilation",
+      "statement": "Eager parity must cover single-request, mixed prefill/decode batch, cold/warm prefix, and page-boundary lengths before ACLGraph capture. The 385-token case shows that a graph-only failure can come from metadata classification that eager execution can expose.",
+      "unit": "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-page-boundary-385",
+        "s-k3-kda-decode-mtp",
+        "s-k3-mrv2-hybrid-cache"
+      ],
+      "boundary": "The 385-token minimal reproduction was on 0.26.0rc; the exact boundary may move with page size."
+    },
+    {
+      "claim_id": "k3-graph-capture-requires-static-workspace-and-declared-mutation",
+      "statement": "Piecewise/ACLGraph capture must bind static input and workspace buffers, move dynamic metadata to device before replay, keep AICPU metadata outside the graph when required, and exclude or declare state-mutating custom ops. Steady-state decode must not perform host D2H synchronization.",
+      "unit": "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
+      "strength": "reproduced_empirical",
+      "sources": [
+        "s-k3-conv-state-aclgraph",
+        "s-k3-kda-pack-address",
+        "s-k3-gqa-mamba-packing",
+        "s-k3-kda-decode-mtp"
+      ],
+      "boundary": "The archive establishes graph NaNs, address-lifetime risk, and cross-stream/H2D races; it does not provide a paired latency result for this workflow."
+    }
+  ],
+  "excluded_or_unverified": [
+    "The 1/sqrt(H) Hadamard scale and the fp16 65504 outlier threshold are numerical contract checks stated in the bring-up brief. The archive establishes QuaRot rotation/anti-rotation failure modes, not a measured threshold sweep, so claim k3-quarot-transform-must-be-orthonormal-and-fp32-accumulated is marked hypothesis.",
+    "The 128/4096/16384 prompt-length and batch 1/16 acceptance matrix is the gate specified for this distillation. The archive contains 128K/1K and 383/384/385/386 boundary runs, not that exact matrix, so the matrix claim is marked hypothesis.",
+    "No paired timing, throughput, or latency-improvement result is claimed by these units. The workflow stage 4 exit is convergence and absence of steady-state host D2H, not a speedup number.",
+    "The unequal-TP prefill/decode state split was audited from source; end-to-end multi-connector transfer and state precision were not completed in the archived task.",
+    "A complete DSpark hot-cache fix and a complete exact-boundary recurrent-state admission fix are not claimed. The archive records partial fixes, remaining failures, and explicit non-pass states."
+  ]
+}

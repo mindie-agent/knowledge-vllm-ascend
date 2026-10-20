@@ -33,7 +33,7 @@ provenance:
 revision: 2
 schema: mindie-graded-unit/1
 tier: L3
-title: 'Hermes workflow: 0-day Qwen3.5 GatedDeltaNet + Attention bring-up on vllm-ascend'
+title: '0-day Qwen3.5 GatedDeltaNet + Attention bring-up workflow on vllm-ascend'
 triggers:
   error_signatures:
   - torch_npu.npu_recurrent_gated_delta_rule does not support ssm_state inputs in
@@ -52,27 +52,27 @@ triggers:
   - speculative decode
   - ssm_state
   - conv_state
-  - Hermes
+  - workflow
   - reviewed_change
   - Ascend910_93
 ---
 
-# Hermes workflow: 0-day Qwen3.5 GatedDeltaNet + Attention bring-up
+# 0-day Qwen3.5 GatedDeltaNet + Attention bring-up workflow
 
 ## Trigger
 
-A hybrid checkpoint alternates GDN linear attention and full attention — `Qwen3.5-0.8B` is the reference case — on Ascend 910B/910_93. The goal is staged: load, prove eager prefill parity, adapt decode metadata, close a multi-step gate, then distill. Not performance tuning or acceptance.
+A hybrid checkpoint alternates GDN linear attention and full attention — `Qwen3.5-0.8B` is the reference case — on Ascend 910B/910_93. The goal is staged: load weights, verify eager prefill numerical parity, adapt decode metadata, verify multi-step stability, and then distill the verified findings.
 
 ## First discriminating observation
 
-Before any NPU run, check loader and patch binding: does the text config resolve, do the expected index keys load, does `AscendQwen3_5GatedDeltaNet._forward_core` actually replace the model core, and do `_C_ascend.causal_conv1d_fn` and Triton import? A miss here is not yet a model-parity experiment.
+Before any NPU run, check loader and patch binding: does the text config resolve, do the expected index keys load, does `AscendQwen3_5GatedDeltaNet._forward_core` actually replace the model core, and do `_C_ascend.causal_conv1d_fn` and Triton import? A failure here is an environment or loader issue rather than a model-parity bug.
 
 ## Branches
 
 - **A. Loader or import failure** (missing/unexpected key, skipped guard, missing op): fix the environment or revision first. Do not interpret later logits; exit after the loader gate is clean.
 - **B. Loader clean, eager prefill diverges:** compare per-layer hidden states after the GDN mixer and attention, `conv_state` after the causal conv, `ssm_state` before/after the chunk rule, then final logits against CPU `fp32`. A correct final logit with a wrong intermediate state is a failure.
 - **C. Prefill clean, decode diverges:** check the unpadded GDN `query_start_loc`, `num_actual_tokens`/padding sentinels, `num_accepted_tokens`/`spec_state_indices_tensor`, and single-token vs multi-token first-position equality. Fix the builder and re-run prefill.
-- **D. Prefill and decode clean but multi-step or SP unstable:** run repeated greedy decode and SP on/off with determinism and NaN checks; only then treat it as a Probe 3-level result for this model.
+- **D. Prefill and decode clean but multi-step or SP unstable:** run repeated greedy decode and SP on/off with determinism and NaN checks before treating multi-step inference as verified.
 
 ## Prerequisites
 

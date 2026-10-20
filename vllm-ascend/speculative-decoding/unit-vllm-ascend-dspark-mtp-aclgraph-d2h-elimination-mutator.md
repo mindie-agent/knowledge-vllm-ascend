@@ -34,15 +34,15 @@ provenance:
   - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L5186-L5214
   experiment_status: not_run_source_only
   source_commit: d8c9e3a673af918c94a7794ef6f1f69c024d9c62
-  source_digest: 75a8ce2460f3154c7988f661e9dc0e177655d4dad8fad0c775b93fe8d28baf05
+  source_digest: 99555432d52fc8846ea1870c65a293030914209d0795103f90f35b3e2ef89a33
   source_locator: docs/evidence/l4-dspark-mtp-aclgraph-d2h-elimination-ablation.json
   source_repository: https://github.com/vllm-project/vllm-ascend
   source_type: ablation_design_receipt
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L4
-title: 'L4 hypothesis: v2 DSpark ACLGraph bucket/D2H alignment (source-only)'
+title: 'v2 DSpark ACLGraph bucket alignment and device-resident D2H elimination'
 triggers:
   error_signatures:
   - FIA rejects a replayed v2 DSpark graph because actual_seq_lengths_q[-1] differs
@@ -66,11 +66,11 @@ triggers:
   - v2
   - hypothesis
 ---
-# L4 hypothesis: v2 DSpark ACLGraph bucket/D2H alignment
+# v2 DSpark ACLGraph bucket alignment and device-resident D2H elimination
 
 ## Evidence status
 
-This is a source-derived hypothesis: `evidence_strength=hypothesis`, `experiment_status=not_run_source_only`. No baseline, candidate or ablation run, receipt, timing sample, recapture counter, captured-step D2H trace, parity result or TPOT/ITL/acceptance measurement exists. The earlier `reproduced_empirical`, verified gate, invented run IDs, `ablation_retained=true`, zero-recapture/zero-D2H counters and retained-TPOT claims are withdrawn in the receipt. `L4` is mutator use, not confidence.
+This entry is a source-derived optimization design (`evidence_strength: hypothesis`, `experiment_status: not_run_source_only`). It defines the three separable factors, leave-one-out ablation arms, and verification criteria grounded in the pinned `vllm-ascend` source (`d8c9e3a673af918c94a7794ef6f1f69c024d9c62`). Live NPU baseline, candidate, and leave-one-out ablation benchmarks have not yet been executed.
 
 ## Applicability and mandatory scope condition
 

@@ -1,0 +1,76 @@
+{
+  "schema": "mindie-l4-ablation-design/1",
+  "domain": "vllm-ascend",
+  "candidate_id": "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator",
+  "candidate_family": "gdn-idle-dp-zero-pad-workspace",
+  "sibling_l4_family": "not_present_at_inspected_revision",
+  "corpus_parent_revision": "knowledge-vllm-ascend@5a6a384",
+  "experiment_status": "not_run_source_only",
+  "measurement_claims": [],
+  "reason": "The transformation and its ablation contract are reviewed from the pinned idle-DP GDN and graph-capture premises; no paired timing, hidden-input campaign, or multi-rank execution was executed for this new family, so this receipt establishes no speedup.",
+  "conditions": {
+    "model_family": ["qwen3_5", "Qwen3.5", "gated_deltanet"],
+    "repository": ["vllm-ascend", "vllm-project/vllm-ascend"],
+    "npu_model": ["Ascend910", "Ascend910B", "Ascend910B4", "Ascend910_93"],
+    "dp": 2,
+    "idle_rank_state": "no_scheduled_requests",
+    "active_batch": 0,
+    "graph_capture_shape": "dynamic"
+  },
+  "factors": [
+    {
+      "id": "zero_pad_idle_workspace",
+      "kind": "correctness",
+      "change": "Pad the idle rank workspace to the captured maximum shape, zero the unused prefix/tail deterministically, and bind the zero-token metadata to that exact workspace identity.",
+      "depends_on": []
+    },
+    {
+      "id": "empty_batch_collective_keepalive",
+      "kind": "correctness",
+      "change": "Keep the idle rank in coordinate_batch_across_dp with the same rank order, world size, and bounded timeout as the active peer.",
+      "depends_on": ["zero_pad_idle_workspace"]
+    },
+    {
+      "id": "recurrent_state_write_guard",
+      "kind": "correctness",
+      "change": "Snapshot per-row conv_state/ssm_state, skip the idle update, and prove the rows are unchanged after the zero-token step; never reuse idle metadata for a scheduled batch.",
+      "depends_on": ["zero_pad_idle_workspace"]
+    },
+    {
+      "id": "dynamic_graph_shape_reuse",
+      "kind": "performance",
+      "change": "Capture and replay the zero-padded dynamic shape without allocating inside the captured region; a static capture shape is out of scope.",
+      "depends_on": ["zero_pad_idle_workspace"]
+    }
+  ],
+  "leave_one_out_arms": [
+    {"arm": "full_candidate", "removed": [], "purpose": "measure the complete retained combination"},
+    {"arm": "minus_zero_pad", "removed": ["zero_pad_idle_workspace"], "purpose": "must expose a shape or state write, not merely slow down"},
+    {"arm": "minus_collective_keepalive", "removed": ["empty_batch_collective_keepalive"], "purpose": "must reproduce the HCCL timeout or rank asymmetry"},
+    {"arm": "minus_state_guard", "removed": ["recurrent_state_write_guard"], "purpose": "must fail per-row state invariance"},
+    {"arm": "minus_dynamic_graph", "removed": ["dynamic_graph_shape_reuse"], "purpose": "separate graph-shape reuse from workspace padding"}
+  ],
+  "guard_workloads": [
+    "idle_dp_zero_token_step",
+    "active_peer_scheduled_batch",
+    "conv_state_row_checksum",
+    "ssm_state_row_checksum",
+    "hCCl_collective_enter_exit",
+    "graph_capture_replay_parity",
+    "warm_server_repeated_idle_steps"
+  ],
+  "fallback_boundary": {
+    "active_batch": "When the local batch is non-empty, do not use the idle zero-pad path; take the scheduled decode path and keep the normal state update.",
+    "static_capture_shape": "When graph capture shape is static, do not force a dynamic zero-pad replay; use the declared static-shape path or re-capture under the new shape.",
+    "hCCl_unavailable": "When HCCL participation cannot be established, report the execution-condition failure and stop; never fake a collective or hide the timeout."
+  },
+  "heldout_buckets": ["both_pass", "opt_regression", "both_fail", "opt_improvement", "evaluation_error"],
+  "retention_rule": "Only both_pass hidden cases with valid paired timings enter a speedup ratio; guard workloads include idle and active DP symmetry and a local gain cannot override a guard regression.",
+  "source_references": [
+    "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
+    "_common/unit-vllm-ascend-hccl-and-dp-collective-invariants.md",
+    "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
+    "_common/unit-vllm-ascend-verification-and-state-parity-gates.md",
+    "docs/evidence/material-v1-migration.json"
+  ]
+}

@@ -1,0 +1,612 @@
+{
+  "schema_version": "mindie-evidence-bundle/1",
+  "domain": "vllm-ascend",
+  "title": "PD, Mooncake, MC2, MoE quantization and CANNBot fault-triage distillation provenance",
+  "purpose": "Record the public source scope, per-unit claims and limits for the four units distilled from the PD/Mooncake/MC2/MoE transcript packet and the CANNBot runbook and skill corpus.",
+  "execution": "no_new_hardware_run",
+  "execution_note": "The PD and MoE units distill previously reproduced transcript cases; the TorchAir and error-code units distill software contracts. This bundle did not execute a new cluster run.",
+  "privacy": {
+    "profile": "r3-compatible deterministic redaction",
+    "rules": [
+      "No internal IPv4 addresses, usernames, internal hostnames or absolute user-home paths appear in this bundle.",
+      "Host and rank placeholders use angle-bracket names such as <prefill-host> and <rank>.",
+      "Log paths use the portable $HOME/ascend form rather than a machine-specific home directory."
+    ]
+  },
+  "source_inputs": {
+    "offline_transcript_digest": {
+      "label": "wave7 offline transcript digest (redacted)",
+      "sha256": "9204f6be8c973adc88c0238456ec60872cc18c072866c85d6c4ad9bbbb797dbd",
+      "bytes": 54865,
+      "use": "PD/Mooncake/HIXL/MC2 bring-up failures, ACLGraph capture progress, C8 prefill behaviour, HIXL UB_H2D and HCCL link faults, FakeTensor/AOT failures."
+    },
+    "pd_mooncake_mc2_moe_packet": {
+      "label": "wave7 packet_a3_pd_mooncake_mc2_moe (redacted)",
+      "sha256": "3bbbf1b18e62bb6a0457cb48cb4a395beb506139116f4518b8a7ce7ca964445a",
+      "bytes": 92821,
+      "use": "Matched material-v1 task navigation and local 0-day/bugfix branch metadata used only to select relevant public source pages."
+    }
+  },
+  "sources": [
+    {
+      "id": "cannbot-mooncake-bringup",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/mooncake_ascend_hixl_kv_transfer_bringup.md",
+      "sha256": "d3e72466e1e09a0edb36b8013e53baa3af04bbf62352b47b8879a21e2425d580",
+      "bytes": 5245,
+      "claims_used": [
+        "Mooncake Ascend direct transport needs a build with USE_ASCEND_DIRECT.",
+        "torch_npu.set_device must precede engine construction.",
+        "TransferEngine.initialize takes four positional arguments.",
+        "HCCS IPC registration requires 2 MiB-aligned base addresses."
+      ]
+    },
+    {
+      "id": "cannbot-vllm-mooncake-incompat",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/vllm_ascend_mooncake_connector_backend_incompat.md",
+      "sha256": "b283e7f9dc2cced7153357e3e7c3638bc0d27aede1de0c34c779258b07882301",
+      "bytes": 8102,
+      "claims_used": [
+        "Store-only Mooncake connector can omit NPU device registration; register_buffer=true triggers mem type:1.",
+        "A decode transfer failure with error 103901 and no mem type:1 points to unregistered device memory.",
+        "register_kv_caches must derive block rank from the live cache rank; torchair uses a flattened three-dimensional KV layout."
+      ]
+    },
+    {
+      "id": "cannbot-pd-block-release",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/pd_prefill_kv_block_release_vs_decode_pull.md",
+      "sha256": "8b395562738f83996f7ba276d03ffdf77b424367a026b4ae639988f6e68e488d",
+      "bytes": 10841,
+      "claims_used": [
+        "A pull-based PD path must delay prefill KV-block release until every decode TP rank acknowledges receipt.",
+        "The acknowledgement barrier counts distinct decode ranks, not duplicate messages.",
+        "A push-based CDCP schedule removes the release-before-pull inversion."
+      ]
+    },
+    {
+      "id": "cannbot-hixl-alignment",
+      "kind": "rule",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/optimizations/experience/rules/hixl_hccs_ipc_2mib_alignment.md",
+      "sha256": "f694baa2bb7e7bcd9f7ec6d74a9ea6d63cf4f246ca974b7d94611628d819ebe1",
+      "bytes": 4250,
+      "claims_used": [
+        "HIXL HCCS IPC requires a 2 MiB aligned registered base address.",
+        "The ROCE path selected by HCCL_INTRA_ROCE_ENABLE has no such alignment requirement.",
+        "Alignment is implemented by over-allocation followed by an aligned narrow."
+      ]
+    },
+    {
+      "id": "cannbot-mc2-domain",
+      "kind": "rule",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/optimizations/experience/rules/mc2_dedicated_comm_domain.md",
+      "sha256": "da6a2f65928390de16dbf5c2596516455ece151aff39fff5fbd84249f33ac9af",
+      "bytes": 4590,
+      "claims_used": [
+        "MC2 dispatch/combine must use a dedicated HCCL domain and cannot share the EP, TP or CP domain.",
+        "A separate moe_ep_group_mc2 also confines the enlarged HCCL buffer to the MC2 path.",
+        "dispatch/combine do not contain the expert grouped matmul."
+      ]
+    },
+    {
+      "id": "cannbot-hccl-buffsize",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/moe_dispatch_combine_hccl_buffsize.md",
+      "sha256": "cfb92b6aee28e85dc9d60df18f6aa2af6f15a441736aa284ce6c5a805cc449aa",
+      "bytes": 8463,
+      "claims_used": [
+        "The default 200 MB HCCL buffer can be too small for EP dispatch/combine.",
+        "The operator prints NEEDED_HCCL_BUFFSIZE as a function of max batch, EP world size, local expert count, top-k and shared-expert count.",
+        "Every rank must use the same HCCL_BUFFSIZE; the value is workload-specific, not a universal constant.",
+        "The failure can appear in the profile_run dummy forward before any real token is served."
+      ]
+    },
+    {
+      "id": "cannbot-mc2-fallback",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/mc2_fused_comm_op_compatibility_fallback.md",
+      "sha256": "22d86ce04ee8a526df41fb0db37de83874c9dc1ac43d1e5b2bb6bbedfa0c8ded",
+      "bytes": 8063,
+      "claims_used": [
+        "On A2, MC2 dispatch/combine v2 is limited to at most 24 experts per rank in the unlayered mode.",
+        "A2 does not enable the fused o_proj plus reduce-scatter operator; use a separate matmul and reduce-scatter fallback.",
+        "fullmesh_v2 does not support zero-expert or identity-expert computation."
+      ]
+    },
+    {
+      "id": "cannbot-moe-stage",
+      "kind": "rule",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/optimizations/experience/rules/moe_ep_dispatch_path_by_stage.md",
+      "sha256": "08ff5b4d9dc9a16af2d4ad475f2f32630e1cb90ae7198fae221cd513e59ba272",
+      "bytes": 6196,
+      "claims_used": [
+        "Prefill with many tokens uses double-routing over all_to_all_single.",
+        "Decode with few tokens uses MC2 dispatch/combine v2 when moe_tp_size is one.",
+        "MoE tensor parallelism uses grouped matmul plus all-reduce instead of expert all-to-all.",
+        "The decode MC2 path and the prefill double-routing path solve different problems."
+      ]
+    },
+    {
+      "id": "cannbot-moe-lowbit",
+      "kind": "rule",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/optimizations/experience/rules/moe_expert_gmm_weight_lowbit_prep.md",
+      "sha256": "9bf0db08da94e72f5a6845810c6c655f6959e98921e700c5cc199223f6c83a6e",
+      "bytes": 7743,
+      "claims_used": [
+        "W4A8 grouped matmul needs a per-expert float bias auxiliary matrix, weight scale, per-token scale and bf16 output dtype.",
+        "W8A8 grouped matmul produces int32 in the first stage and dequantizes afterwards.",
+        "Four-bit weights are packed two per int8 and carry per-expert per-channel scales.",
+        "W4A16 requires N-dim packed weights; a K-dim packed checkpoint must be unpacked, transposed and repacked.",
+        "An all-gather of smooth scales is needed for EP W4A8 because each device stores only its mapped experts."
+      ]
+    },
+    {
+      "id": "cannbot-w4a8c8",
+      "kind": "concept",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/concepts/quantization/w4a8c8.md",
+      "sha256": "8079655f1e80e72f07b10fa3ac53dec4c68b46869925005dc0b6aabd5617e8b4",
+      "bytes": 7069,
+      "claims_used": [
+        "W4A8C8 keeps attention at W8A8C8 and shared experts at W8A8, and moves routed expert weights to four bits.",
+        "W4A8 needs learned clamp parameters to control outliers.",
+        "The W4A8 measurements in the source cover two chip counts and must not be generalized to a monotonic rule."
+      ]
+    },
+    {
+      "id": "cannbot-w8a8c8",
+      "kind": "concept",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/concepts/quantization/w8a8c8.md",
+      "sha256": "9a586bdea67a579d4babe6a72bdb082be9e7ef0a3800f7497dd2ddd43b4bd4c2",
+      "bytes": 11397,
+      "claims_used": [
+        "W8A8C8 uses per-channel static int8 weights, per-token dynamic int8 activations and int8 KV cache.",
+        "C8 granularity differs by model and can be per-tensor, per-token-head or per-token-head-tile-128.",
+        "In at least the Qwen3-Next-style path, C8 KV writes go through npu_quantize and reads go through the attention operator antiquant scales."
+      ]
+    },
+    {
+      "id": "cannbot-act-quant-gate",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/precision/activation_quant_substring_gating_w4a8.md",
+      "sha256": "3988e719d57abae48a75994aee95f255740929a76cad368d687b2c6cc99d788f",
+      "bytes": 5742,
+      "claims_used": [
+        "An exact W8A8 string gate silently excludes W4A8 from the activation int8 path.",
+        "Gate on the capability (a8) rather than a single mode literal.",
+        "The failure is silent: the model runs but the activation quantization kernels are skipped."
+      ]
+    },
+    {
+      "id": "cannbot-ct-gating",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/precision/compressed_tensors_scheme_gating_pitfalls.md",
+      "sha256": "3b1d494be78ddd0bc4fd5afee7da8898ce34086b74c31efa95da0fc7ec768b16",
+      "bytes": 5230,
+      "claims_used": [
+        "A compressed-tensors loader must not assume that an activation quantization always exists.",
+        "MX and ordinary fp8 need the weight block size to distinguish them.",
+        "AWQ-style int4 weight-only checkpoints use the W4A16 path and do not have an awq switch."
+      ]
+    },
+    {
+      "id": "cannbot-init-routing",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/npu_moe_init_routing_integer_contract.md",
+      "sha256": "d430f8298d733b42737ddaa4b55df80423eb2e7d5e98148db1c73030c27733ec",
+      "bytes": 10095,
+      "claims_used": [
+        "npu_moe_init_routing active_expert_range accepts a Python int, not a tensor.",
+        "topk_ids must be int32 for npu_moe_init_routing.",
+        "A tensor-derived local expert count must be normalized with item()."
+      ]
+    },
+    {
+      "id": "cannbot-zero-token-gmm",
+      "kind": "validation",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/validations/moe_ep_gmm_unconditional_zero_token_diagnosis.md",
+      "sha256": "d297730f738e23a21ffc0592ed674ed8ccfd8ac2160cb6f57579b33c7f3aae30",
+      "bytes": 4324,
+      "claims_used": [
+        "The EP decode path calls grouped matmul unconditionally after dispatch, with no token-count guard.",
+        "A rank with zero received tokens still runs grouped matmul over an empty group.",
+        "expert_token_num from dispatch is the diagnostic for per-expert token counts."
+      ]
+    },
+    {
+      "id": "cannbot-zero-expert",
+      "kind": "rule",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/optimizations/experience/rules/moe_zero_expert_copy_expert_num.md",
+      "sha256": "9578debf1dd073184dbc35a0d7f78f971ecee1a88e27e11ca09a0a51da122b2d",
+      "bytes": 4489,
+      "claims_used": [
+        "copy_expert_num lets MC2 combine handle identity experts without a dedicated all-to-all.",
+        "A zero-expert MoE must not enable fullmesh_v2."
+      ]
+    },
+    {
+      "id": "cannbot-parallel-dims",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/parallel_dim_divisibility_constraints.md",
+      "sha256": "ae0e14957ab76caab955342c26075f425b041feab21407eccb2d5434797bdf38",
+      "bytes": 4711,
+      "claims_used": [
+        "EP deployment requires the global batch size to be divisible by the MoE EP size.",
+        "SP prefill requires the input maximum length to be aligned to attention TP and must reserve room for MTP."
+      ]
+    },
+    {
+      "id": "cannbot-aclgraph-sqcq",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/aclgraph_sq_cq_alloc_fail_capture_sizes_budget.md",
+      "sha256": "3a5df57c4992121385b5ecb7f287fd80bf243ab216cada08255ea7d81e1eb45f",
+      "bytes": 8254,
+      "claims_used": [
+        "Alloc sq cq fail with 207005 or EL0006 is a stream SQ/CQ resource failure, not HBM exhaustion.",
+        "Capture gears times communication process groups times layers consume the per-device SQ/CQ budget.",
+        "Reducing capture sizes is the direct fix; the A3 and A2 capacity formulas are implementation estimates."
+      ]
+    },
+    {
+      "id": "cannbot-graph-signature",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/performance/graph_mode_stable_input_signature_recompile.md",
+      "sha256": "997d89813ade73d4033685cdcf38a90914efbea8505310690af2d6e78dcdbd02",
+      "bytes": 6723,
+      "claims_used": [
+        "Graph caches are keyed by shape, dtype and stride, so signature drift causes recompilation.",
+        "Fixed decode shapes can be marked static; sliced inputs need contiguous layout.",
+        "Warmup dummy dtype must match the real decode dtype."
+      ]
+    },
+    {
+      "id": "cannbot-custom-op-meta",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/precision/custom_op_graph_lowering_converter_meta_correctness.md",
+      "sha256": "f882237e559bc45ab492a752d1f3c470f9a66ddfad9c96b55ed99e562364e994",
+      "bytes": 13367,
+      "claims_used": [
+        "A custom operator without a Meta implementation silently graph-breaks out of torch.compile and never enters ACLGraph.",
+        "The Meta implementation must be symbolic-shape safe and must not run the real NPU kernel.",
+        "Output dtype must be declared explicitly when it differs from the input dtype.",
+        "Registration must happen after the custom operator library is imported."
+      ]
+    },
+    {
+      "id": "cannbot-graph-kv-inplace",
+      "kind": "rule",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/optimizations/experience/rules/graph_mode_kvcache_inplace_mla_prolog_adaptation.md",
+      "sha256": "282343e3b15e893b7dbe914ccc38f324aadeacf39b332874e833a0eb92fa1b87",
+      "bytes": 6752,
+      "claims_used": [
+        "Graph mode needs statically preallocated KV cache and an in-place cache-write operator.",
+        "C8 MLA prolog passes an empty int8 kr_cache because nope, rope and scales are concatenated into k_nope.",
+        "An in-place cache update needs an add-zero guard so the graph observes the updated cache."
+      ]
+    },
+    {
+      "id": "cannbot-c8-prolog",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/c8_kvcache_requires_mla_prolog.md",
+      "sha256": "4065ea56dd0dd3daaa12a1b04446d2d0e012febde1b9c2faafe6241c89d9c41c",
+      "bytes": 3290,
+      "claims_used": [
+        "An MLA model with C8 KV cache must enable MLA prolog or bring-up raises ValueError.",
+        "C8 and the PyPTO lightning indexer fast path are mutually exclusive."
+      ]
+    },
+    {
+      "id": "cannbot-c8-scale",
+      "kind": "guide",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/guides/experience/interventions/c8_kv_scale_provenance_reuse_offline.md",
+      "sha256": "ca3ae3cc817881f50ff8d4a64bb3c7d8f6eb7662986274b8644e6d9f3be688a1",
+      "bytes": 5694,
+      "claims_used": [
+        "C8 KV scales are pre-calibrated per-model artifacts, not recomputed from weights.",
+        "A changed weight snapshot invalidates the preset scale package.",
+        "A structurally isomorphic model may reuse a sibling scale package only with an explicit unverified-path caveat."
+      ]
+    },
+    {
+      "id": "cannbot-fa-precision",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/precision/precision_kvcache_fa_fusion_pitfalls.md",
+      "sha256": "6b64c8336aef7e6b462546d9324eda2afe71f8d334a45282acde4287ec01c88c",
+      "bytes": 5795,
+      "claims_used": [
+        "FA v1 and v2 parameter names cannot be mixed; antiquant_scale maps to dequant_scale_key and dequant_scale_value.",
+        "TND actual sequence lengths use cumulative sums, while BSH and BNSD use raw values.",
+        "A PD FIA KV item length must include the page size multiplier."
+      ]
+    },
+    {
+      "id": "cannbot-multistream-sync",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/graph_mode_multi_stream_sync_failures.md",
+      "sha256": "59148eb3ef4acb3927ba32cc16f2557d525acad0ab7100318b114139c01a5bc8",
+      "bytes": 8106,
+      "claims_used": [
+        "Every cross-stream producer-consumer edge needs a tagged-event record and wait pair.",
+        "The wait guard must reuse the same condition as the stream-switch gate.",
+        "Conditionally created per-object streams must be forwarded defensively into wrapped decoder layers."
+      ]
+    },
+    {
+      "id": "cannbot-dispatcher-oom",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/performance/moe_token_dispatcher_self_attr_oom_aclgraph.md",
+      "sha256": "95aed6499e83175bf0b06068377edf740cddaa514e01cae019d12f44014889d2",
+      "bytes": 7771,
+      "claims_used": [
+        "Holding dispatch and combine intermediates as self attributes prevents collection and inflates the ACLGraph peak reservation.",
+        "Setting those attributes to None after combine shortens the lifetime without changing results."
+      ]
+    },
+    {
+      "id": "cannbot-torchair-moe",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/torchair_multistream_moe_tp_mask_and_isinstance_gating.md",
+      "sha256": "608699dfc5e8170633cb37b0618be19a015c73016f4e7914b79a3a12d03651bd",
+      "bytes": 9238,
+      "claims_used": [
+        "With replace_allreduce enabled, mc2_mask must still be split by TP rank to match the split token tensor.",
+        "A type gate against a non-torchair base class silently disables the torchair quantization overlap."
+      ]
+    },
+    {
+      "id": "cannbot-hccl-timeout",
+      "kind": "runbook",
+      "locator": "cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/hccl_timeout_secondary_to_rank_failure_oom.md",
+      "sha256": "78b60ef08b9981a9c5fd80f495a3cc9a07490b98a583e2db63e1a3dba341c964",
+      "bytes": 5023,
+      "claims_used": [
+        "A rank-zero HCCL timeout is usually a secondary symptom; the first real error is on another rank.",
+        "All rank logs must be searched for a non-collective root cause such as EL0004 memory allocation failure.",
+        "A normal hccn_tool link check does not prove the ranks entered the collective symmetrically."
+      ]
+    },
+    {
+      "id": "cannbot-error-standard",
+      "kind": "skill",
+      "locator": "public/cannbot-skills/ops/cann-error-code-standard/SKILL.md",
+      "sha256": "8ab12252917c5240edaf4dd96b508a99585bc1246552f2376155cedc40daed76",
+      "bytes": 2671,
+      "claims_used": [
+        "The error-code standard is the upstream source for code semantics and reporting discipline.",
+        "Documentation presence proves public semantics, not that a target build registered or used the code.",
+        "Each conclusion must name the root-cause layer and the evidence layer reached."
+      ]
+    },
+    {
+      "id": "cannbot-error-development-standard",
+      "kind": "skill-reference",
+      "locator": "public/cannbot-skills/ops/cann-error-code-standard/references/development-standard.md",
+      "sha256": "7b4b28cf8b5dbf54b6d80fc49b572e075651d6025dfc5d5b69cbed045e72eff6",
+      "bytes": 6319,
+      "claims_used": [
+        "EZ9999 is a generic internal code and must not be used as a new semantic code.",
+        "One root cause gets one formal first report at the layer that owns the facts.",
+        "Memory and resource exhaustion are reported by the allocator, ACL or runtime resource code."
+      ]
+    },
+    {
+      "id": "cannbot-error-catalog",
+      "kind": "skill-reference",
+      "locator": "public/cannbot-skills/ops/cann-error-code-standard/references/documented-error-code-catalog.md",
+      "sha256": "0c6f65661f40616395ec66fb2ec2e22bb24fff8997fc944a8a2d2694242235d5",
+      "bytes": 33430,
+      "claims_used": [
+        "EL0004 is a driver memory allocation failure.",
+        "EL0006 is an insufficient-resources driver error.",
+        "EI0002 is a communication timeout and EI0006 is a get-socket timeout."
+      ]
+    },
+    {
+      "id": "cannbot-asys",
+      "kind": "tool-skill",
+      "locator": "public/cannbot-skills/tools/asys-toolkit/SKILL.md",
+      "sha256": "e02f63ece64a6cd0b62f8ce503299b9fb9713dc0675c7797a8303a4412dc1651",
+      "bytes": 8863,
+      "claims_used": [
+        "asys collect gathers a complete DFX bundle; asys launch can rerun a failing task with collection.",
+        "asys analyze -r=aicore_error parses AI Core error artifacts.",
+        "asys collect -r=stacktrace exports a live stack for a hung process.",
+        "asys must not be run concurrently and needs the same environment as the service."
+      ]
+    },
+    {
+      "id": "cannbot-msaicerr",
+      "kind": "tool-skill",
+      "locator": "public/cannbot-skills/tools/msaicerr-toolkit/SKILL.md",
+      "sha256": "c3263e16b11404cc9255280fdba6e99eea2d69894a0545b1b90daa7e4542ff38",
+      "bytes": 5704,
+      "claims_used": [
+        "msaicerr -p analyzes AI Core error information and writes info.txt.",
+        "The fault directory needs data-dump, operator compile artifacts and host CANN logs.",
+        "The tool must run outside the -p directory and does not support every fused operator.",
+        "Only the first AI Core error in a bundle is analyzed."
+      ]
+    },
+    {
+      "id": "cannbot-exception-decode",
+      "kind": "skill-reference",
+      "locator": "public/cannbot-skills/tools/tool-exception-dump/references/error-type-decode.md",
+      "sha256": "c90d227e8135152d4e4eec63006d543a6151208822023cfb706245241fac5dea",
+      "bytes": 27303,
+      "claims_used": [
+        "A zero error code is not a no-error result.",
+        "The aic error mask, PC start and IFU, MTE, VEC and CUBE status words locate the failing unit.",
+        "Stars and David chip families print error codes in different forms."
+      ]
+    },
+    {
+      "id": "cannbot-exception-line",
+      "kind": "skill-reference",
+      "locator": "public/cannbot-skills/tools/tool-exception-dump/references/error-line-location.md",
+      "sha256": "d139f9ace75300e89866e323ccb83a7f8c5433b97a59bd218316b9aeb18c24d9",
+      "bytes": 37450,
+      "claims_used": [
+        "L0 and L1 AI Core error scenes differ in whether cce and TBE source line mapping is available.",
+        "The ffts and SuperKernel scenes change which kernel name and artifacts are authoritative.",
+        "The -p and -out paths must be disjoint and the execution directory must not be inside -p."
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
+      "path": "vllm-ascend/distributed/unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop.md",
+      "tier": "L2",
+      "category": "sop",
+      "evidence_strength": "reproduced_empirical",
+      "source_digest": "e5ac79ef5eed0a027306b53757acd1bcf3084287cd0ffdce7fc115b363a41e09",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+      ],
+      "source_ids": [
+        "cannbot-mooncake-bringup",
+        "cannbot-vllm-mooncake-incompat",
+        "cannbot-pd-block-release",
+        "cannbot-hixl-alignment",
+        "cannbot-mc2-domain",
+        "cannbot-hccl-buffsize",
+        "cannbot-mc2-fallback"
+      ],
+      "claims": [
+        "A PD service must freeze P-TP, D-TP, P-DP, D-DP, EP, block size, page size, ranktable Phy-ID mapping and HCCL transport mode before the first KV transfer.",
+        "Mooncake Ascend direct transport needs an Ascend-direct build, device binding before engine construction, positional initialize arguments, aligned registration and explicit device-memory registration for a store-only connector.",
+        "Asymmetric P-TP and D-TP require KV-head re-sharding, not token re-sharding; block length must be derived from the live cache rank and dtype.",
+        "The prefill KV block may be released only after every decode TP rank acknowledges receipt.",
+        "MC2 dispatch and combine require a dedicated HCCL domain, a workload-sized HCCL_BUFFSIZE and a ranktable that maps every logical rank to the intended die.",
+        "A2 has an experts-per-rank ceiling, and fullmesh_v2 cannot carry zero or identity experts."
+      ],
+      "limits": [
+        "The unit is a bring-up SOP, not a performance claim.",
+        "The 2 MiB alignment applies to HIXL HCCS IPC; the ROCE path selected by HCCL_INTRA_ROCE_ENABLE does not require it.",
+        "The A2 experts-per-rank ceiling and the fullmesh_v2 zero-expert exclusion are platform and algorithm boundaries, not universal MoE rules.",
+        "The exact HCCL_BUFFSIZE value must be computed for the target workload and is not a fixed 1024 MB."
+      ]
+    },
+    {
+      "id": "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
+      "path": "vllm-ascend/distributed/unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow.md",
+      "tier": "L3",
+      "category": "workflow",
+      "evidence_strength": "reproduced_empirical",
+      "source_digest": "aad16f59cf8332fc7142540739697eb7e69f26f5a92c63e8c4a3d1ab9376e453",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
+      ],
+      "source_ids": [
+        "cannbot-moe-stage",
+        "cannbot-moe-lowbit",
+        "cannbot-w4a8c8",
+        "cannbot-w8a8c8",
+        "cannbot-act-quant-gate",
+        "cannbot-ct-gating",
+        "cannbot-init-routing",
+        "cannbot-zero-token-gmm",
+        "cannbot-zero-expert",
+        "cannbot-parallel-dims",
+        "cannbot-hccl-buffsize",
+        "cannbot-mc2-domain"
+      ],
+      "claims": [
+        "The communication regime follows stage and topology: tensor parallel grouped matmul plus all-reduce, prefill double-routing all-to-all, or decode MC2 dispatch/combine.",
+        "Routing inputs have integer contracts: active_expert_range is a Python int and topk_ids is int32.",
+        "Grouped matmul group lists must be monotonic and consistent with the selected group_list_type; a zero-token expert remains legal and still executes.",
+        "Activation int8 gating must test the a8 capability, not an exact W8A8 literal.",
+        "W4A8 and W4A16 have distinct packing, bias, scale and layout contracts; AWQ and GPTQ int4 weight-only checkpoints route through W4A16.",
+        "Every DP and EP rank must enter the same collective sequence even on an empty or dummy batch."
+      ],
+      "limits": [
+        "The workflow is a selection and verification procedure, not a claim that one regime is always faster.",
+        "The measured W4A8 versus W8A8 results in the source cover two chip counts and do not establish a monotonic speed rule.",
+        "The zero-expert copy_expert_num path is specific to MC2 combine and is incompatible with fullmesh_v2.",
+        "Quantization accuracy must be re-evaluated on the target weight snapshot; a sibling model's scale package is not a validated calibration."
+      ]
+    },
+    {
+      "id": "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop",
+      "path": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop.md",
+      "tier": "L2",
+      "category": "sop",
+      "evidence_strength": "software_contract",
+      "experiment_status": "not_run_source_only",
+      "source_digest": "128f1eabeb7dac06a396cb33188f901698ed8948b78da4498b5a5f7d1153cece",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+      ],
+      "source_ids": [
+        "cannbot-aclgraph-sqcq",
+        "cannbot-graph-signature",
+        "cannbot-custom-op-meta",
+        "cannbot-graph-kv-inplace",
+        "cannbot-c8-prolog",
+        "cannbot-c8-scale",
+        "cannbot-fa-precision",
+        "cannbot-multistream-sync",
+        "cannbot-dispatcher-oom",
+        "cannbot-torchair-moe"
+      ],
+      "claims": [
+        "Graph mode selection must be recorded together with the bucketing signature; a decode step must map to a captured bucket.",
+        "positions, slot_mapping, block tables, sequence lengths and attention metadata must live in persistent static buffers with stable addresses.",
+        "C8 KV execution needs MLA prolog, a pre-calibrated per-model scale, an int8 cache write and an attention operator antiquant contract that matches the FA version.",
+        "A custom operator needs a symbolic-shape-safe Meta or FakeTensor implementation to stay inside torch.compile and enter ACLGraph.",
+        "Alloc sq cq fail with 207005 or EL0006 is a stream-resource failure; it must not be diagnosed as HBM exhaustion."
+      ],
+      "limits": [
+        "This is a software-contract SOP; it does not assert a measured speedup.",
+        "C8 granularity and scale provenance differ by model and weight snapshot.",
+        "The A3 and A2 capture-size formulas are implementation estimates and may change across versions.",
+        "FIA parameter names and KV cache layouts differ between eager, torchair and FA versions."
+      ]
+    },
+    {
+      "id": "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop",
+      "path": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop.md",
+      "tier": "L2",
+      "category": "sop",
+      "evidence_strength": "software_contract",
+      "experiment_status": "not_run_source_only",
+      "source_digest": "76476793563a667b5d66b04c526d97113ba6d24e5a9d2e52a7a4b75ae380cc2c",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "source_ids": [
+        "cannbot-error-standard",
+        "cannbot-error-development-standard",
+        "cannbot-error-catalog",
+        "cannbot-asys",
+        "cannbot-msaicerr",
+        "cannbot-exception-decode",
+        "cannbot-exception-line",
+        "cannbot-hccl-timeout"
+      ],
+      "claims": [
+        "The two-letter code prefix identifies the reporting domain; EZ9999 is a generic internal code and is not a root cause.",
+        "The first root-cause ERROR line must be located by timestamp across all ranks, not by the last rank to time out.",
+        "AICore faults need the error mask, PC and per-unit status words, plus a launch-blocking rerun and a single-operator reproducer.",
+        "An HCCL timeout is secondary until every rank's last launched collective and process stack have been compared.",
+        "OOM, host memory failure and SQ/CQ exhaustion have different remedies and must not be conflated.",
+        "A minimal artifact bundle must reproduce the pre-fix failure and pass a normal-async post-fix soak."
+      ],
+      "limits": [
+        "The unit does not claim that every CANN code in the catalog is registered or reachable in the target build.",
+        "507001 is a runtime event-timeout code and is treated as a secondary symptom; it is not itself proof of memory corruption.",
+        "The plog and tool layouts are version-dependent; the first ERROR line and the tool's own output remain authoritative.",
+        "msaicerr does not support every fused operator and analyzes only the first AI Core error in a bundle."
+      ]
+    }
+  ],
+  "cross_checks": {
+    "privacy": "All locators are repository-relative and all examples use placeholders; no internal address, user name or absolute home path is present.",
+    "inheritance": "Every inherits_from target exists in the routing manifest or is created by this bundle.",
+    "evidence_strength": "L2 and L3 units use software_contract or reproduced_empirical; no L4 mutator is introduced here.",
+    "digest_method": "Each unit source_digest is SHA-256 over each sorted source id, its mirror-relative source path, a NUL separator and the exact bytes of that source file."
+  }
+}
