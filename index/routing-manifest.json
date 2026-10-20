@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 8.861541980877519,
+  "build_elapsed_ms": 15.077791991643608,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -11,6 +11,10 @@
     ],
     "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
@@ -67,6 +71,11 @@
       "unit-vllm-ascend-hccl-and-dp-collective-invariants",
       "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
     ],
+    "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+    ],
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -81,6 +90,10 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
     "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates",
@@ -88,11 +101,12 @@
     ],
     "unit-vllm-ascend-verification-and-state-parity-gates": []
   },
-  "generation": "db2dce1d9f069ee883e609a0f65b9a273e3fc3442029951c4465e6f2caf7b3ea",
+  "generation": "1b97a9d36fa2682c2eaba8a5cf5167243864e53d6df06684da35cabd5c542f51",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
     "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop.md",
+    "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow": "vllm-ascend/performance/quantization-breakdown/unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow.md",
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
     "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": "vllm-ascend/speculative-decoding/unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator.md",
     "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms.md",
@@ -106,17 +120,19 @@
     "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow.md",
     "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop.md",
     "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow": "vllm-ascend/distributed/unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow.md",
+    "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow": "vllm-ascend/performance/multi-stream-prefetch/unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow.md",
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": "vllm-ascend/distributed/unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop.md",
     "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow": "vllm-ascend/performance/prefill-decode/unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow.md",
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
+    "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop": "vllm-ascend/performance/superkernel-kvcache/unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop.md",
     "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop.md",
     "unit-vllm-ascend-verification-and-state-parity-gates": "_common/unit-vllm-ascend-verification-and-state-parity-gates.md"
   },
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 22,
+  "unit_count": 25,
   "units": [
     {
       "category": "workflow",
@@ -328,6 +344,84 @@
           "HCCL timeout",
           "OOM",
           "memory_summary"
+        ]
+      }
+    },
+    {
+      "category": "workflow",
+      "conditions": {
+        "analysis_scope": [
+          "compressed_tensors_quantization",
+          "stream_sample_perf_breakdown"
+        ],
+        "npu_model": [
+          "Ascend910B",
+          "Ascend910B2",
+          "Ascend910B3",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "quant_method": [
+          "compressed-tensors",
+          "W8A8",
+          "W8A8C8",
+          "W4A8C8"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "cann/cann-recipes-infer"
+        ]
+      },
+      "domain_path": "vllm-ascend/performance/quantization-breakdown",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/performance/quantization-breakdown/unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-quantization/SKILL.md#L108-L540",
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-perf-breakdown/SKILL.md#L18-L366",
+          "https://gitcode.com/cann/cannbot/blob/d0f8c40ebc208fa17323781c89e4ec6ea16e4c52/plugins-official/model-infer-optimize/workflows/optimize-workflow.md#L122-L158",
+          "https://gitcode.com/cann/cannbot/blob/d0f8c40ebc208fa17323781c89e4ec6ea16e4c52/plugins-official/model-infer-optimize/workflows/references/decision-rules.md#L62-L113"
+        ],
+        "experiment_status": "not_run_source_only",
+        "source_digest": "661c95a4fa72e27243ed0f614b91476b240c223ae2092e410f93fbea6acb6ebe",
+        "source_locator": "cann/cannbot-skills:f305e200aa4b1e1fed73cd21ff1f083b8df25a1e:model/model-infer-quantization/SKILL.md",
+        "source_type": "cannbot_skill_and_source_contract",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L3",
+      "title": "Compressed-tensors quantization admission, post-load fusion recovery, and stream-sample performance breakdown workflow",
+      "token_estimate": 1535,
+      "triggers": {
+        "error_signatures": [
+          "quantized checkpoint splits fused gate_up_proj or qkv_proj into separate small matmuls and regresses decode latency",
+          "Linear module absent from compressed-tensors ignore list lacks weight_scale in safetensors index",
+          "auxiliary_stream_temporally_displaced or compute-core unmatched ratio exceeds 5% during kernel_details.csv breakdown",
+          "quantized model loads without error but falls back to UnquantizedLinearMethod or produces garbled greedy tokens"
+        ],
+        "keywords": [
+          "compressed-tensors",
+          "quantization_config",
+          "process_weights_after_loading",
+          "QuantBatchMatmul",
+          "DequantSwigluQuant",
+          "DynamicQuant",
+          "UnquantizedLinearMethod",
+          "kernel_details.csv",
+          "stream_sample_ack",
+          "auxiliary_stream_temporally_displaced",
+          "bubble_ms",
+          "operator_jitter"
         ]
       }
     },
@@ -1278,6 +1372,88 @@
       }
     },
     {
+      "category": "workflow",
+      "conditions": {
+        "execution_mode": [
+          "ge_graph",
+          "npugraph_ex",
+          "aclgraph"
+        ],
+        "npu_model": [
+          "Ascend910B",
+          "Ascend910B2",
+          "Ascend910B3",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "optimization_mechanism": [
+          "multi_stream_overlap",
+          "npu_prefetch",
+          "limit_core_num"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "cann/cann-recipes-infer"
+        ]
+      },
+      "domain_path": "vllm-ascend/performance/multi-stream-prefetch",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates",
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates",
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+      ],
+      "path": "vllm-ascend/performance/multi-stream-prefetch/unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-multi-stream/SKILL.md#L27-L125",
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-multi-stream/references/timeline-overlap-check.md#L5-L89",
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-multi-stream/references/ge-reorder-design-check.md#L1-L27",
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-prefetch/SKILL.md#L13-L396",
+          "https://gitcode.com/cann/cann-recipes-infer/blob/3c9266727c2a25bd17d503ad37d189a134ff364b/executor/utils/stream_utils.py#L33-L114",
+          "https://gitcode.com/cann/cann-recipes-infer/blob/3c9266727c2a25bd17d503ad37d189a134ff364b/executor/utils/common_utils.py#L120-L155"
+        ],
+        "experiment_status": "not_run_source_only",
+        "source_digest": "4b1ef07a0d42a4c592e3116a26d2f8355ddc5e3ca6cdd380c73a83136e40116d",
+        "source_locator": "cann/cannbot-skills:f305e200aa4b1e1fed73cd21ff1f083b8df25a1e:model/model-infer-multi-stream/SKILL.md",
+        "source_type": "cannbot_skill_and_source_contract",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L3",
+      "title": "Multi-stream overlap verification, GE reorder barrier triage, and npu_prefetch window sizing workflow",
+      "token_estimate": 2007,
+      "triggers": {
+        "error_signatures": [
+          "side stream operators land on distinct Stream ID but module wall-clock duration is unchanged",
+          "overlap_pct <= 0.05 because GE auto-reorders cheap precompute onto the main stream ahead of the dominator",
+          "torch.compile with fullgraph=True and dynamic=True rejects Stream or Event objects lacking as_proxy",
+          "torch_npu.npu_prefetch degrades the dependency window because max_size saturates HBM bandwidth"
+        ],
+        "keywords": [
+          "multi-stream",
+          "npu_stream_switch",
+          "npu_wait_tensor",
+          "npu_tagged_event_record",
+          "npu_tagged_event_wait",
+          "record_stream",
+          "limit_core_num",
+          "overlap_pct",
+          "GE auto-reorder",
+          "npu_prefetch",
+          "dependency window",
+          "roofline"
+        ]
+      }
+    },
+    {
       "category": "axiom",
       "conditions": {
         "npu_model": [
@@ -1551,6 +1727,86 @@
           "recurrent decode",
           "chunk_gated_delta_rule",
           "Ascend910_93"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "execution_mode": [
+          "ge_graph",
+          "npugraph_ex",
+          "eager"
+        ],
+        "kv_cache_mode": [
+          "paged_attention_tnd",
+          "mla_absorb_tnd_ntd",
+          "sliding_window_tnd"
+        ],
+        "npu_model": [
+          "Ascend910B",
+          "Ascend910B4",
+          "Ascend910_93"
+        ],
+        "repository": [
+          "vllm-ascend",
+          "vllm-project/vllm-ascend",
+          "cann/cann-recipes-infer"
+        ]
+      },
+      "domain_path": "vllm-ascend/performance/superkernel-kvcache",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/performance/superkernel-kvcache/unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop.md",
+      "provenance": {
+        "evidence_refs": [
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-superkernel/SKILL.md#L12-L158",
+          "https://gitcode.com/cann/cannbot-skills/blob/f305e200aa4b1e1fed73cd21ff1f083b8df25a1e/model/model-infer-kvcache/SKILL.md#L34-L275",
+          "https://gitcode.com/cann/cann-recipes-infer/blob/3c9266727c2a25bd17d503ad37d189a134ff364b/executor/utils/common_utils.py#L59-L64",
+          "https://gitcode.com/cann/cann-recipes-infer/blob/3c9266727c2a25bd17d503ad37d189a134ff364b/executor/utils/graph_utils.py#L58-L67",
+          "https://gitcode.com/cann/cann-recipes-infer/blob/3c9266727c2a25bd17d503ad37d189a134ff364b/executor/core/kv_cache/cache_utils.py#L471-L580"
+        ],
+        "experiment_status": "not_run_source_only",
+        "source_digest": "2678e4032732c8c91599d89b4ff256323b813983cfa0bb96b68b9f78cea4608e",
+        "source_locator": "cann/cannbot-skills:f305e200aa4b1e1fed73cd21ff1f083b8df25a1e:model/model-infer-kvcache/SKILL.md",
+        "source_type": "cannbot_skill_and_source_contract",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "Atlas A3 SuperKernel binary fusion scope and Paged Attention TND/TND_NTD KV-cache contract SOP",
+      "token_estimate": 1518,
+      "triggers": {
+        "error_signatures": [
+          "SuperKernel scope enabled during dynamic-shape prefill or on unsupported eager execution path",
+          "FA v1 and FA v2 parameter name mismatch silently resets softmax scale to 1.0 or drops actual_seq_kvlen",
+          "MLA absorb decode uses sparse_mode=3 instead of sparse_mode=0 or mismatches num_key_value_heads=1",
+          "Prefill or decode corrupts KV cache because kv_len is incremented inside per-layer attention"
+        ],
+        "keywords": [
+          "SuperKernel",
+          "superkernel_scope",
+          "super_kernel",
+          "stream-fusion",
+          "dcci_disable_on_kernel",
+          "Paged Attention",
+          "TND",
+          "TND_NTD",
+          "PA_NZ",
+          "npu_fused_infer_attention_score",
+          "npu_fused_infer_attention_score_v2",
+          "npu_kv_rmsnorm_rope_cache",
+          "sparse_mode",
+          "slot_mapping",
+          "block_table"
         ]
       }
     },

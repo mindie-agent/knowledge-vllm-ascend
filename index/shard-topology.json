@@ -11,6 +11,10 @@
     "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
+    "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
@@ -66,6 +70,11 @@
       "unit-vllm-ascend-hccl-and-dp-collective-invariants",
       "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
     ],
+    "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
+    ],
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -80,6 +89,10 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
     "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates",
@@ -90,14 +103,15 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 218887,
-      "estimated_tokens": 42894,
+      "bytes": 247054,
+      "estimated_tokens": 47954,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
         "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
         "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop",
+        "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow",
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
         "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
         "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
@@ -111,14 +125,16 @@
         "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
         "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
         "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
+        "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
         "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
         "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
+        "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop",
         "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 22
+      "units": 25
     },
     "domains": [
       {
@@ -164,8 +180,8 @@
       },
       {
         "automatic": false,
-        "bytes": 199312,
-        "estimated_tokens": 39926,
+        "bytes": 227479,
+        "estimated_tokens": 44986,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -174,6 +190,7 @@
           "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
           "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
           "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop",
+          "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow",
           "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
           "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
           "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator",
@@ -184,16 +201,18 @@
           "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
           "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
           "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
+          "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow",
           "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
           "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
           "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
+          "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop",
           "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop"
         ],
-        "units": 17
+        "units": 20
       }
     ]
   },
-  "index_build_elapsed_ms": 8.861541980877519,
+  "index_build_elapsed_ms": 15.077791991643608,
   "leaves": [
     {
       "automatic": false,
@@ -288,6 +307,19 @@
     },
     {
       "automatic": false,
+      "bytes": 10818,
+      "estimated_tokens": 2007,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/performance/multi-stream-prefetch",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
       "bytes": 4383,
       "estimated_tokens": 715,
       "exceeds": [],
@@ -296,6 +328,32 @@
       "recommended_action": "review_leaf_split",
       "unit_ids": [
         "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 8748,
+      "estimated_tokens": 1535,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/performance/quantization-breakdown",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 8601,
+      "estimated_tokens": 1518,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/performance/superkernel-kvcache",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop"
       ],
       "units": 1
     },
@@ -447,16 +505,19 @@
     },
     {
       "automatic": false,
-      "bytes": 4383,
-      "estimated_tokens": 715,
+      "bytes": 32550,
+      "estimated_tokens": 5775,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/performance",
       "recommended_action": "review_two_level_subtree_split",
       "unit_ids": [
-        "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow"
+        "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow",
+        "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow",
+        "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
+        "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop"
       ],
-      "units": 1
+      "units": 4
     },
     {
       "automatic": false,
@@ -491,7 +552,7 @@
       "units": 1
     }
   ],
-  "unit_count": 22,
+  "unit_count": 25,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4712,
@@ -533,6 +594,20 @@
       ],
       "path": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop.md",
       "tier": "L2"
+    },
+    "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow": {
+      "bytes": 8748,
+      "category": "workflow",
+      "content_sha256": "c8bef67ede091fa55732af2204e177f5a4b704e81bf259f2411f81b003ed2285",
+      "domain_path": "vllm-ascend/performance/quantization-breakdown",
+      "estimated_tokens": 1535,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/performance/quantization-breakdown/unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow.md",
+      "tier": "L3"
     },
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": {
       "bytes": 3712,
@@ -711,6 +786,21 @@
       "path": "vllm-ascend/distributed/unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow.md",
       "tier": "L3"
     },
+    "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow": {
+      "bytes": 10818,
+      "category": "workflow",
+      "content_sha256": "8dcc233674e835680ab26dab3b71d5d05e98a6bce8757b8a6f1b2c8dfbad7841",
+      "domain_path": "vllm-ascend/performance/multi-stream-prefetch",
+      "estimated_tokens": 2007,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/performance/multi-stream-prefetch/unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow.md",
+      "tier": "L3"
+    },
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": {
       "bytes": 2676,
       "category": "axiom",
@@ -762,6 +852,20 @@
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
       "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop": {
+      "bytes": 8601,
+      "category": "sop",
+      "content_sha256": "091e314591c65f9f24969500e810a7c5918fa2d45c0ef49eb038e3267d5d28cb",
+      "domain_path": "vllm-ascend/performance/superkernel-kvcache",
+      "estimated_tokens": 1518,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/performance/superkernel-kvcache/unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop.md",
       "tier": "L2"
     },
     "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop": {
