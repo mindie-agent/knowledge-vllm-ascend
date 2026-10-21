@@ -4,9 +4,26 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+    ],
     "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+    ],
+    "unit-vllm-ascend-batch-job-srf-ai-qos-and-structured-output-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
     "unit-vllm-ascend-c8-pypto-310p-and-is-cuda-anti-patterns-axiom": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
@@ -27,8 +44,25 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-deepseek-v3-v32-r1-ocr2-deployment-and-tuning-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
+    ],
+    "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
+      "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop",
+      "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop"
+    ],
+    "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms": [
+      "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -47,14 +81,38 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms"
     ],
+    "unit-vllm-ascend-eagle-medusa-suffix-and-ngram-proposer-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
     "unit-vllm-ascend-embodied-vla-world-models-and-3dgs-spatial-inference-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-epd-three-stage-and-mooncake-disaggregation-workflow": [
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop"
+    ],
+    "unit-vllm-ascend-eplb-swift-balancer-and-dyntra-lb-workflow": [
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop"
     ],
     "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates",
       "unit-vllm-ascend-hccl-and-dp-collective-invariants",
       "unit-vllm-ascend-idle-dp-gdn-state"
+    ],
+    "unit-vllm-ascend-gemma4-hunyuan-hy3-internvl35-paddleocr-cohere-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
+      "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop"
+    ],
+    "unit-vllm-ascend-glm4-glm5-glm52-and-minimax-m2-m3-adaptation-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
     ],
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": [],
     "unit-vllm-ascend-hccl-timeout-oom-and-cross-stream-lifetime-triage-sop": [
@@ -73,6 +131,15 @@
       "unit-vllm-ascend-hccl-and-dp-collective-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+      "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+      "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
+      "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop"
+    ],
     "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
@@ -87,7 +154,32 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms"
     ],
+    "unit-vllm-ascend-kv-cpu-offload-vs-recompute-tradeoff-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-large-scale-ep-fine-grained-tp-and-dcpp-workflow": [
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+    ],
+    "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
     "unit-vllm-ascend-mla-c8-kv-wiring-and-batch-offload-swap-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-model-runner-v1-input-prep-and-async-pipeline-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-model-runner-v2-persistent-batch-and-eplb-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-modelopt-mxfp8-mxfp4-and-fp8-dequant-fusion-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+    ],
+    "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
     "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow": [
@@ -105,6 +197,12 @@
       "unit-vllm-ascend-moe-ep-stage-dispatch-mc2-and-double-routing-sop",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow": [
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop"
+    ],
     "unit-vllm-ascend-mtp-draft-kv-allocation-and-recurrent-state-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ],
@@ -113,13 +211,31 @@
       "unit-vllm-ascend-verification-and-state-parity-gates",
       "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
     ],
+    "unit-vllm-ascend-multi-tier-and-layerwise-kv-pool-sop": [
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms"
+    ],
     "unit-vllm-ascend-multimodal-vlm-mrope-and-video-dit-adaptation-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-netloader-rfork-and-sleep-mode-hbm-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": [],
+    "unit-vllm-ascend-npugraph-ex-fusion-passes-and-recompilation-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop"
+    ],
+    "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop": [
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
     "unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop": [
+      "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -146,13 +262,46 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop"
     ],
+    "unit-vllm-ascend-qwen3-235b-30b-coder-next-and-dspark-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop"
+    ],
+    "unit-vllm-ascend-qwen3-vl-omni-asr-embedding-reranker-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
+      "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop"
+    ],
+    "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow": [
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop",
+      "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow"
+    ],
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow": [
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
+    ],
+    "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
+    ],
+    "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
     "unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-mtp-draft-kv-allocation-and-recurrent-state-sop"
+    ],
+    "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop"
     ],
     "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -163,64 +312,114 @@
       "unit-vllm-ascend-verification-and-state-parity-gates",
       "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop"
     ],
+    "unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop": [
+      "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms"
+    ],
     "unit-vllm-ascend-verification-and-state-parity-gates": [],
     "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 357119,
-      "estimated_tokens": 62275,
+      "bytes": 535125,
+      "estimated_tokens": 87860,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
+        "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop",
         "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+        "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop",
+        "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
+        "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop",
+        "unit-vllm-ascend-batch-job-srf-ai-qos-and-structured-output-sop",
         "unit-vllm-ascend-c8-pypto-310p-and-is-cuda-anti-patterns-axiom",
         "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop",
         "unit-vllm-ascend-chunked-prefill-cla-and-kv-admission-retraction-workflow",
         "unit-vllm-ascend-compilation-tiling-whitelists-and-peak-memory-oom-sop",
         "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow",
+        "unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop",
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz",
+        "unit-vllm-ascend-deepseek-v3-v32-r1-ocr2-deployment-and-tuning-sop",
+        "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow",
+        "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
         "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
         "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
         "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator",
         "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop",
+        "unit-vllm-ascend-eagle-medusa-suffix-and-ngram-proposer-sop",
         "unit-vllm-ascend-embodied-vla-world-models-and-3dgs-spatial-inference-sop",
+        "unit-vllm-ascend-epd-three-stage-and-mooncake-disaggregation-workflow",
+        "unit-vllm-ascend-eplb-swift-balancer-and-dyntra-lb-workflow",
         "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator",
+        "unit-vllm-ascend-gemma4-hunyuan-hy3-internvl35-paddleocr-cohere-sop",
+        "unit-vllm-ascend-glm4-glm5-glm52-and-minimax-m2-m3-adaptation-sop",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-hccl-timeout-oom-and-cross-stream-lifetime-triage-sop",
         "unit-vllm-ascend-host-scalar-precompute-and-preprocess-elimination-sop",
         "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
         "unit-vllm-ascend-idle-dp-gdn-state",
+        "unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop",
         "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
         "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
         "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+        "unit-vllm-ascend-kv-cpu-offload-vs-recompute-tradeoff-workflow",
+        "unit-vllm-ascend-large-scale-ep-fine-grained-tp-and-dcpp-workflow",
+        "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop",
         "unit-vllm-ascend-mla-c8-kv-wiring-and-batch-offload-swap-sop",
+        "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop",
+        "unit-vllm-ascend-model-runner-v1-input-prep-and-async-pipeline-sop",
+        "unit-vllm-ascend-model-runner-v2-persistent-batch-and-eplb-sop",
+        "unit-vllm-ascend-modelopt-mxfp8-mxfp4-and-fp8-dequant-fusion-sop",
+        "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop",
         "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
         "unit-vllm-ascend-moe-ep-stage-dispatch-mc2-and-double-routing-sop",
         "unit-vllm-ascend-moe-shared-expert-dual-stream-and-eplb-workflow",
+        "unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow",
         "unit-vllm-ascend-mtp-draft-kv-allocation-and-recurrent-state-sop",
         "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow",
+        "unit-vllm-ascend-multi-tier-and-layerwise-kv-pool-sop",
         "unit-vllm-ascend-multimodal-vlm-mrope-and-video-dit-adaptation-workflow",
+        "unit-vllm-ascend-netloader-rfork-and-sleep-mode-hbm-sop",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-npugraph-ex-fusion-passes-and-recompilation-workflow",
+        "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop",
         "unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop",
+        "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop",
         "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
         "unit-vllm-ascend-pd-hixl-mooncake-layerwise-kv-push-and-release-sop",
         "unit-vllm-ascend-perf-measurement-distortion-and-quant-benchmark-sop",
         "unit-vllm-ascend-precision-bisect-cp-lse-rope-moe-and-validation-sop",
         "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
         "unit-vllm-ascend-quant-weight-loading-scheme-gating-and-li-quant-sop",
+        "unit-vllm-ascend-qwen3-235b-30b-coder-next-and-dspark-sop",
+        "unit-vllm-ascend-qwen3-vl-omni-asr-embedding-reranker-sop",
+        "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow",
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
+        "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow",
+        "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
         "unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop",
+        "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow",
         "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop",
         "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop",
+        "unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop",
+        "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop",
         "unit-vllm-ascend-verification-and-state-parity-gates",
-        "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop"
+        "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop",
+        "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
       ],
-      "units": 43
+      "units": 82
     },
     "domains": [
       {
@@ -238,18 +437,20 @@
       },
       {
         "automatic": false,
-        "bytes": 8182,
-        "estimated_tokens": 1008,
+        "bytes": 17026,
+        "estimated_tokens": 2378,
         "exceeds": [],
         "kind": "federation",
         "path": "_common",
         "recommended_action": "review_federation_boundary",
         "unit_ids": [
+          "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
           "unit-vllm-ascend-hccl-and-dp-collective-invariants",
           "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+          "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
           "unit-vllm-ascend-verification-and-state-parity-gates"
         ],
-        "units": 3
+        "units": 5
       },
       {
         "automatic": false,
@@ -266,57 +467,94 @@
       },
       {
         "automatic": false,
-        "bytes": 337544,
-        "estimated_tokens": 59307,
+        "bytes": 506706,
+        "estimated_tokens": 83522,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
         "recommended_action": "review_federation_boundary",
         "unit_ids": [
           "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
+          "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop",
           "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop",
+          "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop",
+          "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
+          "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop",
+          "unit-vllm-ascend-batch-job-srf-ai-qos-and-structured-output-sop",
           "unit-vllm-ascend-c8-pypto-310p-and-is-cuda-anti-patterns-axiom",
           "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop",
           "unit-vllm-ascend-chunked-prefill-cla-and-kv-admission-retraction-workflow",
           "unit-vllm-ascend-compilation-tiling-whitelists-and-peak-memory-oom-sop",
           "unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow",
+          "unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop",
+          "unit-vllm-ascend-deepseek-v3-v32-r1-ocr2-deployment-and-tuning-sop",
+          "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow",
           "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator",
           "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
           "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator",
           "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop",
+          "unit-vllm-ascend-eagle-medusa-suffix-and-ngram-proposer-sop",
           "unit-vllm-ascend-embodied-vla-world-models-and-3dgs-spatial-inference-sop",
+          "unit-vllm-ascend-epd-three-stage-and-mooncake-disaggregation-workflow",
+          "unit-vllm-ascend-eplb-swift-balancer-and-dyntra-lb-workflow",
+          "unit-vllm-ascend-gemma4-hunyuan-hy3-internvl35-paddleocr-cohere-sop",
+          "unit-vllm-ascend-glm4-glm5-glm52-and-minimax-m2-m3-adaptation-sop",
           "unit-vllm-ascend-hccl-timeout-oom-and-cross-stream-lifetime-triage-sop",
           "unit-vllm-ascend-host-scalar-precompute-and-preprocess-elimination-sop",
           "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow",
           "unit-vllm-ascend-idle-dp-gdn-state",
+          "unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop",
           "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
           "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
           "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop",
+          "unit-vllm-ascend-kv-cpu-offload-vs-recompute-tradeoff-workflow",
+          "unit-vllm-ascend-large-scale-ep-fine-grained-tp-and-dcpp-workflow",
+          "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop",
           "unit-vllm-ascend-mla-c8-kv-wiring-and-batch-offload-swap-sop",
+          "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop",
+          "unit-vllm-ascend-model-runner-v1-input-prep-and-async-pipeline-sop",
+          "unit-vllm-ascend-model-runner-v2-persistent-batch-and-eplb-sop",
+          "unit-vllm-ascend-modelopt-mxfp8-mxfp4-and-fp8-dequant-fusion-sop",
+          "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop",
           "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
           "unit-vllm-ascend-moe-ep-stage-dispatch-mc2-and-double-routing-sop",
           "unit-vllm-ascend-moe-shared-expert-dual-stream-and-eplb-workflow",
+          "unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow",
           "unit-vllm-ascend-mtp-draft-kv-allocation-and-recurrent-state-sop",
           "unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow",
+          "unit-vllm-ascend-multi-tier-and-layerwise-kv-pool-sop",
           "unit-vllm-ascend-multimodal-vlm-mrope-and-video-dit-adaptation-workflow",
+          "unit-vllm-ascend-netloader-rfork-and-sleep-mode-hbm-sop",
+          "unit-vllm-ascend-npugraph-ex-fusion-passes-and-recompilation-workflow",
+          "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop",
           "unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop",
+          "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop",
           "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
           "unit-vllm-ascend-pd-hixl-mooncake-layerwise-kv-push-and-release-sop",
           "unit-vllm-ascend-perf-measurement-distortion-and-quant-benchmark-sop",
           "unit-vllm-ascend-precision-bisect-cp-lse-rope-moe-and-validation-sop",
           "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
           "unit-vllm-ascend-quant-weight-loading-scheme-gating-and-li-quant-sop",
+          "unit-vllm-ascend-qwen3-235b-30b-coder-next-and-dspark-sop",
+          "unit-vllm-ascend-qwen3-vl-omni-asr-embedding-reranker-sop",
+          "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow",
           "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
+          "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow",
+          "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow",
           "unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop",
+          "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow",
           "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop",
           "unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop",
-          "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop"
+          "unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop",
+          "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop",
+          "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop",
+          "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
         ],
-        "units": 38
+        "units": 75
       }
     ]
   },
-  "index_build_elapsed_ms": 19.506790908053517,
+  "index_build_elapsed_ms": 38.693916983902454,
   "leaves": [
     {
       "automatic": false,
@@ -333,18 +571,20 @@
     },
     {
       "automatic": false,
-      "bytes": 8182,
-      "estimated_tokens": 1008,
+      "bytes": 17026,
+      "estimated_tokens": 2378,
       "exceeds": [],
       "kind": "leaf",
       "path": "_common",
       "recommended_action": "review_leaf_split",
       "unit_ids": [
+        "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 3
+      "units": 5
     },
     {
       "automatic": false,
@@ -356,6 +596,188 @@
       "recommended_action": "review_leaf_split",
       "unit_ids": [
         "unit-vllm-ascend-custom-op-gates-import-retry-and-nz"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 3701,
+      "estimated_tokens": 553,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/architecture/platform-and-patch/cpu-core-binding",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4162,
+      "estimated_tokens": 586,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/architecture/platform-and-patch/monkey-patch-hierarchy",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4515,
+      "estimated_tokens": 719,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/architecture/runner-and-worker/model-runner-v1",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-model-runner-v1-input-prep-and-async-pipeline-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4293,
+      "estimated_tokens": 641,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/architecture/runner-and-worker/model-runner-v2",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-model-runner-v2-persistent-batch-and-eplb-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 3393,
+      "estimated_tokens": 472,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/architecture/runner-and-worker/xlite-runtime",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4414,
+      "estimated_tokens": 626,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/attention/backends/hybrid-linear-attention",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 3945,
+      "estimated_tokens": 589,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/attention/backends/multimodal-encoder",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4917,
+      "estimated_tokens": 769,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/attention/backends/sparse-kv-offload",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4457,
+      "estimated_tokens": 646,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/attention/backends/unified-routing",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4941,
+      "estimated_tokens": 722,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 3880,
+      "estimated_tokens": 567,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/compilation/aclgraph-and-npugraph/aclgraph-capture",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4865,
+      "estimated_tokens": 707,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/compilation/aclgraph-and-npugraph/npugraph-ex-fusion",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-npugraph-ex-fusion-passes-and-recompilation-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 3811,
+      "estimated_tokens": 556,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/compilation/custom-ops/aclnn-registration",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4111,
+      "estimated_tokens": 582,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/compilation/custom-ops/ascend-310p-ops",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop"
       ],
       "units": 1
     },
@@ -375,6 +797,58 @@
     },
     {
       "automatic": false,
+      "bytes": 4716,
+      "estimated_tokens": 617,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/kv-pool-and-disaggregation/cache-pools/multi-tier-kv-pool",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-multi-tier-and-layerwise-kv-pool-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4072,
+      "estimated_tokens": 600,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/kv-pool-and-disaggregation/cache-pools/ucm-and-lmcache",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5190,
+      "estimated_tokens": 748,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/kv-pool-and-disaggregation/epd-and-offload/cpu-offload-recompute",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-kv-cpu-offload-vs-recompute-tradeoff-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4806,
+      "estimated_tokens": 699,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/kv-pool-and-disaggregation/epd-and-offload/epd-mooncake-p2p",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-epd-three-stage-and-mooncake-disaggregation-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
       "bytes": 49161,
       "estimated_tokens": 10233,
       "exceeds": [],
@@ -390,6 +864,45 @@
     },
     {
       "automatic": false,
+      "bytes": 4325,
+      "estimated_tokens": 560,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/deepseek/v3-and-r1",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-deepseek-v3-v32-r1-ocr2-deployment-and-tuning-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5543,
+      "estimated_tokens": 839,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/deepseek/v4-pro-flash",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4895,
+      "estimated_tokens": 626,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/glm-and-minimax/glm-minimax",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-glm4-glm5-glm52-and-minimax-m2-m3-adaptation-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
       "bytes": 45426,
       "estimated_tokens": 9645,
       "exceeds": [],
@@ -402,6 +915,32 @@
         "unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop"
       ],
       "units": 3
+    },
+    {
+      "automatic": false,
+      "bytes": 4681,
+      "estimated_tokens": 625,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/kimi/k2-and-k3",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5166,
+      "estimated_tokens": 737,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/multimodal-and-emerging/vision-audio-llm",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-gemma4-hunyuan-hy3-internvl35-paddleocr-cohere-sop"
+      ],
+      "units": 1
     },
     {
       "automatic": false,
@@ -426,6 +965,45 @@
       "recommended_action": "review_leaf_split",
       "unit_ids": [
         "unit-vllm-ascend-multimodal-vlm-mrope-and-video-dit-adaptation-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4182,
+      "estimated_tokens": 546,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/qwen/qwen3-moe-next",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-qwen3-235b-30b-coder-next-and-dspark-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4651,
+      "estimated_tokens": 649,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/qwen/qwen35-36-38",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4808,
+      "estimated_tokens": 633,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/models/qwen/vl-omni-audio-rag",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-qwen3-vl-omni-asr-embedding-reranker-sop"
       ],
       "units": 1
     },
@@ -639,6 +1217,58 @@
     },
     {
       "automatic": false,
+      "bytes": 4911,
+      "estimated_tokens": 726,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/quantization/modelslim-and-mxfp/modelslim-schemes",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4352,
+      "estimated_tokens": 570,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/quantization/modelslim-and-mxfp/mxfp8-and-fp8",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-modelopt-mxfp8-mxfp4-and-fp8-dequant-fusion-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4403,
+      "estimated_tokens": 652,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/quantization/weight-switch/accuracy-triage",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4050,
+      "estimated_tokens": 558,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/quantization/weight-switch/tp-switch-and-lora",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
       "bytes": 7502,
       "estimated_tokens": 945,
       "exceeds": [],
@@ -746,6 +1376,58 @@
     },
     {
       "automatic": false,
+      "bytes": 5081,
+      "estimated_tokens": 761,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/scheduling-and-ep/eplb-and-parallel/hybrid-parallelism",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-large-scale-ep-fine-grained-tp-and-dcpp-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5966,
+      "estimated_tokens": 911,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/scheduling-and-ep/eplb-and-parallel/swift-and-dyntra-eplb",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-eplb-swift-balancer-and-dyntra-lb-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4976,
+      "estimated_tokens": 704,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/scheduling-and-ep/qos-and-lifecycle/loader-and-sleep-mode",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-netloader-rfork-and-sleep-mode-hbm-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5107,
+      "estimated_tokens": 711,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/scheduling-and-ep/qos-and-lifecycle/slo-and-guided-decode",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-batch-job-srf-ai-qos-and-structured-output-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
       "bytes": 10636,
       "estimated_tokens": 1790,
       "exceeds": [],
@@ -754,6 +1436,45 @@
       "recommended_action": "review_leaf_split",
       "unit_ids": [
         "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4859,
+      "estimated_tokens": 720,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/speculative-decoding/proposers/dspark-and-dflash",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4477,
+      "estimated_tokens": 628,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/speculative-decoding/proposers/eagle-medusa-suffix",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-eagle-medusa-suffix-and-ngram-proposer-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4540,
+      "estimated_tokens": 660,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow"
       ],
       "units": 1
     }
@@ -775,18 +1496,20 @@
     },
     {
       "automatic": false,
-      "bytes": 8182,
-      "estimated_tokens": 1008,
+      "bytes": 17026,
+      "estimated_tokens": 2378,
       "exceeds": [],
       "kind": "subtree",
       "path": "_common",
       "recommended_action": "review_two_level_subtree_split",
       "unit_ids": [
+        "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 3
+      "units": 5
     },
     {
       "automatic": false,
@@ -803,6 +1526,92 @@
     },
     {
       "automatic": false,
+      "bytes": 7863,
+      "estimated_tokens": 1139,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/architecture/platform-and-patch",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop",
+        "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 12201,
+      "estimated_tokens": 1832,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/architecture/runner-and-worker",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-model-runner-v1-input-prep-and-async-pipeline-sop",
+        "unit-vllm-ascend-model-runner-v2-persistent-batch-and-eplb-sop",
+        "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
+      ],
+      "units": 3
+    },
+    {
+      "automatic": false,
+      "bytes": 17733,
+      "estimated_tokens": 2630,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/attention/backends",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
+        "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop",
+        "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop",
+        "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow"
+      ],
+      "units": 4
+    },
+    {
+      "automatic": false,
+      "bytes": 4941,
+      "estimated_tokens": 722,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/attention/context-parallel",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 8745,
+      "estimated_tokens": 1274,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/compilation/aclgraph-and-npugraph",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop",
+        "unit-vllm-ascend-npugraph-ex-fusion-passes-and-recompilation-workflow"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 7922,
+      "estimated_tokens": 1138,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/compilation/custom-ops",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop",
+        "unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
       "bytes": 37438,
       "estimated_tokens": 8130,
       "exceeds": [],
@@ -812,6 +1621,34 @@
       "unit_ids": [
         "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
         "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 8788,
+      "estimated_tokens": 1217,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/kv-pool-and-disaggregation/cache-pools",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-multi-tier-and-layerwise-kv-pool-sop",
+        "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 9996,
+      "estimated_tokens": 1447,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/kv-pool-and-disaggregation/epd-and-offload",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-epd-three-stage-and-mooncake-disaggregation-workflow",
+        "unit-vllm-ascend-kv-cpu-offload-vs-recompute-tradeoff-workflow"
       ],
       "units": 2
     },
@@ -835,6 +1672,59 @@
     },
     {
       "automatic": false,
+      "bytes": 9868,
+      "estimated_tokens": 1399,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/models/deepseek",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-deepseek-v3-v32-r1-ocr2-deployment-and-tuning-sop",
+        "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 4895,
+      "estimated_tokens": 626,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/models/glm-and-minimax",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-glm4-glm5-glm52-and-minimax-m2-m3-adaptation-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 4681,
+      "estimated_tokens": 625,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/models/kimi",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5166,
+      "estimated_tokens": 737,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/models/multimodal-and-emerging",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-gemma4-hunyuan-hy3-internvl35-paddleocr-cohere-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
       "bytes": 14032,
       "estimated_tokens": 1908,
       "exceeds": [],
@@ -846,6 +1736,21 @@
         "unit-vllm-ascend-multimodal-vlm-mrope-and-video-dit-adaptation-workflow"
       ],
       "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 13641,
+      "estimated_tokens": 1828,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/models/qwen",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-qwen3-235b-30b-coder-next-and-dspark-sop",
+        "unit-vllm-ascend-qwen3-vl-omni-asr-embedding-reranker-sop",
+        "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow"
+      ],
+      "units": 3
     },
     {
       "automatic": false,
@@ -949,6 +1854,34 @@
     },
     {
       "automatic": false,
+      "bytes": 9263,
+      "estimated_tokens": 1296,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/quantization/modelslim-and-mxfp",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-modelopt-mxfp8-mxfp4-and-fp8-dequant-fusion-sop",
+        "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 8453,
+      "estimated_tokens": 1210,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/quantization/weight-switch",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow",
+        "unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
       "bytes": 7502,
       "estimated_tokens": 945,
       "exceeds": [],
@@ -1008,6 +1941,34 @@
     },
     {
       "automatic": false,
+      "bytes": 11047,
+      "estimated_tokens": 1672,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/scheduling-and-ep/eplb-and-parallel",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-eplb-swift-balancer-and-dyntra-lb-workflow",
+        "unit-vllm-ascend-large-scale-ep-fine-grained-tp-and-dcpp-workflow"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 10083,
+      "estimated_tokens": 1415,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/scheduling-and-ep/qos-and-lifecycle",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-batch-job-srf-ai-qos-and-structured-output-sop",
+        "unit-vllm-ascend-netloader-rfork-and-sleep-mode-hbm-sop"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
       "bytes": 10636,
       "estimated_tokens": 1790,
       "exceeds": [],
@@ -1018,9 +1979,24 @@
         "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator"
       ],
       "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 13876,
+      "estimated_tokens": 2008,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/speculative-decoding/proposers",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-ascend-eagle-medusa-suffix-and-ngram-proposer-sop",
+        "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop",
+        "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow"
+      ],
+      "units": 3
     }
   ],
-  "unit_count": 43,
+  "unit_count": 82,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4712,
@@ -1036,6 +2012,20 @@
       "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
       "tier": "L3"
     },
+    "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": {
+      "bytes": 4111,
+      "category": "sop",
+      "content_sha256": "5739b68b45ace45cb16d9721ff025251591ff1c304c22c9ae85955356c99623f",
+      "domain_path": "vllm-ascend/compilation/custom-ops/ascend-310p-ops",
+      "estimated_tokens": 582,
+      "evidence_strength": "hardware_spec",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+      ],
+      "path": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": {
       "bytes": 3599,
       "category": "sop",
@@ -1048,6 +2038,59 @@
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
       "path": "vllm-ascend/runtime/graph-capture/unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop": {
+      "bytes": 3880,
+      "category": "sop",
+      "content_sha256": "9896df60149a0d2ee12d054d24f3f7f12440dfd6575a0c5729be3cec73032a85",
+      "domain_path": "vllm-ascend/compilation/aclgraph-and-npugraph/aclgraph-capture",
+      "estimated_tokens": 567,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/compilation/aclgraph-and-npugraph/aclgraph-capture/unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop": {
+      "bytes": 4457,
+      "category": "sop",
+      "content_sha256": "e839819013ae6e288a14a736a0f3895b3580ccc62ab90c766948cecf0809321e",
+      "domain_path": "vllm-ascend/attention/backends/unified-routing",
+      "estimated_tokens": 646,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/attention/backends/unified-routing/unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop": {
+      "bytes": 4414,
+      "category": "sop",
+      "content_sha256": "061939ef27e3cb464f71c70c61ead7c2541581e469be0b9e61c0d30d5b3b6cea",
+      "domain_path": "vllm-ascend/attention/backends/hybrid-linear-attention",
+      "estimated_tokens": 626,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/attention/backends/hybrid-linear-attention/unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-batch-job-srf-ai-qos-and-structured-output-sop": {
+      "bytes": 5107,
+      "category": "sop",
+      "content_sha256": "9d445eaead30a5ab94eb00a7ba60ce1be519b8458818bf58f14a6bac5650c165",
+      "domain_path": "vllm-ascend/scheduling-and-ep/qos-and-lifecycle/slo-and-guided-decode",
+      "estimated_tokens": 711,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/scheduling-and-ep/qos-and-lifecycle/slo-and-guided-decode/unit-vllm-ascend-batch-job-srf-ai-qos-and-structured-output-sop.md",
       "tier": "L2"
     },
     "unit-vllm-ascend-c8-pypto-310p-and-is-cuda-anti-patterns-axiom": {
@@ -1118,6 +2161,19 @@
       "path": "vllm-ascend/performance/quantization-breakdown/unit-vllm-ascend-compressed-tensors-quantization-and-step-breakdown-workflow.md",
       "tier": "L3"
     },
+    "unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop": {
+      "bytes": 3811,
+      "category": "sop",
+      "content_sha256": "da8fb810bc11653c2fd3c84f6db6561ae69338373d376bb9c041108f46d12713",
+      "domain_path": "vllm-ascend/compilation/custom-ops/aclnn-registration",
+      "estimated_tokens": 556,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/compilation/custom-ops/aclnn-registration/unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": {
       "bytes": 3712,
       "category": "sop",
@@ -1130,6 +2186,49 @@
       ],
       "path": "integration/custom-ops/unit-vllm-ascend-custom-op-gates-import-retry-and-nz.md",
       "tier": "L2"
+    },
+    "unit-vllm-ascend-deepseek-v3-v32-r1-ocr2-deployment-and-tuning-sop": {
+      "bytes": 4325,
+      "category": "sop",
+      "content_sha256": "d9fd00ace977712952727a53bbf5fd55f589e74db24f06911e9f778e20fcf8f3",
+      "domain_path": "vllm-ascend/models/deepseek/v3-and-r1",
+      "estimated_tokens": 560,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/models/deepseek/v3-and-r1/unit-vllm-ascend-deepseek-v3-v32-r1-ocr2-deployment-and-tuning-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow": {
+      "bytes": 5543,
+      "category": "workflow",
+      "content_sha256": "9813dbcd4212e740e1e568f645d5ef15c256e9def3c2c77bcb3695a7de216b77",
+      "domain_path": "vllm-ascend/models/deepseek/v4-pro-flash",
+      "estimated_tokens": 839,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
+        "unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop",
+        "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop"
+      ],
+      "path": "vllm-ascend/models/deepseek/v4-pro-flash/unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms": {
+      "bytes": 4238,
+      "category": "measurement",
+      "content_sha256": "b24eb50ce8138c2b5c1339c1368d2e4fffd3728176d40bb8dd9557a25f4582d4",
+      "domain_path": "_common",
+      "estimated_tokens": 634,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "_common/unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms.md",
+      "tier": "L1"
     },
     "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": {
       "bytes": 10636,
@@ -1185,6 +2284,19 @@
       "path": "vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-eagle-medusa-suffix-and-ngram-proposer-sop": {
+      "bytes": 4477,
+      "category": "sop",
+      "content_sha256": "e6507f59c92cb35d0faab97ebc3695a5033aaa099cad9b13d725f20c21752ae1",
+      "domain_path": "vllm-ascend/speculative-decoding/proposers/eagle-medusa-suffix",
+      "estimated_tokens": 628,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/speculative-decoding/proposers/eagle-medusa-suffix/unit-vllm-ascend-eagle-medusa-suffix-and-ngram-proposer-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-embodied-vla-world-models-and-3dgs-spatial-inference-sop": {
       "bytes": 7167,
       "category": "sop",
@@ -1197,6 +2309,34 @@
       ],
       "path": "vllm-ascend/models/multimodal-and-vla/embodied-and-spatial/unit-vllm-ascend-embodied-vla-world-models-and-3dgs-spatial-inference-sop.md",
       "tier": "L2"
+    },
+    "unit-vllm-ascend-epd-three-stage-and-mooncake-disaggregation-workflow": {
+      "bytes": 4806,
+      "category": "workflow",
+      "content_sha256": "2cbc88f16eb1cbc0c5aa25fb75e7bd26a86012e7ddef440757790fe33bccf676",
+      "domain_path": "vllm-ascend/kv-pool-and-disaggregation/epd-and-offload/epd-mooncake-p2p",
+      "estimated_tokens": 699,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop"
+      ],
+      "path": "vllm-ascend/kv-pool-and-disaggregation/epd-and-offload/epd-mooncake-p2p/unit-vllm-ascend-epd-three-stage-and-mooncake-disaggregation-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-eplb-swift-balancer-and-dyntra-lb-workflow": {
+      "bytes": 5966,
+      "category": "workflow",
+      "content_sha256": "52fe794055f5c9d1daf5313c5c812160a004cca7375a57eacb927f862fab0e28",
+      "domain_path": "vllm-ascend/scheduling-and-ep/eplb-and-parallel/swift-and-dyntra-eplb",
+      "estimated_tokens": 911,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop"
+      ],
+      "path": "vllm-ascend/scheduling-and-ep/eplb-and-parallel/swift-and-dyntra-eplb/unit-vllm-ascend-eplb-swift-balancer-and-dyntra-lb-workflow.md",
+      "tier": "L3"
     },
     "unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator": {
       "bytes": 7681,
@@ -1212,6 +2352,36 @@
       ],
       "path": "0day/Qwen3_5/unit-vllm-ascend-gdn-idle-dp-zero-pad-workspace-mutator.md",
       "tier": "L4"
+    },
+    "unit-vllm-ascend-gemma4-hunyuan-hy3-internvl35-paddleocr-cohere-sop": {
+      "bytes": 5166,
+      "category": "sop",
+      "content_sha256": "7ae8a4be855537c9aa2bb3e7e0428b9c503c8865d10916f9150f070c19157b5f",
+      "domain_path": "vllm-ascend/models/multimodal-and-emerging/vision-audio-llm",
+      "estimated_tokens": 737,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop",
+        "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/models/multimodal-and-emerging/vision-audio-llm/unit-vllm-ascend-gemma4-hunyuan-hy3-internvl35-paddleocr-cohere-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-glm4-glm5-glm52-and-minimax-m2-m3-adaptation-sop": {
+      "bytes": 4895,
+      "category": "sop",
+      "content_sha256": "cb48434185ecf36029d54475a1fa5ddb3f9c21a0dfc4761adb05eaf90aa81b24",
+      "domain_path": "vllm-ascend/models/glm-and-minimax/glm-minimax",
+      "estimated_tokens": 626,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/models/glm-and-minimax/glm-minimax/unit-vllm-ascend-glm4-glm5-glm52-and-minimax-m2-m3-adaptation-sop.md",
+      "tier": "L2"
     },
     "unit-vllm-ascend-hccl-and-dp-collective-invariants": {
       "bytes": 2734,
@@ -1280,6 +2450,21 @@
       "path": "vllm-ascend/runtime/idle-dp-gdn-state/unit-vllm-ascend-idle-dp-gdn-state.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop": {
+      "bytes": 4681,
+      "category": "sop",
+      "content_sha256": "b4c8865866adaf4bda777a9622a64eed3ea786c2402adde1837a7e7745c4f1e8",
+      "domain_path": "vllm-ascend/models/kimi/k2-and-k3",
+      "estimated_tokens": 625,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
+        "unit-vllm-ascend-kimi-k3-model-bringup-and-hybrid-cache-workflow",
+        "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop"
+      ],
+      "path": "vllm-ascend/models/kimi/k2-and-k3/unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms": {
       "bytes": 11448,
       "category": "axiom",
@@ -1321,6 +2506,45 @@
       "path": "vllm-ascend/models/kimi-k3-hybrid/unit-vllm-ascend-kimi-k3-nan-inf-quarot-and-norm-precision-sop.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-kv-cpu-offload-vs-recompute-tradeoff-workflow": {
+      "bytes": 5190,
+      "category": "workflow",
+      "content_sha256": "a53b0b08e6a138a7b68784cb0be21356d106c02868ea2a60abc492b235686e24",
+      "domain_path": "vllm-ascend/kv-pool-and-disaggregation/epd-and-offload/cpu-offload-recompute",
+      "estimated_tokens": 748,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/kv-pool-and-disaggregation/epd-and-offload/cpu-offload-recompute/unit-vllm-ascend-kv-cpu-offload-vs-recompute-tradeoff-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-large-scale-ep-fine-grained-tp-and-dcpp-workflow": {
+      "bytes": 5081,
+      "category": "workflow",
+      "content_sha256": "9aa68ec89887b7afe0586b905c8c5a04d111e9526c6ea86ee1788f30731a4fbd",
+      "domain_path": "vllm-ascend/scheduling-and-ep/eplb-and-parallel/hybrid-parallelism",
+      "estimated_tokens": 761,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+      ],
+      "path": "vllm-ascend/scheduling-and-ep/eplb-and-parallel/hybrid-parallelism/unit-vllm-ascend-large-scale-ep-fine-grained-tp-and-dcpp-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop": {
+      "bytes": 4859,
+      "category": "sop",
+      "content_sha256": "652a51be0511b1f56be6efd5160c46ba92bb0da99f9c4919ef88f16d5f3ba2f3",
+      "domain_path": "vllm-ascend/speculative-decoding/proposers/dspark-and-dflash",
+      "estimated_tokens": 720,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/speculative-decoding/proposers/dspark-and-dflash/unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-mla-c8-kv-wiring-and-batch-offload-swap-sop": {
       "bytes": 5218,
       "category": "sop",
@@ -1332,6 +2556,72 @@
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
       ],
       "path": "vllm-ascend/optimizations/kv-cache-and-pd-disaggregation/mla-c8-and-offload/unit-vllm-ascend-mla-c8-kv-wiring-and-batch-offload-swap-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop": {
+      "bytes": 3945,
+      "category": "sop",
+      "content_sha256": "a22e3acc3f2312a07e631a1cbc32cc9b734a2c1eb6fc76615ae35d08087d8468",
+      "domain_path": "vllm-ascend/attention/backends/multimodal-encoder",
+      "estimated_tokens": 589,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/attention/backends/multimodal-encoder/unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-model-runner-v1-input-prep-and-async-pipeline-sop": {
+      "bytes": 4515,
+      "category": "sop",
+      "content_sha256": "1c3170be649630811427bf28cb4c4518d95d94095c86d63207c99449aa6bde09",
+      "domain_path": "vllm-ascend/architecture/runner-and-worker/model-runner-v1",
+      "estimated_tokens": 719,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/architecture/runner-and-worker/model-runner-v1/unit-vllm-ascend-model-runner-v1-input-prep-and-async-pipeline-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-model-runner-v2-persistent-batch-and-eplb-sop": {
+      "bytes": 4293,
+      "category": "sop",
+      "content_sha256": "8d04b9e28b9a9c888452e05326487f22d1a888851bffe75ba2ea8f64336cc73e",
+      "domain_path": "vllm-ascend/architecture/runner-and-worker/model-runner-v2",
+      "estimated_tokens": 641,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/architecture/runner-and-worker/model-runner-v2/unit-vllm-ascend-model-runner-v2-persistent-batch-and-eplb-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-modelopt-mxfp8-mxfp4-and-fp8-dequant-fusion-sop": {
+      "bytes": 4352,
+      "category": "sop",
+      "content_sha256": "e95bf41190bd4eb46e80b06026b0ed1dec84a5641547633badff3f7166f31112",
+      "domain_path": "vllm-ascend/quantization/modelslim-and-mxfp/mxfp8-and-fp8",
+      "estimated_tokens": 570,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+      ],
+      "path": "vllm-ascend/quantization/modelslim-and-mxfp/mxfp8-and-fp8/unit-vllm-ascend-modelopt-mxfp8-mxfp4-and-fp8-dequant-fusion-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop": {
+      "bytes": 4911,
+      "category": "sop",
+      "content_sha256": "b8067da899cc77309d63282470bd6fba72e7532e17a88854c7c9d66f71ac8d11",
+      "domain_path": "vllm-ascend/quantization/modelslim-and-mxfp/modelslim-schemes",
+      "estimated_tokens": 726,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/quantization/modelslim-and-mxfp/modelslim-schemes/unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop.md",
       "tier": "L2"
     },
     "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow": {
@@ -1376,6 +2666,21 @@
       "path": "vllm-ascend/optimizations/moe-and-ep/eplb-and-multistream/unit-vllm-ascend-moe-shared-expert-dual-stream-and-eplb-workflow.md",
       "tier": "L3"
     },
+    "unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow": {
+      "bytes": 4403,
+      "category": "workflow",
+      "content_sha256": "d11c8860aefb19747f340606d9e36c9dbb6e0ff0da4ef4bdb43c4394d0259427",
+      "domain_path": "vllm-ascend/quantization/weight-switch/accuracy-triage",
+      "estimated_tokens": 652,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
+        "unit-vllm-ascend-modelslim-w8a8-w4a16-w4a8-c8-and-quarot-sop",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/quantization/weight-switch/accuracy-triage/unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow.md",
+      "tier": "L3"
+    },
     "unit-vllm-ascend-mtp-draft-kv-allocation-and-recurrent-state-sop": {
       "bytes": 5067,
       "category": "sop",
@@ -1404,6 +2709,20 @@
       "path": "vllm-ascend/performance/multi-stream-prefetch/unit-vllm-ascend-multi-stream-overlap-and-npu-prefetch-workflow.md",
       "tier": "L3"
     },
+    "unit-vllm-ascend-multi-tier-and-layerwise-kv-pool-sop": {
+      "bytes": 4716,
+      "category": "sop",
+      "content_sha256": "8dc077dcd10a6c401ac2daa68bcf7a06703badb557d50539ccffba4da930e44e",
+      "domain_path": "vllm-ascend/kv-pool-and-disaggregation/cache-pools/multi-tier-kv-pool",
+      "estimated_tokens": 617,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+      ],
+      "path": "vllm-ascend/kv-pool-and-disaggregation/cache-pools/multi-tier-kv-pool/unit-vllm-ascend-multi-tier-and-layerwise-kv-pool-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-multimodal-vlm-mrope-and-video-dit-adaptation-workflow": {
       "bytes": 6865,
       "category": "workflow",
@@ -1418,6 +2737,19 @@
       "path": "vllm-ascend/models/multimodal-and-vla/vlm-and-dit/unit-vllm-ascend-multimodal-vlm-mrope-and-video-dit-adaptation-workflow.md",
       "tier": "L3"
     },
+    "unit-vllm-ascend-netloader-rfork-and-sleep-mode-hbm-sop": {
+      "bytes": 4976,
+      "category": "sop",
+      "content_sha256": "ce99200aea8ee35797258820d5a713d1684445e37e1416fa117362c53b6fc269",
+      "domain_path": "vllm-ascend/scheduling-and-ep/qos-and-lifecycle/loader-and-sleep-mode",
+      "estimated_tokens": 704,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/scheduling-and-ep/qos-and-lifecycle/loader-and-sleep-mode/unit-vllm-ascend-netloader-rfork-and-sleep-mode-hbm-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-npu-runtime-and-graph-invariants": {
       "bytes": 2676,
       "category": "axiom",
@@ -1428,6 +2760,33 @@
       "inherits_from": [],
       "path": "_common/unit-vllm-ascend-npu-runtime-and-graph-invariants.md",
       "tier": "L1"
+    },
+    "unit-vllm-ascend-npugraph-ex-fusion-passes-and-recompilation-workflow": {
+      "bytes": 4865,
+      "category": "workflow",
+      "content_sha256": "aba4cce6a8cf70cd37253e17cc81b041df203b4c7c8bcbf189e93c78a26e4ab4",
+      "domain_path": "vllm-ascend/compilation/aclgraph-and-npugraph/npugraph-ex-fusion",
+      "estimated_tokens": 707,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-aclgraph-full-piecewise-bucket-and-mempool-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/compilation/aclgraph-and-npugraph/npugraph-ex-fusion/unit-vllm-ascend-npugraph-ex-fusion-passes-and-recompilation-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop": {
+      "bytes": 3701,
+      "category": "sop",
+      "content_sha256": "04db0ec7b4696a6b5d858c5bc1d1f70e8248d0b4bf6fca8c85fb4038e4d89814",
+      "domain_path": "vllm-ascend/architecture/platform-and-patch/cpu-core-binding",
+      "estimated_tokens": 553,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/architecture/platform-and-patch/cpu-core-binding/unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop.md",
+      "tier": "L2"
     },
     "unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop": {
       "bytes": 7535,
@@ -1440,6 +2799,19 @@
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
       ],
       "path": "vllm-ascend/runbooks/runtime-faults/operator-and-checkpoint/unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop": {
+      "bytes": 4162,
+      "category": "sop",
+      "content_sha256": "919846e884f4708e4595568f46f04f123a7a65bd4b1330ccd4cb1c5c58be1260",
+      "domain_path": "vllm-ascend/architecture/platform-and-patch/monkey-patch-hierarchy",
+      "estimated_tokens": 586,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/architecture/platform-and-patch/monkey-patch-hierarchy/unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop.md",
       "tier": "L2"
     },
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": {
@@ -1524,6 +2896,50 @@
       "path": "vllm-ascend/optimizations/quantization/calibration-and-loading/unit-vllm-ascend-quant-weight-loading-scheme-gating-and-li-quant-sop.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-qwen3-235b-30b-coder-next-and-dspark-sop": {
+      "bytes": 4182,
+      "category": "sop",
+      "content_sha256": "9613b1b32dd3f976a786141e0dd252a9ef5fc846b81858c5e63b66fd2556fcaf",
+      "domain_path": "vllm-ascend/models/qwen/qwen3-moe-next",
+      "estimated_tokens": 546,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/models/qwen/qwen3-moe-next/unit-vllm-ascend-qwen3-235b-30b-coder-next-and-dspark-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-qwen3-vl-omni-asr-embedding-reranker-sop": {
+      "bytes": 4808,
+      "category": "sop",
+      "content_sha256": "6c6fa2e9855568a64acd8e010f4d94e80da7eaa534f4a3ebe7a88a53aafb6506",
+      "domain_path": "vllm-ascend/models/qwen/vl-omni-audio-rag",
+      "estimated_tokens": 633,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop",
+        "unit-vllm-ascend-mm-encoder-attention-and-vit-aclgraph-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/models/qwen/vl-omni-audio-rag/unit-vllm-ascend-qwen3-vl-omni-asr-embedding-reranker-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow": {
+      "bytes": 4651,
+      "category": "workflow",
+      "content_sha256": "44bb2d054a83f6f1574687d7ac15e7cc78e3654c3c89d69ea63454cac424d477",
+      "domain_path": "vllm-ascend/models/qwen/qwen35-36-38",
+      "estimated_tokens": 649,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants",
+        "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow"
+      ],
+      "path": "vllm-ascend/models/qwen/qwen35-36-38/unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow.md",
+      "tier": "L3"
+    },
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": {
       "bytes": 4850,
       "category": "sop",
@@ -1538,6 +2954,47 @@
       "path": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow": {
+      "bytes": 4941,
+      "category": "workflow",
+      "content_sha256": "96057bc6f13df590ec2539fcc8c685a2d4f43f8fa8a75aa041f66c05a27e5e6b",
+      "domain_path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp",
+      "estimated_tokens": 722,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+      ],
+      "path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp/unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow": {
+      "bytes": 4917,
+      "category": "workflow",
+      "content_sha256": "78ad0f96b1d8acec3050925f036c19f189d893da1c5e17d9f5611f6639626860",
+      "domain_path": "vllm-ascend/attention/backends/sparse-kv-offload",
+      "estimated_tokens": 769,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/attention/backends/sparse-kv-offload/unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms": {
+      "bytes": 4606,
+      "category": "axiom",
+      "content_sha256": "351d622245f4fb37cf53970a5b06f474ad1ec69f188cc82dcbbd155783c2579f",
+      "domain_path": "_common",
+      "estimated_tokens": 736,
+      "evidence_strength": "hardware_spec",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "_common/unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms.md",
+      "tier": "L1"
+    },
     "unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop": {
       "bytes": 5264,
       "category": "sop",
@@ -1550,6 +3007,20 @@
       ],
       "path": "vllm-ascend/optimizations/speculative-decoding/rejection-and-metrics/unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop.md",
       "tier": "L2"
+    },
+    "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow": {
+      "bytes": 4540,
+      "category": "workflow",
+      "content_sha256": "ff98dda23503c829132f95bb8c639f09453a4dacbe4b3f8116e84b79899efb5e",
+      "domain_path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
+      "estimated_tokens": 660,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback/unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow.md",
+      "tier": "L3"
     },
     "unit-vllm-ascend-superkernel-scope-and-paged-fa-tnd-sop": {
       "bytes": 8601,
@@ -1579,6 +3050,33 @@
       "path": "vllm-ascend/runtime/cannbot-runbooks/unit-vllm-ascend-torchair-aclgraph-and-c8-kv-cache-execution-sop.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop": {
+      "bytes": 4050,
+      "category": "sop",
+      "content_sha256": "0d14e1accb2f793d4b150eb9cca984d9ea846f37799d7a85ff3a4100e34ebf5e",
+      "domain_path": "vllm-ascend/quantization/weight-switch/tp-switch-and-lora",
+      "estimated_tokens": 558,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/quantization/weight-switch/tp-switch-and-lora/unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop": {
+      "bytes": 4072,
+      "category": "sop",
+      "content_sha256": "b330addcb5b9cc5e720d8edb9549453707baa5f200a8f351334c42bd93cd9fe1",
+      "domain_path": "vllm-ascend/kv-pool-and-disaggregation/cache-pools/ucm-and-lmcache",
+      "estimated_tokens": 600,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
+        "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+      ],
+      "path": "vllm-ascend/kv-pool-and-disaggregation/cache-pools/ucm-and-lmcache/unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-verification-and-state-parity-gates": {
       "bytes": 2772,
       "category": "measurement",
@@ -1601,6 +3099,19 @@
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
       ],
       "path": "vllm-ascend/optimizations/quantization/w4a8-w8a8-mxfp/unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop": {
+      "bytes": 3393,
+      "category": "sop",
+      "content_sha256": "5a3e835962a92b2585d66924a04240db29836f645471666d7a961772ce49c81f",
+      "domain_path": "vllm-ascend/architecture/runner-and-worker/xlite-runtime",
+      "estimated_tokens": 472,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/architecture/runner-and-worker/xlite-runtime/unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop.md",
       "tier": "L2"
     }
   }
