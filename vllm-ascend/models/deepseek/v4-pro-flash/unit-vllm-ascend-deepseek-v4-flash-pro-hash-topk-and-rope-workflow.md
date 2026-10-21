@@ -6,6 +6,7 @@ conditions:
   - deepseek-v4
   - deepseek-v4-flash
   - deepseek-v4-pro
+  - deepseek-v4.1
 domain_path: vllm-ascend/models/deepseek/v4-pro-flash
 evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow
@@ -25,11 +26,11 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/model.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L3
-title: DeepSeek-V4-Flash & DeepSeek-V4-Pro (mHC, Compress-4/128 DSA, Hadamard Indexer,
-  DSpark/MTP) workflow
+title: DeepSeek-V4-Flash, DeepSeek-V4-Pro & DeepSeek-V4.1 (mHC, Compress-4/128 DSA,
+  Hadamard Indexer, Engram/Candidate, DSpark/MTP) workflow
 triggers:
   error_signatures:
   - DeepSeek-V4-Pro multi-node W4A8-MTP times out during weight load or HCCL collective
@@ -37,9 +38,11 @@ triggers:
   - DeepSeek-V4-Flash-0731 DSpark draft model fails when rope_dsv4 inverse RoPE or
     Markov head is miswired
   - AscendDSAC4Backend or AscendDSAC128Backend block size mismatch on DSV4_BLOCK_SIZES
+  - DeepSeek-V4.1 npu_hc_pre_v2 rejects hidden_size 5120 because tiling whitelist only allows 4096 or 7168
   keywords:
   - DeepSeek-V4-Flash
   - DeepSeek-V4-Pro
+  - DeepSeek-V4.1
   - DeepSeek-V4-Flash-0731
   - AscendCompressorStateCache
   - AscendDeepseekV4IndexerCache
@@ -47,17 +50,20 @@ triggers:
   - enable_dsa_cp
   - rope_dsv4
   - mHC
+  - npu_hc_pre_v2
+  - Engram
 ---
-# DeepSeek-V4-Flash & DeepSeek-V4-Pro (mHC, Compress-4/128 DSA, Hadamard Indexer, DSpark/MTP) workflow
+# DeepSeek-V4-Flash, DeepSeek-V4-Pro & DeepSeek-V4.1 (mHC, Compress-4/128 DSA, Hadamard Indexer, Engram/Candidate, DSpark/MTP) workflow
 
 ## Trigger and scope
 
-Use this workflow when deploying or debugging `DeepSeek-V4-Flash` (`DeepSeek-V4-Flash-w8a8-mtp` and `DeepSeek-V4-Flash-0731-w8a8` with DSpark) and `DeepSeek-V4-Pro` (`DeepSeek-V4-Pro-w4a8-mtp`) on Atlas A2/A3/A5 (`vllm_ascend/models/deepseek_v4/`, `DeepSeek-V4-Flash.md`, `DeepSeek-V4-Pro.md`).
+Use this workflow when deploying or debugging `DeepSeek-V4-Flash` (`DeepSeek-V4-Flash-w8a8-mtp` and `DeepSeek-V4-Flash-0731-w8a8` with DSpark), `DeepSeek-V4-Pro` (`DeepSeek-V4-Pro-w4a8-mtp`), and `DeepSeek-V4.1-Exp` (`40` backbone + `3` DSpark layers, `hidden_size=5120`, `384`/`128` routed experts, `2` Engram layers `[1, 14]`) on Atlas A2/A3/A5 (`vllm_ascend/models/deepseek_v4/`, `DeepSeek-V4-Flash.md`, `DeepSeek-V4-Pro.md`).
 
 ## Stage 1 — Configure Manifold-Constrained Hyper-Connections (mHC) and Compress-4 / Compress-128 caches
 
-1. **Verify `DSV4_BLOCK_SIZES` and multi-group cache specs (`compressor.py`, `indexer.py`):**
+1. **Verify `DSV4_BLOCK_SIZES`, multi-group cache specs, and `DeepSeek-V4.1` architectural deltas (`compressor.py`, `indexer.py`):**
    - DeepSeek-V4 combines `Compress-4` (`compress_ratio=4`, `overlap=True`, `coff=2`, `AscendDSAC4Backend` / `AscendDSAC4StateBackend`) and `Compress-128` (`compress_ratio=128`, `overlap=False`, `coff=1`, `AscendDSAC128Backend` / `AscendDSAC128StateBackend`) with Manifold-Constrained Hyper-Connections (`hc_mult`).
+   - **DeepSeek-V4.1 mHC, Candidate & Engram Boundaries:** Unlike V4-Flash (`D=4096`, 43 layers) and V4-Pro (`D=7168`, 61 layers), V4.1 uses `hidden_size=5120` (40 all-MoE backbone layers + 3 DSpark layers, `4` compressed-KV sources, `8` index sources) with delayed `pre_in` from the previous sublayer, requiring `npu_hc_pre_v2` / `hc_post` tiling whitelists to accept `D=5120` in addition to `4096`/`7168`. Its two-stage `Candidate` block selection (block max-pool by 8 + Top-2048 blocks) is pure Vector reusing layer-20 `index_score`, and `Engram` (layers `[1, 14]`, similar to `PLE` on Qwen3.8 Flash Next layer `[1]`) injects gated multi-stream memory at decoder layer entry before `hc_pre` and Attention.
    - Always launch with `--block-size 128` and `--no-enable-prefix-caching` (unless hybrid compressor state prefix caching is explicitly validated for the target revision).
    - On Ascend 950 (`A5`), `AscendDeepseekV4IndexerCache` automatically switches indexer cache dtype to `float8_e4m3fn` with `float32` scale and forces `Compressor.norm` to `float32`.
 

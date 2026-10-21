@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 57.18510004226118,
+  "build_elapsed_ms": 58.16629994660616,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -341,7 +341,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "a999597c5c7da42deb0b0fca747f2afb14ee6b72557788aa13bb74bb5967b6e1",
+  "generation": "a8e2eca205801fd212c78e6d16f8c0d9a0e706e628a0cdb5e6b63aa75a764d26",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -749,22 +749,28 @@
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/gdn.py",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/kimi_kda.py",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/bailing_moe_linear_attn.py",
-          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/triton/fla/chunk_gated_delta_rule.py"
+          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/triton/fla/chunk_gated_delta_rule.py",
+          "https://github.com/vllm-project/vllm-ascend/pull/12027",
+          "https://github.com/vllm-project/vllm-ascend/pull/12255",
+          "https://github.com/vllm-project/vllm/pull/35219"
         ],
         "source_digest": "ba8b93c8191c6f1d97f5af3704c749468ed86f042837481003826983f07f8de7",
         "source_locator": "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/gdn_attn_builder.py",
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
       "title": "Hybrid linear attention (GatedDeltaNet / KDA / Bailing MoE linear attention) metadata builder and Triton FLA SOP",
-      "token_estimate": 626,
+      "token_estimate": 1255,
       "triggers": {
         "error_signatures": [
           "GatedDeltaNet or KDA layer corrupts recurrent state when batch mixes prefill and decode requests",
           "AscendGDNMetadataBuilder non_spec_state_indices_tensor points to padding slot -1 without mask guard",
-          "Bailing linear attention slope tensor or chunk_gated_delta_rule Triton launch fails on Ascend"
+          "Bailing linear attention slope tensor or chunk_gated_delta_rule Triton launch fails on Ascend",
+          "Qwen3.5 PCP or PD accuracy degrades in FULL_DECODE_ONLY graph mode after moving GDN conv1d metadata to device tensors",
+          "MTP step >= 1 full-graph decode fails with KvQuantSparseAttnSharedkv AICORE errcode 264 when query_start_loc[-1] exceeds num_actual_tokens",
+          "Qwen3_5MoeForCausalLM fails at assert mamba_block_size is not None when missing from MODELS_CONFIG_MAP"
         ],
         "keywords": [
           "gdn_attn_builder",
@@ -773,7 +779,10 @@
           "chunk_gated_delta_rule",
           "fused_recurrent_gated_delta_rule",
           "kimi_kda",
-          "mamba_utils"
+          "mamba_utils",
+          "num_decode_tokens",
+          "KVBlockZeroer",
+          "MODELS_CONFIG_MAP"
         ]
       }
     },
@@ -1202,22 +1211,30 @@
         "evidence_refs": [
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/meta_registration.py",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/register_custom_ops.py",
-          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/developer_guide/Design_Documents/add_custom_aclnn_op.md"
+          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/developer_guide/Design_Documents/add_custom_aclnn_op.md",
+          "https://github.com/vllm-project/vllm-ascend/pull/9613",
+          "https://github.com/vllm-project/vllm-ascend/pull/10378",
+          "https://github.com/vllm-project/vllm-ascend/pull/10726",
+          "https://github.com/vllm-project/vllm-ascend/pull/12106",
+          "https://github.com/vllm-project/vllm-ascend/pull/14516"
         ],
         "source_digest": "ebb0fe2505497c20ce208473d85f93a62d27a2f4052df0bf450543d5d833f1ac",
         "source_locator": "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/meta_registration.py",
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
       "title": "Custom AscendC / aclnn operator C++ binding, TORCH_LIBRARY_EXPAND, and meta_registration SOP",
-      "token_estimate": 556,
+      "token_estimate": 1177,
       "triggers": {
         "error_signatures": [
           "NotImplementedError: Could not run '_C_ascend::...' with arguments from the 'Meta' backend",
           "RuntimeError: No such operator _C_ascend::... when importing vllm_ascend",
-          "aclnn two-stage workspace launch fails or mutates unaliased tensor inside torch.compile"
+          "aclnn two-stage workspace launch fails or mutates unaliased tensor inside torch.compile",
+          "linking full libopapi.so in custom_build.cmake shadows PTA mc2 dispatch or combine symbols",
+          "torch_npu.npu_kv_quant_sparse_flash_attention segfaults with exit 139 when return_lse is False",
+          "undefined symbol LLVMInitializeSw64TargetInfo when host /usr/lib64 shadows container libLLVM"
         ],
         "keywords": [
           "_C_ascend",
@@ -1226,7 +1243,11 @@
           "add_custom_aclnn_op",
           "EXEC_NPU_CMD",
           "TORCH_LIBRARY_EXPAND",
-          "direct_register_custom_op"
+          "direct_register_custom_op",
+          "opapi_math",
+          "VLLM_ENABLE_ATB_AND_DIRECT_KERNELS",
+          "vllm_quant_lightning_indexer",
+          "npu_kv_quant_sparse_flash_attention"
         ]
       }
     },
@@ -1237,7 +1258,8 @@
           "Ascend910",
           "Ascend910B",
           "Ascend910B4",
-          "Ascend910_93"
+          "Ascend910_93",
+          "Ascend950"
         ],
         "repository": [
           "vllm-ascend",
@@ -1261,19 +1283,22 @@
           "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L397-L456",
           "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L299-L316",
           "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L656-L786",
-          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L249-L286"
+          "https://github.com/vllm-project/vllm-ascend/blob/175ef4d49c2072f9233619636f0309f4f88b4e2c/vllm_ascend/utils.py#L249-L286",
+          "https://github.com/vllm-project/vllm-ascend/pull/10741"
         ],
         "source_digest": "b04fd7d5698c9a1ad9cb1470fe4ce593e1e21bbdd00747c2d797850becc43aa9",
         "source_locator": "docs/evidence/unit-vllm-ascend-custom-op-gates-import-retry-and-nz-review.json",
         "source_type": "ecosystem_repo",
         "supersedes": []
       },
-      "revision": 3,
+      "revision": 4,
       "tier": "L2",
       "title": "Ascend custom-op imports, registration and NZ selection have distinct gates",
-      "token_estimate": 540,
+      "token_estimate": 720,
       "triggers": {
-        "error_signatures": [],
+        "error_signatures": [
+          "RuntimeError: No such operator _C_ascend::npu_compressor_metadata because camem imported vllm_ascend_C before ASCEND_CUSTOM_OPP_PATH bootstrap"
+        ],
         "keywords": [
           "vllm-ascend",
           "ascend",
@@ -1286,7 +1311,10 @@
           "have",
           "distinct",
           "gates",
-          "Ascend910_93"
+          "Ascend910_93",
+          "bootstrap_custom_op_env",
+          "ASCEND_CUSTOM_OPP_PATH",
+          "CaMemAllocator"
         ]
       }
     },
@@ -1359,7 +1387,8 @@
         "model_family": [
           "deepseek-v4",
           "deepseek-v4-flash",
-          "deepseek-v4-pro"
+          "deepseek-v4-pro",
+          "deepseek-v4.1"
         ]
       },
       "domain_path": "vllm-ascend/models/deepseek/v4-pro-flash",
@@ -1391,26 +1420,30 @@
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L3",
-      "title": "DeepSeek-V4-Flash & DeepSeek-V4-Pro (mHC, Compress-4/128 DSA, Hadamard Indexer, DSpark/MTP) workflow",
-      "token_estimate": 839,
+      "title": "DeepSeek-V4-Flash, DeepSeek-V4-Pro & DeepSeek-V4.1 (mHC, Compress-4/128 DSA, Hadamard Indexer, Engram/Candidate, DSpark/MTP) workflow",
+      "token_estimate": 1068,
       "triggers": {
         "error_signatures": [
           "DeepSeek-V4-Pro multi-node W4A8-MTP times out during weight load or HCCL collective init",
           "DeepSeek-V4-Flash-0731 DSpark draft model fails when rope_dsv4 inverse RoPE or Markov head is miswired",
-          "AscendDSAC4Backend or AscendDSAC128Backend block size mismatch on DSV4_BLOCK_SIZES"
+          "AscendDSAC4Backend or AscendDSAC128Backend block size mismatch on DSV4_BLOCK_SIZES",
+          "DeepSeek-V4.1 npu_hc_pre_v2 rejects hidden_size 5120 because tiling whitelist only allows 4096 or 7168"
         ],
         "keywords": [
           "DeepSeek-V4-Flash",
           "DeepSeek-V4-Pro",
+          "DeepSeek-V4.1",
           "DeepSeek-V4-Flash-0731",
           "AscendCompressorStateCache",
           "AscendDeepseekV4IndexerCache",
           "DeepseekV4DSparkModel",
           "enable_dsa_cp",
           "rope_dsv4",
-          "mHC"
+          "mHC",
+          "npu_hc_pre_v2",
+          "Engram"
         ]
       }
     },
@@ -2272,7 +2305,8 @@
           "Ascend910",
           "Ascend910B",
           "Ascend910B4",
-          "Ascend910_93"
+          "Ascend910_93",
+          "Ascend950"
         ],
         "repository": [
           "vllm-ascend",
@@ -2310,16 +2344,18 @@
         "source_type": "cannbot_runbook_distillation",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
       "title": "Runtime fault triage Part 1: Secondary HCCL timeouts, rank-divergent collectives, HCCL_BUFFSIZE exhaustion, and cross-stream tensor lifetimes",
-      "token_estimate": 880,
+      "token_estimate": 1336,
       "triggers": {
         "error_signatures": [
           "HcclAllGather or Notify wait timeout (EI0006 / Get_Socket_Timeout) reported on healthy ranks after one peer rank fails with OOM",
           "MoE dispatch/combine or multi-node collective fails with HCCL_BUFFSIZE too SMALL at large batch size",
           "Single-expert AllToAllV crashes or hangs because non-blocking D2H split_sizes copy was read before stream sync",
-          "CaMem allocator swallows ACL_ERROR_RT_MEMORY_ALLOCATION and returns null pointer causing downstream illegal address crash"
+          "CaMem allocator swallows ACL_ERROR_RT_MEMORY_ALLOCATION and returns null pointer causing downstream illegal address crash",
+          "rogue process or thread unexpectedly creates NPU context on device 0 / rank 0",
+          "EngineCore shm_broadcast or ZeroMQ deserialization fails on 367-byte frame while /v1/models stays 200 and /v1/chat/completions hangs"
         ],
         "keywords": [
           "hccl_timeout_secondary",
@@ -2329,7 +2365,10 @@
           "camem_allocator",
           "ACL_ERROR_RT_MEMORY_ALLOCATION",
           "multistream_cross_stream_tensor_lifetime",
-          "RouteServer"
+          "RouteServer",
+          "aclrtSetDevice",
+          "lock_page_killable",
+          "shm_broadcast"
         ]
       }
     },
@@ -2593,15 +2632,16 @@
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
-      "title": "Kimi-K2-Thinking, Kimi-K2.5, Kimi-K2.6 (Eagle3/DFlash), and native multimodal Kimi-K3 (KDA/MoE/MRV2) SOP",
-      "token_estimate": 625,
+      "title": "Kimi-K2-Thinking, Kimi-K2.5, Kimi-K2.6 (Eagle3/DFlash), and native multimodal Kimi-K3 (KDA/MoE/MRV2/AttnRes) SOP",
+      "token_estimate": 854,
       "triggers": {
         "error_signatures": [
           "Kimi-K2.5 or Kimi-K2.6 vision encoder fails when num_heads is not divisible by tensor_parallel_size",
           "Kimi-K3 packed expert weight or latent MoE quantization mismatches ModelSlim ascend scheme",
-          "Kimi-K3 structural tag or reasoning/tool parser fails on streaming thinking responses"
+          "Kimi-K3 structural tag or reasoning/tool parser fails on streaming thinking responses",
+          "Kimi-K3 per-card weight HBM exceeds INT4 estimate by 8.80 GiB because routed_expert_down_proj and up_proj are stored in BF16"
         ],
         "keywords": [
           "Kimi-K2-Thinking",
@@ -2612,7 +2652,9 @@
           "KimiK3Processor",
           "kimi_kda",
           "Kimi-K2.5-DFlash",
-          "kimi-k2.6-eagle3"
+          "kimi-k2.6-eagle3",
+          "attn_res_fwd",
+          "ReplicatedLinear"
         ]
       }
     },
@@ -4041,7 +4083,8 @@
           "Ascend910",
           "Ascend910B",
           "Ascend910B4",
-          "Ascend910_93"
+          "Ascend910_93",
+          "Ascend950"
         ],
         "repository": [
           "vllm-ascend",
@@ -4070,23 +4113,28 @@
           "https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/triton_grid_coredim_uint16_overflow.md",
           "https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/ascendc_kernel_unsigned_underflow_invalid_row.md",
           "https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/graphmode_padding_stale_position_gatherv3_out_of_range.md",
-          "https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/vendored_custom_op_vs_cann_samename_op_conflict.md"
+          "https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/vendored_custom_op_vs_cann_samename_op_conflict.md",
+          "https://github.com/vllm-project/vllm-ascend/pull/11068",
+          "https://github.com/vllm-project/vllm-ascend/pull/11713",
+          "https://github.com/vllm-project/vllm-ascend/pull/14513"
         ],
         "source_digest": "14aed78ad41ce8d9ee6735d3ab413984ffae79a819ce318257577294ba290e85",
         "source_locator": "cann/cannbot-knowledge@be5882ef29fa9943305085652d2025a038ba491c:knowledge/model/inference/runbooks/runtime/fia_actual_seq_lengths_kv_backend_type.md",
         "source_type": "cannbot_runbook_distillation",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
       "title": "Runtime fault triage Part 2: FIA/MoE operator integer & batch contracts, MC2 fallbacks, Triton uint16 grid overflow, and sharded checkpoint indexing",
-      "token_estimate": 993,
+      "token_estimate": 1463,
       "triggers": {
         "error_signatures": [
           "npu_fused_infer_attention_score fails type check on actual_seq_lengths_kv between torchair GE graph and eager/npugraph_ex",
           "npu_moe_init_routing_v2 raises dtype/type error when topk_ids is int64 or active_expert_range is tensor instead of Python int list",
           "Triton-Ascend kernel launch fails or truncates blocks when grid[0] exceeds CoreDim uint16 ceiling (65535)",
-          "Graph-mode padded tail tokens with stale positions trigger GatherV3 out-of-bounds AICore exception"
+          "Graph-mode padded tail tokens with stale positions trigger GatherV3 out-of-bounds AICore exception",
+          "Duplicate --limit-mm-per-prompt CLI flag switches input_ids to inputs_embeds and crashes AOT compile cache with NoneType.size()",
+          "Corrupted safetensors shard or zeroed MoE gate routes all tokens to rank 0 causing +7 GiB HBM spike and unpermute crash"
         ],
         "keywords": [
           "fia_actual_seq_lengths_kv",
@@ -4096,7 +4144,10 @@
           "mc2_fused_comm_op",
           "triton_grid_coredim_uint16",
           "GatherV3",
-          "padding_idx"
+          "padding_idx",
+          "VLLM_DISABLE_COMPILE_CACHE",
+          "npu_scatter_pa_kv_cache",
+          "padded_head_dim"
         ]
       }
     },
@@ -4312,6 +4363,8 @@
           "https://github.com/vllm-project/vllm-ascend/issues/5044",
           "https://github.com/vllm-project/vllm-ascend/pull/2947",
           "https://github.com/vllm-project/vllm-ascend/issues/4051",
+          "https://github.com/vllm-project/vllm-ascend/pull/12126",
+          "https://github.com/vllm-project/vllm-ascend/pull/12127",
           "https://gitcode.com/cann/cann-recipes-infer/merge_requests/452",
           "https://gitcode.com/cann/cann-recipes-infer/merge_requests/421",
           "https://gitcode.com/cann/cann-recipes-infer/issues/160"
@@ -4321,10 +4374,10 @@
         "source_type": "cannbot_runbook_and_transcript_distillation",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
       "title": "PD disaggregation with Mooncake/LlmDataDist KV transfer and MC2 dispatch/combine bring-up SOP",
-      "token_estimate": 3696,
+      "token_estimate": 3965,
       "triggers": {
         "error_signatures": [
           "Mooncake Ascend backend initialize returns non-zero or reports USE_ASCEND_DIRECT missing",
@@ -4333,7 +4386,9 @@
           "prefill and decode have different TP sizes and decode reads permuted or stale KV heads",
           "HCCL_BUFFSIZE is too SMALL or MoeDistributeDispatchV2 do tiling failed",
           "EI0006 socket timeout, UB LINK ERROR or a missing rank during PD bring-up",
-          "decoded text is corrupted only at high concurrency because prefill released a KV block too early"
+          "decoded text is corrupted only at high concurrency because prefill released a KV block too early",
+          "D rank process PID appears on both target NPU die and Chip0 with extra 119 MB context after KV transfer",
+          "splitfuse chunked request exceeding tokenizer limit finishes on non-final chunk without publishing KV"
         ],
         "keywords": [
           "PD disaggregation",
@@ -4359,7 +4414,9 @@
           "fullmesh_v2",
           "ranktable",
           "Phy-ID",
-          "Ascend910_93"
+          "Ascend910_93",
+          "ThreadPoolExecutor",
+          "splitfuse"
         ]
       }
     },
@@ -5091,22 +5148,26 @@
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/attention/context_parallel/dsa_cp.py",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/attention/context_parallel/sfa_cp.py",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/worker/dcp_utils.py",
-          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/developer_guide/Design_Documents/context_parallel.md"
+          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/developer_guide/Design_Documents/context_parallel.md",
+          "https://github.com/vllm-project/vllm-ascend/pull/12950"
         ],
         "source_digest": "55b44b753cfe25794f0a9a42463950bd71ec59d2b4b44f0f6bf4e4c1e46bdf24",
         "source_locator": "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/attention/context_parallel/common_cp.py",
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L3",
       "title": "Context Parallelism (PCP Ring, Ulysses, DCP, DSA-CP) KV partitioning and LSE log-sum-exp combine workflow",
-      "token_estimate": 723,
+      "token_estimate": 1081,
       "triggers": {
         "error_signatures": [
           "long-context output diverges when pcp_size or dcp_size is greater than 1",
           "LSE log-sum-exp reduction produces NaN or Inf on empty KV shards in Decode Context Parallelism",
-          "enable_dsa_cp fails or deadlocks when chunked prefill mixes requests of unequal sequence lengths"
+          "enable_dsa_cp fails or deadlocks when chunked prefill mixes requests of unequal sequence lengths",
+          "MLAPO fails tiling check 'Only dim0 may be non-contiguous' on merged 576-stride CKV/KR views in DCP",
+          "npu_attention_update fails under high-concurrency chunked prefill when chunk count exceeds 16-way fan-in limit",
+          "MLA split decode fails ACLGraph capture when decode_meta.seq_lens CPU tensor is used in masked_fill"
         ],
         "keywords": [
           "context_parallel",
@@ -5118,7 +5179,10 @@
           "dsa_cp",
           "LSE",
           "softmax_lse",
-          "dcp_utils"
+          "dcp_utils",
+          "MLAPO",
+          "copy_mla_kv",
+          "npu_attention_update"
         ]
       }
     },
@@ -5145,22 +5209,25 @@
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/attention/sfa_kv_offload.py",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/distributed/kv_transfer/sparse_kv_offload/sparse_kv_offload_manager.py",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/distributed/kv_transfer/kv_p2p/sfa_pd_rd2h/connector.py",
-          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/user_guide/feature_guide/layerwise_and_sparse_kv_cache_offloading.md"
+          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/user_guide/feature_guide/layerwise_and_sparse_kv_cache_offloading.md",
+          "https://github.com/vllm-project/vllm-ascend/pull/10441",
+          "https://github.com/vllm-project/vllm-ascend/blob/23d1d9055f2161b3c15613c7fc309f7d5d2ef629/vllm_ascend/distributed/kv_transfer/sparse_kv_offload/sparse_kv_offload_manager.py#L320"
         ],
         "source_digest": "7b796d915eb5ce3215c0c4d45a4ae2fd20dc68b5a14a98e51aa934229ecb7de9",
         "source_locator": "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/attention/sfa_kv_offload.py",
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L3",
       "title": "SFA layerwise KV buffer reuse and sparse C8 KV cache CPU offloading workflow",
-      "token_estimate": 769,
+      "token_estimate": 985,
       "triggers": {
         "error_signatures": [
           "Prefill OOM on long-context SFA or MLA model when allocating full-layer HBM KV caches",
           "sparse_kv_offload H2D gather reads stale host blocks or collides with Mooncake P2P send",
-          "enable_sparse_c8 layerwise buffer reuse corrupts MTP draft layer KV cache"
+          "enable_sparse_c8 layerwise buffer reuse corrupts MTP draft layer KV cache",
+          "SFA layer with has_indexer=False or skip_topk=True corrupts KV cache when reshape_cache_event is not recorded"
         ],
         "keywords": [
           "sfa_kv_offload",
@@ -5168,7 +5235,10 @@
           "layerwise_and_sparse_kv_cache_offloading",
           "enable_sparse_c8",
           "sfa_pd_rd2h",
-          "SparseKVOffloadManager"
+          "SparseKVOffloadManager",
+          "keep_device_kv_cache",
+          "reshape_cache_event",
+          "skip_topk"
         ]
       }
     },

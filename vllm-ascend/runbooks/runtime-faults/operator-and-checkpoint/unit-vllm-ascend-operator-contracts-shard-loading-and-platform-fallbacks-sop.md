@@ -7,6 +7,7 @@ conditions:
   - Ascend910B
   - Ascend910B4
   - Ascend910_93
+  - Ascend950
   repository:
   - vllm-ascend
   - vllm-project/vllm-ascend
@@ -28,11 +29,14 @@ provenance:
   - https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/ascendc_kernel_unsigned_underflow_invalid_row.md
   - https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/graphmode_padding_stale_position_gatherv3_out_of_range.md
   - https://gitcode.com/cann/cannbot-knowledge/blob/be5882ef29fa9943305085652d2025a038ba491c/knowledge/model/inference/runbooks/runtime/vendored_custom_op_vs_cann_samename_op_conflict.md
+  - https://github.com/vllm-project/vllm-ascend/pull/11068
+  - https://github.com/vllm-project/vllm-ascend/pull/11713
+  - https://github.com/vllm-project/vllm-ascend/pull/14513
   source_digest: 14aed78ad41ce8d9ee6735d3ab413984ffae79a819ce318257577294ba290e85
   source_locator: cann/cannbot-knowledge@be5882ef29fa9943305085652d2025a038ba491c:knowledge/model/inference/runbooks/runtime/fia_actual_seq_lengths_kv_backend_type.md
   source_type: cannbot_runbook_distillation
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L2
 title: 'Runtime fault triage Part 2: FIA/MoE operator integer & batch contracts, MC2
@@ -47,6 +51,8 @@ triggers:
     uint16 ceiling (65535)
   - Graph-mode padded tail tokens with stale positions trigger GatherV3 out-of-bounds
     AICore exception
+  - Duplicate --limit-mm-per-prompt CLI flag switches input_ids to inputs_embeds and crashes AOT compile cache with NoneType.size()
+  - Corrupted safetensors shard or zeroed MoE gate routes all tokens to rank 0 causing +7 GiB HBM spike and unpermute crash
   keywords:
   - fia_actual_seq_lengths_kv
   - fia_qlens_block_table
@@ -56,6 +62,9 @@ triggers:
   - triton_grid_coredim_uint16
   - GatherV3
   - padding_idx
+  - VLLM_DISABLE_COMPILE_CACHE
+  - npu_scatter_pa_kv_cache
+  - padded_head_dim
 ---
 # Runtime fault triage Part 2: FIA/MoE operator integer & batch contracts, MC2 fallbacks, Triton uint16 grid overflow, and sharded checkpoint indexing
 
@@ -82,3 +91,8 @@ Use this SOP when triaging operator shape/type assertion failures, AICore out-of
    - When `VocabParallelEmbedding` shards the vocabulary across TP ranks `[vocab_start, vocab_end)`, translate global `padding_idx` to `padding_idx - vocab_start` (or `None` if outside the rank's shard) so `padding_idx` does not zero out an unrelated token row.
    - Filter out MTP weights (`model.layers.<k>.*` where `k >= config.num_hidden_layers`) during target-model checkpoint loading instead of hardcoding layer index `61`.
    - Never assume shared fused MoE/MLP wrappers default to the right activation or bias rule across model families (e.g., `GEGLU` vs. default `SiLU` in Gemma-4, clamped `SwiGLU` in GPT-OSS, or dense bias dropped by MXFP8 linear wrappers).
+
+5. **Audit safetensors headers directly, pad unaligned `head_dim` at load time, and eliminate redundant/hot-path copies (`PR #11068`, `PR #11713`, `PR #14513`).**
+   - **Safetensors Header & Gate Pre-Flight:** Never trust `quantization_config` (`targets: ["Linear"]`) alone when sizing HBM—parse `*.safetensors` JSON headers directly (e.g., Kimi-K3 stores 92-layer `routed_expert_down_proj`/`up_proj` as `BF16` `ReplicatedLinear`, adding `8.80 GiB/card`). When Rank 0 spikes by `+7 GiB` and crashes in `unpermute` under `--enable-expert-parallel`, run a zero-NPU safetensors shard/index and MoE `gate` non-zero distribution check to catch corrupted shards routing all padded tokens to `expert 0 / rank 0`. When pruning layers/experts, prune `model.safetensors.index.json` in lockstep.
+   - **Load-Time Static `head_dim` 32B Alignment & Weight Contiguity:** When `head_dim` is not 32-byte aligned (e.g., `head_dim=35`), zero-pad QKV and `out_proj` weights once in `load_state_dict` to `padded_head_dim=64` (preserving `scale = 1/sqrt(35)`) with a zero-copy `BSND` view to eliminate runtime `FlashAttentionScore_Pad`/`Transpose` kernels (`-18%` latency). Ensure loaded weights are `.contiguous()` and drop duplicate TP/full `o_proj` copies (`PR #11068`), but never insert implicit `.contiguous()` copies inside hot-path KV cache operator wrappers (`npu_scatter_pa_kv_cache` / `npu_gather_pa_kv_cache`, `PR #11713`).
+   - **CLI Flag Override AOT Cache Isolation & FlashComm1 Gating:** Duplicate CLI flags (such as `--limit-mm-per-prompt` overriding `vision_chunk=0` with `vision_chunk=40`) switch execution from `input_ids` to `inputs_embeds` while colliding on the same AOT compile cache (`NoneType.size()`); isolate with `VLLM_DISABLE_COMPILE_CACHE=1`. When enabling `VLLM_ASCEND_ENABLE_FLASHCOMM1=1`, verify `enable_shared_expert_dp` gating in `ascend_config.py` (`PR #14513`).
