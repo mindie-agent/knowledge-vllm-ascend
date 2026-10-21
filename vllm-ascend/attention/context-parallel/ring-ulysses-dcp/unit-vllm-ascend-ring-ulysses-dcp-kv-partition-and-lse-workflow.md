@@ -65,9 +65,9 @@ Use this workflow when configuring or debugging Prefill Context Parallelism (`pc
 1. **Compute local attention with `softmax_lse` output (`common_cp.py`, `dcp_utils.py`):**
    - Each CP/DCP rank computes local attention output $O_i$ and local log-sum-exp $L_i = \log \sum \exp(S_i)$ in `float32`.
    - Combine partial outputs across the CP/DCP process group using the numerically stable LSE rescaling identity:
-     $$L_{	ext{global}} = \log \sum_i \exp(L_i - L_{\max}) + L_{\max}, \quad O_{	ext{global}} = \sum_i \exp(L_i - L_{	ext{global}}) O_i$$
+     $$L_{\text{global}} = \log \sum_i \exp(L_i - L_{\max}) + L_{\max}, \quad O_{\text{global}} = \sum_i \exp(L_i - L_{\text{global}}) O_i$$
 2. **Guard empty local KV shards (`seq_len_local == 0`):**
-   - When a short request has zero KV blocks assigned to a given DCP rank, its local $L_i$ must be initialized to $-\infty$ (and $\exp(-\infty - L_{	ext{global}}) = 0$) in FP32 so it contributes zero weight without producing `0 * NaN` during LSE reduction.
+   - When a short request has zero KV blocks assigned to a given DCP rank, its local $L_i$ must be initialized to $-\infty$ (and $\exp(-\infty - L_{\text{global}}) = 0$) in FP32 so it contributes zero weight without producing `0 * NaN` during LSE reduction.
 
 ## Stage 3 — Validate CP parity against single-sequence eager oracle
 

@@ -64,7 +64,7 @@ Use this workflow when deploying or debugging `DeepSeek-V4-Flash` (`DeepSeek-V4-
 ## Stage 2 — Wire Hadamard activation rotation, `IndexerOverlapPlan`, and `rope_dsv4`
 
 1. **Verify Hadamard rotation and compressor/indexer stream overlap (`vllm_ascend/models/deepseek_v4/indexer.py`):**
-   - `rotate_activation` pads hidden dimension to $2^{\lceil \log_2 D ceil}$ and applies the Hadamard projection scaled by $D^{-0.5}$ before `quantize_query` / `quantize_key_and_update_cache`.
+   - `rotate_activation` pads hidden dimension to $2^{\lceil \log_2 D \rceil}$ and applies the Hadamard projection scaled by $D^{-0.5}$ before `quantize_query` / `quantize_key_and_update_cache`.
    - `IndexerOverlapPlan` overlaps main-attention compressed KV computation and scatter on `aux_stream` with Indexer top-$k$ selection on the primary stream.
 2. **Select serial `mtp` vs block `DSpark` (`DeepSeek-V4-Flash-0731`):**
    - Standard `DeepSeek-V4-Flash-w8a8-mtp` and `DeepSeek-V4-Pro-w4a8-mtp` use `--speculative-config '{"num_speculative_tokens": 1, "method": "mtp", "enforce_eager": true}'`.

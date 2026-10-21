@@ -51,7 +51,7 @@ Use this workflow when enabling Multi-Token Prediction (`mtp`, `deepseek_mtp`, `
 ## Stage 1 — Provision speculative state slots for target verification ($1 + K$ tokens)
 
 1. **Size state pools for speculative verification (`gdn_attn_builder.py`, `patch_mamba_config.py`):**
-   - Unlike paged KV caches—where rejected tokens at positions $> 	ext{accepted}$ are simply ignored by decrementing `seq_lens`—recurrent SSM/GDN/KDA states and causal-conv ring buffers mutate in place as each token is processed.
+   - Unlike paged KV caches—where rejected tokens at positions $> \text{accepted}$ are simply ignored by decrementing `seq_lens`—recurrent SSM/GDN/KDA states and causal-conv ring buffers mutate in place as each token is processed.
    - Allocate `1 + K` state slots per active request (`spec_state_indices_tensor`) so the target verification step records intermediate recurrent and conv states at each candidate token position $0, 1, \dots, K$.
 
 ## Stage 2 — Commit the last accepted state slot on rejection (`num_rejected_tokens`)
