@@ -7,6 +7,7 @@ conditions:
   - Ascend910B
   - Ascend910B4
   - Ascend910_93
+  - Ascend950
   repository:
   - vllm-ascend
   - vllm-project/vllm-ascend
@@ -33,7 +34,7 @@ provenance:
   source_locator: cann/cannbot-knowledge@be5882ef29fa9943305085652d2025a038ba491c:knowledge/model/inference/runbooks/runtime/hccl_timeout_secondary_to_rank_failure_oom.md
   source_type: cannbot_runbook_distillation
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L2
 title: 'Runtime fault triage Part 1: Secondary HCCL timeouts, rank-divergent collectives,
@@ -48,6 +49,8 @@ triggers:
     copy was read before stream sync
   - CaMem allocator swallows ACL_ERROR_RT_MEMORY_ALLOCATION and returns null pointer
     causing downstream illegal address crash
+  - rogue process or thread unexpectedly creates NPU context on device 0 / rank 0
+  - EngineCore shm_broadcast or ZeroMQ deserialization fails on 367-byte frame while /v1/models stays 200 and /v1/chat/completions hangs
   keywords:
   - hccl_timeout_secondary
   - Get_Socket_Timeout
@@ -57,6 +60,9 @@ triggers:
   - ACL_ERROR_RT_MEMORY_ALLOCATION
   - multistream_cross_stream_tensor_lifetime
   - RouteServer
+  - aclrtSetDevice
+  - lock_page_killable
+  - shm_broadcast
 ---
 # Runtime fault triage Part 1: Secondary HCCL timeouts, rank-divergent collectives, HCCL_BUFFSIZE exhaustion, and cross-stream tensor lifetimes
 
@@ -82,3 +88,9 @@ Use this SOP to triage distributed hangs, HCCL watchdog timeouts, silent OOM cra
    - Never reuse the same Python local variable name across concurrent primary/secondary stream branches in the same function scope (which overwrites tensor references before the secondary stream's `record_stream` / `wait_tensor` executes).
    - When a small slice of a large primary-stream tensor is consumed by a long-running communication stream, `.clone()` the slice before passing it to the secondary stream so `record_stream` does not pin the entire parent allocation in HBM.
    - Call `RouteServer.finalize()` (or standard torch_npu cleanup) before `os._exit()` to prevent orphaned CANN TBE compiler subprocess tracebacks on shutdown.
+
+5. **Use low-intrusion uprobes for rogue `device 0` contexts, separate NFS `D`-state stalls from NPU hangs, and preserve IPC frame / profiler step invariants:**
+   - **Zero-Intrusion `aclrtSetDevice` Uprobe:** When an unknown process or worker thread intermittently creates a context on `device 0` and restarting vLLM or modifying Python packages is undesirable, attach a user-space uprobe on `libascendcl.so` (`perf probe -x libascendcl.so 'aclrtSetDevice deviceId=%x0:s32'` with `perf record -e probe_libascendcl:aclrtSetDevice -aR -g --call-graph dwarf,16384`) to capture PID, thread name, `deviceId`, and call stack with zero service interruption.
+   - **Slow Shared Storage (`D`-State) vs. Real NPU Hang:** Before killing a slow multi-node startup as an HCCL deadlock, inspect `/proc/<pid>/stat` (`D` state), `/proc/<pid>/wchan` (`lock_page` / `lock_page_killable`), `/proc/<pid>/io` `read_bytes` growth, and `nfsiostat` to distinguish cold NFS page-cache reads (`~28 MB/s`) from NPU hangs.
+   - **EngineCore `shm_broadcast` / ZeroMQ Corrupted Frame Forensics:** If worker output deserialization fails intermittently (e.g., on a `367 B` empty-batch frame) leaving `/v1/models` returning `200` while `/v1/chat/completions` hangs, never swallow the exception or substitute `EMPTY_MODEL_RUNNER_OUTPUT` (which silently desynchronizes request-batch ordering); log frame count, byte length, error offset, SHA-256 digest, and exception chain, and let the exception propagate.
+   - **Profiling Layer Segmentation Invariant:** When segmenting NPU profiler traces on MLA + MTP + Hybrid Dense/MoE models, never treat internal MLA sub-kernels (`MlaPrologV3`, `KvQuantSparseFlashAttention`) as layer-start anchors, and never split short dense prefixes (`3 dense + 75 MoE`) or trailing `MTP` speculative layers into separate steps.

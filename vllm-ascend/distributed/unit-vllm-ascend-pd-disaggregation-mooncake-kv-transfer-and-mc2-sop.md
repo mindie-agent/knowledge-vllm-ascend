@@ -22,6 +22,8 @@ provenance:
   - https://github.com/vllm-project/vllm-ascend/issues/5044
   - https://github.com/vllm-project/vllm-ascend/pull/2947
   - https://github.com/vllm-project/vllm-ascend/issues/4051
+  - https://github.com/vllm-project/vllm-ascend/pull/12126
+  - https://github.com/vllm-project/vllm-ascend/pull/12127
   - https://gitcode.com/cann/cann-recipes-infer/merge_requests/452
   - https://gitcode.com/cann/cann-recipes-infer/merge_requests/421
   - https://gitcode.com/cann/cann-recipes-infer/issues/160
@@ -29,7 +31,7 @@ provenance:
   source_locator: cann/cannbot-knowledge/knowledge/model/inference/runbooks/runtime/mooncake_ascend_hixl_kv_transfer_bringup.md
   source_type: cannbot_runbook_and_transcript_distillation
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L2
 title: PD disaggregation with Mooncake/LlmDataDist KV transfer and MC2 dispatch/combine bring-up SOP
@@ -42,6 +44,8 @@ triggers:
   - HCCL_BUFFSIZE is too SMALL or MoeDistributeDispatchV2 do tiling failed
   - EI0006 socket timeout, UB LINK ERROR or a missing rank during PD bring-up
   - decoded text is corrupted only at high concurrency because prefill released a KV block too early
+  - D rank process PID appears on both target NPU die and Chip0 with extra 119 MB context after KV transfer
+  - splitfuse chunked request exceeding tokenizer limit finishes on non-final chunk without publishing KV
   keywords:
   - PD disaggregation
   - prefill
@@ -67,6 +71,8 @@ triggers:
   - ranktable
   - Phy-ID
   - Ascend910_93
+  - ThreadPoolExecutor
+  - splitfuse
 ---
 
 # PD disaggregation with Mooncake/LlmDataDist KV transfer and MC2 dispatch/combine bring-up SOP
@@ -109,9 +115,9 @@ It does not cover model-quality tuning, scheduler policy, or the internal arithm
 
    **Verify:** `npu-smi info` shows the expected `Phy-ID` per rank and no rank is bound to the wrong die; `python3 -c "import torch, torch_npu; print(torch.npu.current_device())"` agrees with the intended local rank; a four-rank `all_reduce` on the selected transport completes before any model is loaded.
 
-2. **Build and register the KV transport before constructing the connector.**
+2. **Build and register the KV transport before constructing the connector, and bind `set_device` in receiver worker threads (`PR #12126`, `PR #12127`).**
 
-   For the Mooncake Ascend direct backend, build with the Ascend-direct flag, put the resulting libraries on `LD_LIBRARY_PATH`, and construct the engine only after the process has selected its NPU. The engine reads the physical device from the current Ascend context, so a missing `set_device` silently binds the wrong die.
+   For the Mooncake Ascend direct backend, build with the Ascend-direct flag, put the resulting libraries on `LD_LIBRARY_PATH`, and construct the engine only after the process has selected its NPU. The engine reads the physical device from the current Ascend context, so a missing `set_device` silently binds the wrong die. Crucially, Mooncake receiver `ThreadPoolExecutor` worker threads do **not** inherit the main thread's NPU current-device—without an explicit thread `initializer`, worker threads default to `Chip0`/`device 0` and allocate a duplicate `~119 MB` context on `device 0`. Derive the target device from the KV cache tensor and pass `initializer=torch.npu.set_device, initargs=(target_device,)` to both standard and hybrid receiver `ThreadPoolExecutor`s.
 
    ```bash
    cmake .. -DUSE_ASCEND_DIRECT=ON && make -j"$(nproc)" && make install
@@ -144,9 +150,9 @@ It does not cover model-quality tuning, scheduler policy, or the internal arithm
 
    For `LlmDataDist`, use the connector's producer and consumer roles and the same rank-table and HCCL environment; the transport must be registered on both sides before the first block is pulled or pushed.
 
-   **Invariant:** the engine is constructed after `set_device`; `initialize` returns zero; `register_kv_caches` derives block rank from the live cache rank, `block_rank = len(first_kv_cache.shape) - 1`, and computes `block_len = product(shape[1:]) * dtype_size`. Never hard-code `block_rank = 3`; eager KV is four-dimensional while a TorchAir KV cache is a flattened three-dimensional tensor.
+   **Invariant:** the engine is constructed after `set_device`; receiver thread pools initialize `torch.npu.set_device` per worker thread so a rank PID never appears on two dies; `initialize` returns zero; `register_kv_caches` derives block rank from the live cache rank, `block_rank = len(first_kv_cache.shape) - 1`, and computes `block_len = product(shape[1:]) * dtype_size`. Never hard-code `block_rank = 3`; eager KV is four-dimensional while a TorchAir KV cache is a flattened three-dimensional tensor.
 
-   **Verify:** the P and D plogs contain `mem type:1` (NPU HBM registration) in addition to `mem type:0` (host registration); decode does not report transfer error `103901`; a single-block write-then-read returns identical bytes; a 2 MiB alignment assertion passes for every registered base address.
+   **Verify:** the P and D plogs contain `mem type:1` (NPU HBM registration) in addition to `mem type:0` (host registration); decode does not report transfer error `103901`; `npu-smi info` after serving requests shows each worker PID on exactly one die; a 2 MiB alignment assertion passes for every registered base address.
 
 3. **Re-shard KV blocks and KV heads when `P_TP != D_TP`, and hold the prefill block until every decode rank acknowledges it.**
 
@@ -184,7 +190,7 @@ It does not cover model-quality tuning, scheduler policy, or the internal arithm
    assert block_len == block_size * local_heads_p * head_dim * first_kv_cache.element_size()
    ```
 
-   In a pull-based path, prefill must not release the request's blocks when `prefill` finishes. Delay release until all decode TP ranks have acknowledged receipt. Count distinct `tp_rank` values in a set; a duplicate acknowledgement from the same rank must be ignored, otherwise the barrier can be satisfied early.
+   In a pull-based path, prefill must not release the request's blocks when `prefill` finishes. Delay release until all decode TP ranks have acknowledged receipt. Count distinct `tp_rank` values in a set; a duplicate acknowledgement from the same rank must be ignored, otherwise the barrier can be satisfied early. Also guard Splitfuse / chunked-prefill postprocessing: when a chat-templated prompt exceeds the tokenizer limit (e.g., `131,079 > 131,072`), ensure non-final chunks (`isLastChunk=0`) filter out or clear terminal `finish_reason` before `filter_finished_sequences()` runs, so C++ does not end the sequence early without emitting `PUBLISH_KV_COMPLETE` (which leaves the coordinator hanging on an orphaned request).
 
    ```python
    delay_free = len(computed_block_ids) > 0

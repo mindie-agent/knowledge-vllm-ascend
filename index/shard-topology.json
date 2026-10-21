@@ -343,8 +343,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 553876,
-      "estimated_tokens": 90395,
+      "bytes": 572605,
+      "estimated_tokens": 94052,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -470,8 +470,8 @@
       },
       {
         "automatic": false,
-        "bytes": 3712,
-        "estimated_tokens": 540,
+        "bytes": 4730,
+        "estimated_tokens": 720,
         "exceeds": [],
         "kind": "federation",
         "path": "integration",
@@ -483,8 +483,8 @@
       },
       {
         "automatic": false,
-        "bytes": 525457,
-        "estimated_tokens": 86057,
+        "bytes": 543168,
+        "estimated_tokens": 89534,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -574,7 +574,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 57.18510004226118,
+  "index_build_elapsed_ms": 58.16629994660616,
   "leaves": [
     {
       "automatic": false,
@@ -608,8 +608,8 @@
     },
     {
       "automatic": false,
-      "bytes": 3712,
-      "estimated_tokens": 540,
+      "bytes": 4730,
+      "estimated_tokens": 720,
       "exceeds": [],
       "kind": "leaf",
       "path": "integration/custom-ops",
@@ -686,8 +686,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4414,
-      "estimated_tokens": 626,
+      "bytes": 7547,
+      "estimated_tokens": 1255,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/attention/backends/hybrid-linear-attention",
@@ -712,8 +712,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4917,
-      "estimated_tokens": 769,
+      "bytes": 6203,
+      "estimated_tokens": 985,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/attention/backends/sparse-kv-offload",
@@ -738,8 +738,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4945,
-      "estimated_tokens": 723,
+      "bytes": 6822,
+      "estimated_tokens": 1081,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp",
@@ -777,8 +777,8 @@
     },
     {
       "automatic": false,
-      "bytes": 3811,
-      "estimated_tokens": 556,
+      "bytes": 7017,
+      "estimated_tokens": 1177,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/compilation/custom-ops/aclnn-registration",
@@ -803,8 +803,8 @@
     },
     {
       "automatic": false,
-      "bytes": 37438,
-      "estimated_tokens": 8130,
+      "bytes": 38892,
+      "estimated_tokens": 8399,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/distributed",
@@ -937,8 +937,8 @@
     },
     {
       "automatic": false,
-      "bytes": 5544,
-      "estimated_tokens": 839,
+      "bytes": 6669,
+      "estimated_tokens": 1068,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/models/deepseek/v4-pro-flash",
@@ -978,8 +978,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4681,
-      "estimated_tokens": 625,
+      "bytes": 5775,
+      "estimated_tokens": 854,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/models/kimi/k2-and-k3",
@@ -1355,8 +1355,8 @@
     },
     {
       "automatic": false,
-      "bytes": 7130,
-      "estimated_tokens": 880,
+      "bytes": 9251,
+      "estimated_tokens": 1336,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runbooks/runtime-faults/collective-and-memory",
@@ -1368,8 +1368,8 @@
     },
     {
       "automatic": false,
-      "bytes": 7535,
-      "estimated_tokens": 993,
+      "bytes": 9950,
+      "estimated_tokens": 1463,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runbooks/runtime-faults/operator-and-checkpoint",
@@ -1573,8 +1573,8 @@
     },
     {
       "automatic": false,
-      "bytes": 3712,
-      "estimated_tokens": 540,
+      "bytes": 4730,
+      "estimated_tokens": 720,
       "exceeds": [],
       "kind": "subtree",
       "path": "integration/custom-ops",
@@ -1615,8 +1615,8 @@
     },
     {
       "automatic": false,
-      "bytes": 17733,
-      "estimated_tokens": 2630,
+      "bytes": 22152,
+      "estimated_tokens": 3475,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/attention/backends",
@@ -1631,8 +1631,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4945,
-      "estimated_tokens": 723,
+      "bytes": 6822,
+      "estimated_tokens": 1081,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/attention/context-parallel",
@@ -1658,8 +1658,8 @@
     },
     {
       "automatic": false,
-      "bytes": 7922,
-      "estimated_tokens": 1138,
+      "bytes": 11128,
+      "estimated_tokens": 1759,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/compilation/custom-ops",
@@ -1672,8 +1672,8 @@
     },
     {
       "automatic": false,
-      "bytes": 56183,
-      "estimated_tokens": 10663,
+      "bytes": 57637,
+      "estimated_tokens": 10932,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/distributed",
@@ -1736,8 +1736,8 @@
     },
     {
       "automatic": false,
-      "bytes": 9869,
-      "estimated_tokens": 1399,
+      "bytes": 10994,
+      "estimated_tokens": 1628,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/models/deepseek",
@@ -1763,8 +1763,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4681,
-      "estimated_tokens": 625,
+      "bytes": 5775,
+      "estimated_tokens": 854,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/models/kimi",
@@ -1972,8 +1972,8 @@
     },
     {
       "automatic": false,
-      "bytes": 14665,
-      "estimated_tokens": 1873,
+      "bytes": 19201,
+      "estimated_tokens": 2799,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/runbooks/runtime-faults",
@@ -2131,11 +2131,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop": {
-      "bytes": 4414,
+      "bytes": 7547,
       "category": "sop",
-      "content_sha256": "061939ef27e3cb464f71c70c61ead7c2541581e469be0b9e61c0d30d5b3b6cea",
+      "content_sha256": "ae2b2332a60e3b437422a19c2848c1d62a25f25cb5ee5396e150f1d52e5151b7",
       "domain_path": "vllm-ascend/attention/backends/hybrid-linear-attention",
-      "estimated_tokens": 626,
+      "estimated_tokens": 1255,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -2226,11 +2226,11 @@
       "tier": "L3"
     },
     "unit-vllm-ascend-custom-aclnn-op-registration-meta-and-abi-sop": {
-      "bytes": 3811,
+      "bytes": 7017,
       "category": "sop",
-      "content_sha256": "da8fb810bc11653c2fd3c84f6db6561ae69338373d376bb9c041108f46d12713",
+      "content_sha256": "f28b10a9f3cf5f1c91f3422a17ca6bf2ae5ab960f4182d27b20d51f453bdc057",
       "domain_path": "vllm-ascend/compilation/custom-ops/aclnn-registration",
-      "estimated_tokens": 556,
+      "estimated_tokens": 1177,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
@@ -2239,11 +2239,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-custom-op-gates-import-retry-and-nz": {
-      "bytes": 3712,
+      "bytes": 4730,
       "category": "sop",
-      "content_sha256": "49676e66fdf39ba69c08698478bdf89c91da76212677db839114c4057e1f3ff1",
+      "content_sha256": "53aa6f95254bc952191e15c0b7f92a8490b05515e5a13b8f56bdfaf0e5df4df0",
       "domain_path": "integration/custom-ops",
-      "estimated_tokens": 540,
+      "estimated_tokens": 720,
       "evidence_strength": "single_observation",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
@@ -2267,11 +2267,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow": {
-      "bytes": 5544,
+      "bytes": 6669,
       "category": "workflow",
-      "content_sha256": "d024575c6b34e6c2488ebb8ae140091001e30c9b5ae1dc226bb8df04b7a63c5b",
+      "content_sha256": "711392641eda2d62f3d06661fa75e49558589649caea7cf02c00a19b2aeea1d6",
       "domain_path": "vllm-ascend/models/deepseek/v4-pro-flash",
-      "estimated_tokens": 839,
+      "estimated_tokens": 1068,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
@@ -2459,11 +2459,11 @@
       "tier": "L1"
     },
     "unit-vllm-ascend-hccl-timeout-oom-and-cross-stream-lifetime-triage-sop": {
-      "bytes": 7130,
+      "bytes": 9251,
       "category": "sop",
-      "content_sha256": "5fb1d6f9e593d70aac4f7cda05fd5867be374722c18bfd0c800263d1201c6900",
+      "content_sha256": "1817d0ed9c5e7eecc04af1d8729b79d57ec95443d59b40bf38b9f42b6536c5a3",
       "domain_path": "vllm-ascend/runbooks/runtime-faults/collective-and-memory",
-      "estimated_tokens": 880,
+      "estimated_tokens": 1336,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -2515,11 +2515,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-kimi-k2-k25-k26-k3-mrv2-and-dspark-sop": {
-      "bytes": 4681,
+      "bytes": 5775,
       "category": "sop",
-      "content_sha256": "b4c8865866adaf4bda777a9622a64eed3ea786c2402adde1837a7e7745c4f1e8",
+      "content_sha256": "1c66db36d81adbbf259b7116a8fca5ff2dd178fd247bfa9ab59c1de6065d11bf",
       "domain_path": "vllm-ascend/models/kimi/k2-and-k3",
-      "estimated_tokens": 625,
+      "estimated_tokens": 854,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-kimi-k3-kda-mamba-hybrid-attention-axioms",
@@ -2853,11 +2853,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop": {
-      "bytes": 7535,
+      "bytes": 9950,
       "category": "sop",
-      "content_sha256": "a34c00478946f6d736d9ea240b19f4296f1e69dfb1ed6d24eaeef15d30fb284d",
+      "content_sha256": "1cc705858a6c45b26484297c49a60dbae4c7fd02d07b6b2a42d216b2c56ed29a",
       "domain_path": "vllm-ascend/runbooks/runtime-faults/operator-and-checkpoint",
-      "estimated_tokens": 993,
+      "estimated_tokens": 1463,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
@@ -2906,11 +2906,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": {
-      "bytes": 17208,
+      "bytes": 18662,
       "category": "sop",
-      "content_sha256": "b85361d9e486295dd1cb7ccced1a31bb7fbc2438560bbe8825f2bd127a5581af",
+      "content_sha256": "f201c68d105128c31323468e26152eed02d39c43cec4d9e1c87051e49f292223",
       "domain_path": "vllm-ascend/distributed",
-      "estimated_tokens": 3696,
+      "estimated_tokens": 3965,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -3071,11 +3071,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow": {
-      "bytes": 4945,
+      "bytes": 6822,
       "category": "workflow",
-      "content_sha256": "00926ba76a91b456c57c49fd111d0205c6d2dbff90da74b66c47ee8538ad2f05",
+      "content_sha256": "ecda2bcddadc5aed844f60ae08dc76576e2b3fc3188577eac8132b95ad9242aa",
       "domain_path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp",
-      "estimated_tokens": 723,
+      "estimated_tokens": 1081,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
@@ -3085,11 +3085,11 @@
       "tier": "L3"
     },
     "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow": {
-      "bytes": 4917,
+      "bytes": 6203,
       "category": "workflow",
-      "content_sha256": "78ad0f96b1d8acec3050925f036c19f189d893da1c5e17d9f5611f6639626860",
+      "content_sha256": "de261e92e4670e516bbde96b6f56d5104f14d4624282f8906b950734dc1a0074",
       "domain_path": "vllm-ascend/attention/backends/sparse-kv-offload",
-      "estimated_tokens": 769,
+      "estimated_tokens": 985,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
