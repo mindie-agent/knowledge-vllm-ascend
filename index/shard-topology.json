@@ -237,6 +237,13 @@
     "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop": [
       "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
+    "unit-vllm-ascend-pd-accuracy-topdown-bottomup-diagnosis-workflow": [
+      "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
+    "unit-vllm-ascend-pd-connector-layout-compatibility-audit-sop": [
+      "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants"
+    ],
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-hccl-and-dp-collective-invariants"
@@ -244,6 +251,11 @@
     "unit-vllm-ascend-pd-hixl-mooncake-layerwise-kv-push-and-release-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-hccl-and-dp-collective-invariants"
+    ],
+    "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants": [],
+    "unit-vllm-ascend-pd-serving-launch-and-transfer-acceptance-sop": [
+      "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
     ],
     "unit-vllm-ascend-perf-measurement-distortion-and-quant-benchmark-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -331,8 +343,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 535125,
-      "estimated_tokens": 87860,
+      "bytes": 553876,
+      "estimated_tokens": 90395,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -396,8 +408,12 @@
         "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop",
         "unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop",
         "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop",
+        "unit-vllm-ascend-pd-accuracy-topdown-bottomup-diagnosis-workflow",
+        "unit-vllm-ascend-pd-connector-layout-compatibility-audit-sop",
         "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
         "unit-vllm-ascend-pd-hixl-mooncake-layerwise-kv-push-and-release-sop",
+        "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants",
+        "unit-vllm-ascend-pd-serving-launch-and-transfer-acceptance-sop",
         "unit-vllm-ascend-perf-measurement-distortion-and-quant-benchmark-sop",
         "unit-vllm-ascend-precision-bisect-cp-lse-rope-moe-and-validation-sop",
         "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
@@ -419,7 +435,7 @@
         "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop",
         "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
       ],
-      "units": 82
+      "units": 86
     },
     "domains": [
       {
@@ -467,8 +483,8 @@
       },
       {
         "automatic": false,
-        "bytes": 506706,
-        "estimated_tokens": 83522,
+        "bytes": 525457,
+        "estimated_tokens": 86057,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -529,8 +545,12 @@
           "unit-vllm-ascend-numa-cpu-binding-and-irq-isolation-sop",
           "unit-vllm-ascend-operator-contracts-shard-loading-and-platform-fallbacks-sop",
           "unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop",
+          "unit-vllm-ascend-pd-accuracy-topdown-bottomup-diagnosis-workflow",
+          "unit-vllm-ascend-pd-connector-layout-compatibility-audit-sop",
           "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
           "unit-vllm-ascend-pd-hixl-mooncake-layerwise-kv-push-and-release-sop",
+          "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants",
+          "unit-vllm-ascend-pd-serving-launch-and-transfer-acceptance-sop",
           "unit-vllm-ascend-perf-measurement-distortion-and-quant-benchmark-sop",
           "unit-vllm-ascend-precision-bisect-cp-lse-rope-moe-and-validation-sop",
           "unit-vllm-ascend-prefill-decode-bottleneck-convergence-workflow",
@@ -550,11 +570,11 @@
           "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop",
           "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
         ],
-        "units": 75
+        "units": 79
       }
     ]
   },
-  "index_build_elapsed_ms": 38.693916983902454,
+  "index_build_elapsed_ms": 57.18510004226118,
   "leaves": [
     {
       "automatic": false,
@@ -718,8 +738,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4941,
-      "estimated_tokens": 722,
+      "bytes": 4945,
+      "estimated_tokens": 723,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp",
@@ -794,6 +814,46 @@
         "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
       ],
       "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 4904,
+      "estimated_tokens": 691,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/distributed/pd-accuracy",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-pd-accuracy-topdown-bottomup-diagnosis-workflow"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 9410,
+      "estimated_tokens": 1237,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/distributed/pd-layout",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-pd-connector-layout-compatibility-audit-sop",
+        "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants"
+      ],
+      "units": 2
+    },
+    {
+      "automatic": false,
+      "bytes": 4431,
+      "estimated_tokens": 605,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/distributed/pd-serving",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-pd-serving-launch-and-transfer-acceptance-sop"
+      ],
+      "units": 1
     },
     {
       "automatic": false,
@@ -877,7 +937,7 @@
     },
     {
       "automatic": false,
-      "bytes": 5543,
+      "bytes": 5544,
       "estimated_tokens": 839,
       "exceeds": [],
       "kind": "leaf",
@@ -1467,8 +1527,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4540,
-      "estimated_tokens": 660,
+      "bytes": 4541,
+      "estimated_tokens": 661,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
@@ -1571,8 +1631,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4941,
-      "estimated_tokens": 722,
+      "bytes": 4945,
+      "estimated_tokens": 723,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/attention/context-parallel",
@@ -1612,17 +1672,21 @@
     },
     {
       "automatic": false,
-      "bytes": 37438,
-      "estimated_tokens": 8130,
+      "bytes": 56183,
+      "estimated_tokens": 10663,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/distributed",
       "recommended_action": "review_two_level_subtree_split",
       "unit_ids": [
         "unit-vllm-ascend-moe-ep-all2all-and-w4a8-w8a8-quantization-workflow",
-        "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop"
+        "unit-vllm-ascend-pd-accuracy-topdown-bottomup-diagnosis-workflow",
+        "unit-vllm-ascend-pd-connector-layout-compatibility-audit-sop",
+        "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop",
+        "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants",
+        "unit-vllm-ascend-pd-serving-launch-and-transfer-acceptance-sop"
       ],
-      "units": 2
+      "units": 6
     },
     {
       "automatic": false,
@@ -1672,7 +1736,7 @@
     },
     {
       "automatic": false,
-      "bytes": 9868,
+      "bytes": 9869,
       "estimated_tokens": 1399,
       "exceeds": [],
       "kind": "subtree",
@@ -1982,8 +2046,8 @@
     },
     {
       "automatic": false,
-      "bytes": 13876,
-      "estimated_tokens": 2008,
+      "bytes": 13877,
+      "estimated_tokens": 2009,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/speculative-decoding/proposers",
@@ -1996,7 +2060,7 @@
       "units": 3
     }
   ],
-  "unit_count": 82,
+  "unit_count": 86,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4712,
@@ -2203,9 +2267,9 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow": {
-      "bytes": 5543,
+      "bytes": 5544,
       "category": "workflow",
-      "content_sha256": "9813dbcd4212e740e1e568f645d5ef15c256e9def3c2c77bcb3695a7de216b77",
+      "content_sha256": "d024575c6b34e6c2488ebb8ae140091001e30c9b5ae1dc226bb8df04b7a63c5b",
       "domain_path": "vllm-ascend/models/deepseek/v4-pro-flash",
       "estimated_tokens": 839,
       "evidence_strength": "reproduced_empirical",
@@ -2814,6 +2878,33 @@
       "path": "vllm-ascend/architecture/platform-and-patch/monkey-patch-hierarchy/unit-vllm-ascend-patch-hierarchy-and-upstream-migration-sop.md",
       "tier": "L2"
     },
+    "unit-vllm-ascend-pd-accuracy-topdown-bottomup-diagnosis-workflow": {
+      "bytes": 4904,
+      "category": "workflow",
+      "content_sha256": "4f6d05830dffd16a093880d26a38f0dc0b6e19617d0bf8c16908d910c51c880e",
+      "domain_path": "vllm-ascend/distributed/pd-accuracy",
+      "estimated_tokens": 691,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/distributed/pd-accuracy/unit-vllm-ascend-pd-accuracy-topdown-bottomup-diagnosis-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-ascend-pd-connector-layout-compatibility-audit-sop": {
+      "bytes": 4902,
+      "category": "sop",
+      "content_sha256": "e8da80da7149646d3d81fdf566fbaa7df8e64da5ad84dc46b8e9c73cf0b4cbd5",
+      "domain_path": "vllm-ascend/distributed/pd-layout",
+      "estimated_tokens": 693,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants"
+      ],
+      "path": "vllm-ascend/distributed/pd-layout/unit-vllm-ascend-pd-connector-layout-compatibility-audit-sop.md",
+      "tier": "L2"
+    },
     "unit-vllm-ascend-pd-disaggregation-mooncake-kv-transfer-and-mc2-sop": {
       "bytes": 17208,
       "category": "sop",
@@ -2840,6 +2931,31 @@
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
       ],
       "path": "vllm-ascend/optimizations/kv-cache-and-pd-disaggregation/pd-transfer-sync/unit-vllm-ascend-pd-hixl-mooncake-layerwise-kv-push-and-release-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants": {
+      "bytes": 4508,
+      "category": "axiom",
+      "content_sha256": "1d8db6080c383545ed07dbfbbdb3780e098ca72b42e48d588a73521ef9ff7230",
+      "domain_path": "vllm-ascend/distributed/pd-layout",
+      "estimated_tokens": 544,
+      "evidence_strength": "software_contract",
+      "inherits_from": [],
+      "path": "vllm-ascend/distributed/pd-layout/unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants.md",
+      "tier": "L1"
+    },
+    "unit-vllm-ascend-pd-serving-launch-and-transfer-acceptance-sop": {
+      "bytes": 4431,
+      "category": "sop",
+      "content_sha256": "ae95fba14b11055144aca5d7ccace33e25f23241116f892d51e29a07c34c6974",
+      "domain_path": "vllm-ascend/distributed/pd-serving",
+      "estimated_tokens": 605,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-pd-kv-connector-layout-and-handoff-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/distributed/pd-serving/unit-vllm-ascend-pd-serving-launch-and-transfer-acceptance-sop.md",
       "tier": "L2"
     },
     "unit-vllm-ascend-perf-measurement-distortion-and-quant-benchmark-sop": {
@@ -2955,11 +3071,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow": {
-      "bytes": 4941,
+      "bytes": 4945,
       "category": "workflow",
-      "content_sha256": "96057bc6f13df590ec2539fcc8c685a2d4f43f8fa8a75aa041f66c05a27e5e6b",
+      "content_sha256": "00926ba76a91b456c57c49fd111d0205c6d2dbff90da74b66c47ee8538ad2f05",
       "domain_path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp",
-      "estimated_tokens": 722,
+      "estimated_tokens": 723,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop",
@@ -3009,11 +3125,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow": {
-      "bytes": 4540,
+      "bytes": 4541,
       "category": "workflow",
-      "content_sha256": "ff98dda23503c829132f95bb8c639f09453a4dacbe4b3f8116e84b79899efb5e",
+      "content_sha256": "a68141c1d09423a0a3c002cf14d50e567c281be08f6e3400e649a2f0528a7aef",
       "domain_path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
-      "estimated_tokens": 660,
+      "estimated_tokens": 661,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop",
