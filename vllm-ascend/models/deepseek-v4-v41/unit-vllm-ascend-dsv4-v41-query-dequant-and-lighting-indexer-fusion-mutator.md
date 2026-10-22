@@ -44,6 +44,16 @@ triggers:
   - C8
   - W8A8
   - W4A8
+  - sparse_mla_decode
+  - fused_q_dequant_rmsnorm_rope_split
+  - minus_q_fusion
+  - minus_view_alias
+  - minus_device_guard
+  - TensorMove
+  - 稀疏注意力
+  - 解码延迟
+  - 算子融合
+  - 消融实验
 provenance:
   source_type: ablation_design_receipt
   source_locator: docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
@@ -208,3 +218,6 @@ The mutation has three separable factors. Apply them in the order below, keep ea
 Run at least the full candidate, the baseline, and the three `minus_*` arms. A factor is retained only if its removal produces the stated discriminating result; otherwise mark it non-retained and keep the weaker observation. Do not promote `experiment_status` to `ablation_verified` unless the full candidate passes every correctness and performance gate and all three arms behave as specified. Until then, report the result as `not_run_source_only` or `single_observation`, never as a measured speedup.
 
 **Reporting skeleton.** For each arm record: run ID, graph mode, context length, concurrency, quantization, TPOT p50/p90, TTFT p50/p90, output throughput, selected-block count, `TensorMove`/`Memcpy` count per layer, host D2H count, accuracy metric, and the first failing device-log line (if any). This is the minimum evidence needed to distinguish a real factor effect from a cache-state or version artifact.
+
+When implementing a programmatic `run_ablation_suite()` helper in `sparse_mla_decode.py`, return a `dict[str, dict]` keyed by the exact 4 leave-one-out arm identifiers (`full_candidate`, `minus_q_fusion`, `minus_view_alias`, `minus_device_guard`) where each entry records `"tpot_ms"`, `"tensor_moves"`, `"host_d2h_syncs"`, and `"correctness_ok"`.
+

@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 36.6275839987793,
+  "build_elapsed_ms": 37.66400000313297,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -1445,7 +1445,15 @@
           "rope_dsv4",
           "mHC",
           "npu_hc_pre_v2",
-          "Engram"
+          "Engram",
+          "SparseMLA",
+          "sparse_mla_decode",
+          "LightningIndexer",
+          "QLI-v2",
+          "DSV4_BLOCK_SIZES",
+          "IndexerOverlapPlan",
+          "稀疏注意力",
+          "解码延迟"
         ]
       }
     },
@@ -1700,7 +1708,7 @@
       "revision": 1,
       "tier": "L4",
       "title": "Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer views, and keep top-k block masks device-resident",
-      "token_estimate": 4086,
+      "token_estimate": 4173,
       "triggers": {
         "error_signatures": [
           "three TensorMove or Memcpy passes per MLA layer around qr dequantization, RMSNorm and the RoPE/NoPE split",
@@ -1723,7 +1731,17 @@
           "device-resident metadata",
           "C8",
           "W8A8",
-          "W4A8"
+          "W4A8",
+          "sparse_mla_decode",
+          "fused_q_dequant_rmsnorm_rope_split",
+          "minus_q_fusion",
+          "minus_view_alias",
+          "minus_device_guard",
+          "TensorMove",
+          "稀疏注意力",
+          "解码延迟",
+          "算子融合",
+          "消融实验"
         ]
       }
     },

@@ -52,6 +52,14 @@ triggers:
   - mHC
   - npu_hc_pre_v2
   - Engram
+  - SparseMLA
+  - sparse_mla_decode
+  - LightningIndexer
+  - QLI-v2
+  - DSV4_BLOCK_SIZES
+  - IndexerOverlapPlan
+  - 稀疏注意力
+  - 解码延迟
 ---
 # DeepSeek-V4-Flash, DeepSeek-V4-Pro & DeepSeek-V4.1 (mHC, Compress-4/128 DSA, Hadamard Indexer, Engram/Candidate, DSpark/MTP) workflow
 

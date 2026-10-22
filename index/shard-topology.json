@@ -343,8 +343,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 575780,
-      "estimated_tokens": 94815,
+      "bytes": 576487,
+      "estimated_tokens": 94902,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -483,8 +483,8 @@
       },
       {
         "automatic": false,
-        "bytes": 546343,
-        "estimated_tokens": 90297,
+        "bytes": 547050,
+        "estimated_tokens": 90384,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -574,7 +574,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 36.6275839987793,
+  "index_build_elapsed_ms": 37.66400000313297,
   "leaves": [
     {
       "automatic": false,
@@ -909,8 +909,8 @@
     },
     {
       "automatic": false,
-      "bytes": 49161,
-      "estimated_tokens": 10233,
+      "bytes": 49719,
+      "estimated_tokens": 10320,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/models/deepseek-v4-v41",
@@ -937,7 +937,7 @@
     },
     {
       "automatic": false,
-      "bytes": 6669,
+      "bytes": 6818,
       "estimated_tokens": 1068,
       "exceeds": [],
       "kind": "leaf",
@@ -1718,8 +1718,8 @@
     },
     {
       "automatic": false,
-      "bytes": 94587,
-      "estimated_tokens": 19878,
+      "bytes": 95145,
+      "estimated_tokens": 19965,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/models",
@@ -1736,7 +1736,7 @@
     },
     {
       "automatic": false,
-      "bytes": 10994,
+      "bytes": 11143,
       "estimated_tokens": 1628,
       "exceeds": [],
       "kind": "subtree",
@@ -2267,9 +2267,9 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow": {
-      "bytes": 6669,
+      "bytes": 6818,
       "category": "workflow",
-      "content_sha256": "711392641eda2d62f3d06661fa75e49558589649caea7cf02c00a19b2aeea1d6",
+      "content_sha256": "e97c365e0c06c13eab5fc2448ec2c7a847afc6cfc47b284e6d458d0e606f1503",
       "domain_path": "vllm-ascend/models/deepseek/v4-pro-flash",
       "estimated_tokens": 1068,
       "evidence_strength": "reproduced_empirical",
@@ -2322,11 +2322,11 @@
       "tier": "L1"
     },
     "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator": {
-      "bytes": 18877,
+      "bytes": 19435,
       "category": "mutator",
-      "content_sha256": "e7dbec7106f419cea2e28652fd2b72a9e37607ba76cd30e83c70555dd9a3b201",
+      "content_sha256": "d4f504f228b0daa784fbe9b33ac811bb1fe80aa6721bfbadb20674f45b2fb19f",
       "domain_path": "vllm-ascend/models/deepseek-v4-v41",
-      "estimated_tokens": 4086,
+      "estimated_tokens": 4173,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
