@@ -343,8 +343,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 572605,
-      "estimated_tokens": 94052,
+      "bytes": 575780,
+      "estimated_tokens": 94815,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -483,8 +483,8 @@
       },
       {
         "automatic": false,
-        "bytes": 543168,
-        "estimated_tokens": 89534,
+        "bytes": 546343,
+        "estimated_tokens": 90297,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -574,7 +574,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 58.16629994660616,
+  "index_build_elapsed_ms": 36.6275839987793,
   "leaves": [
     {
       "automatic": false,
@@ -1395,8 +1395,8 @@
     },
     {
       "automatic": false,
-      "bytes": 3599,
-      "estimated_tokens": 522,
+      "bytes": 5790,
+      "estimated_tokens": 1039,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runtime/graph-capture",
@@ -1408,8 +1408,8 @@
     },
     {
       "automatic": false,
-      "bytes": 8396,
-      "estimated_tokens": 1154,
+      "bytes": 9380,
+      "estimated_tokens": 1400,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runtime/idle-dp-gdn-state",
@@ -1986,8 +1986,8 @@
     },
     {
       "automatic": false,
-      "bytes": 52268,
-      "estimated_tokens": 9413,
+      "bytes": 55443,
+      "estimated_tokens": 10176,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/runtime",
@@ -2091,11 +2091,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": {
-      "bytes": 3599,
+      "bytes": 5790,
       "category": "sop",
-      "content_sha256": "edf80b8dc2f723641e4a1b53e47002acf146a96b8634c94e2a4bb8f1321abd43",
+      "content_sha256": "898719ce7c8f81089993dd725b1148f09a8ddea7de0a8795ab7e20a968984923",
       "domain_path": "vllm-ascend/runtime/graph-capture",
-      "estimated_tokens": 522,
+      "estimated_tokens": 1039,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -2486,11 +2486,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-hybrid-recurrent-dp-state-hermes-workflow": {
-      "bytes": 4089,
+      "bytes": 5073,
       "category": "workflow",
-      "content_sha256": "d7a5bc327cb07c0090fbf1a295fd5b2308f40f6acf8b414677840fee91cc5123",
+      "content_sha256": "0f92815aae56ea5e5789c23a1343700c536915587e5bb4eb619334a13705db69",
       "domain_path": "vllm-ascend/runtime/idle-dp-gdn-state",
-      "estimated_tokens": 551,
+      "estimated_tokens": 797,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",

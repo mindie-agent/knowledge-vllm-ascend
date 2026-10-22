@@ -33,7 +33,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:vllm_ascend/worker/model_runner_v1.py
   source_type: hermes_workflow_distillation
   supersedes: []
-revision: 2
+revision: 3
 schema: mindie-graded-unit/1
 tier: L3
 title: 'Hybrid GDN/Mamba + MLA DP idle-rank state troubleshooting workflow'
@@ -59,28 +59,29 @@ triggers:
 
 # Hybrid GDN/Mamba + MLA DP idle-rank state troubleshooting workflow
 
-## Trigger
+## Trigger & When to Select
 
-Hybrid GatedDeltaNet/Mamba + MLA model, `dp > 1`, one DP rank idle while a peer is active; the idle rank's cached `conv_state`/`ssm_state` changes and later requests diverge. Not for pure attention, small real batches, or checkpoint/logit parity.
+Select when a hybrid GatedDeltaNet/Mamba/KDA + MLA model runs with `dp > 1` and one DP rank is idle (`idle_rank_state = no_scheduled_requests`, e.g. asymmetric batch `[B, 0]`) while a peer rank is active: either two-rank execution hangs in `coordinate_batch_across_dp`, or the idle rank's cached `conv_state`/`ssm_state` changes during the dummy step and causes subsequent requests on that rank to diverge.
+- **When NOT to Select**: Do not adopt for pure dense/MLA attention models without recurrent `conv_state`/`ssm_state`, single-rank (`dp = 1`) failures, or first-step checkpoint/logit errors on symmetric batches.
 
-## First discriminating observation
+## Missing Facts & Minimal Probe (`condition_unknown`)
+
+Record revision, CANN/torch stack, NPU/die count, `dp`/`tp`/`pp`, attention/recurrent state inventory (`affected_state`), per-rank scheduled token counts (`idle_rank_state`), graph mode, and pre-registered tolerance. If `affected_state` or `idle_rank_state` is unknown, inspect model state buffers and per-rank batch sizes first; a missing fact remains `condition_unknown`, never an assumed match.
+
+## First Discriminating Observation
 
 Run the no-NPU metadata probe first: does the zero-token branch call `_dummy_run(1, skip_gdn_state_update=True)` and build GDN metadata with `num_actual_tokens=0` and a zero start-loc? This splits "collective not entered" from "collective entered but state written".
 
-## Branches
+## Decision Branches
 
 - **A. Dummy call missing, flag false, or no DP collective:** HCCL participation defect. Fix the zero-token branch before any checksum. Exit only when all ranks enter and leave the collective under a bounded timeout.
 - **B. Metadata correct but idle state changes:** the masked kernel still writes state. Run the per-row one-rank checksum on the pre-fix and fixed paths, then the two-rank DP2 TP1 gate. Accept only when idle state is unchanged and active state advances.
-- **C. Idle preserved but active state or logits diverge:** do not claim success. Compare with the `fp32` reference and inspect `query_start_loc`/`num_accepted_tokens` reuse.
+- **C. Idle preserved but active state or logits diverge:** do not claim success. Compare with the `fp32` reference and inspect `query_start_loc`/`num_accepted_tokens` reuse, then switch to operator numerical localization.
 - **D. All pass but a repeat run is unstable:** treat determinism and negative-control failure as separate gates before distilling.
 
-## Prerequisites
+## Verification, Exit & Scoped Counter-Evidence
 
-Record revision, CANN/torch stack, NPU/die count, `dp`/`tp`/`pp`, backend, graph mode, model/checkpoint/dtype/cache, the exact schedule and a pre-registered tolerance. A missing fact is `condition_unknown`, not a pass.
-
-## Exploration exit
-
-Stop when the recorded topology passes: all ranks exit `0`; per-row idle `conv_state`/`ssm_state` unchanged; active state advances; logits match reference; the pre-fix control fails. Then distill into a `reviewed_change`; a passing probe is not itself a reviewed change.
+Stop with `verified` when the recorded topology passes: all ranks exit `0`; per-row idle `conv_state`/`ssm_state` is unchanged across `[B, 0]` steps; active state advances; logits match `DP=1` reference; and the pre-fix negative control fails. If `_dummy_run(1, skip_gdn_state_update=True)` and zero-pad workspace isolation leave `conv_state`/`ssm_state` bit-identical yet `[B, 0]` still hangs or diverges under the recorded `dp`/`tp` topology, record scoped counter-evidence for that topology and switch to HCCL collective / ACLGraph capture boundary inspection.
 
 ## Pitfalls
 

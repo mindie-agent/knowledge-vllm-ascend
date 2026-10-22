@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 58.16629994660616,
+  "build_elapsed_ms": 36.6275839987793,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -341,7 +341,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "a8e2eca205801fd212c78e6d16f8c0d9a0e706e628a0cdb5e6b63aa75a764d26",
+  "generation": "07ef777ba6214f7d7d324c1bc6f8eff172fe611b7f99d82d8b62aed7b6d142ef",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -601,15 +601,16 @@
         "source_type": "runtime_triage_sop",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
       "title": "ACLGraph capture invalidation, dynamic shape bucketing, and stream sync triage SOP",
-      "token_estimate": 522,
+      "token_estimate": 1039,
       "triggers": {
         "error_signatures": [
           "ACLGraph replay falls back to eager execution on decode steps",
           "RuntimeError during npu_graph capture due to host-device synchronization or dynamic allocation",
-          "decode output diverges after batch size changes across padded graph buckets"
+          "decode output diverges after batch size changes across padded graph buckets",
+          "eager execution passes on the same decode input while aclgraph or piecewise replay diverges"
         ],
         "keywords": [
           "ACLGraph",
@@ -620,7 +621,8 @@
           "eager fallback",
           "stream synchronization",
           "persistent buffer",
-          "model_runner_v1"
+          "model_runner_v1",
+          "stale tail padding"
         ]
       }
     },
@@ -2480,10 +2482,10 @@
         "source_type": "hermes_workflow_distillation",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 3,
       "tier": "L3",
       "title": "Hybrid GDN/Mamba + MLA DP idle-rank state troubleshooting workflow",
-      "token_estimate": 551,
+      "token_estimate": 797,
       "triggers": {
         "error_signatures": [
           "idle DP rank with no scheduled requests while peer is active",
