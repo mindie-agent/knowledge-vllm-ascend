@@ -338,13 +338,35 @@
     ],
     "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+    ],
+    "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms": [],
+    "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
+      "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+      "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop"
+    ],
+    "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 576487,
-      "estimated_tokens": 94902,
+      "bytes": 609316,
+      "estimated_tokens": 100995,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -433,9 +455,14 @@
         "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop",
         "unit-vllm-ascend-verification-and-state-parity-gates",
         "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop",
-        "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
+        "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop",
+        "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+        "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop",
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow",
+        "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
       ],
-      "units": 86
+      "units": 91
     },
     "domains": [
       {
@@ -483,8 +510,8 @@
       },
       {
         "automatic": false,
-        "bytes": 547050,
-        "estimated_tokens": 90384,
+        "bytes": 579879,
+        "estimated_tokens": 96477,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -568,13 +595,18 @@
           "unit-vllm-ascend-tp-weight-switch-and-multi-lora-punica-sop",
           "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop",
           "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop",
-          "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop"
+          "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop",
+          "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+          "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop",
+          "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+          "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow",
+          "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
         ],
-        "units": 79
+        "units": 84
       }
     ]
   },
-  "index_build_elapsed_ms": 37.66400000313297,
+  "index_build_elapsed_ms": 50.44474999886006,
   "leaves": [
     {
       "automatic": false,
@@ -1537,6 +1569,71 @@
         "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow"
       ],
       "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5362,
+      "estimated_tokens": 1002,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/vllm-omni/architecture",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 6450,
+      "estimated_tokens": 1167,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/vllm-omni/models-audio-tts",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 7643,
+      "estimated_tokens": 1481,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/vllm-omni/models-diffusion",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 7401,
+      "estimated_tokens": 1393,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/vllm-omni/runner-and-attention",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
+      ],
+      "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 5973,
+      "estimated_tokens": 1050,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/vllm-omni/workflows",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow"
+      ],
+      "units": 1
     }
   ],
   "schema": "mindie-shard-topology/1",
@@ -2058,9 +2155,26 @@
         "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow"
       ],
       "units": 3
+    },
+    {
+      "automatic": false,
+      "bytes": 32829,
+      "estimated_tokens": 6093,
+      "exceeds": [],
+      "kind": "subtree",
+      "path": "vllm-ascend/vllm-omni",
+      "recommended_action": "review_two_level_subtree_split",
+      "unit_ids": [
+        "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+        "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop",
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow",
+        "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
+      ],
+      "units": 5
     }
   ],
-  "unit_count": 86,
+  "unit_count": 91,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4712,
@@ -3228,6 +3342,75 @@
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
       ],
       "path": "vllm-ascend/architecture/runner-and-worker/xlite-runtime/unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop": {
+      "bytes": 6450,
+      "category": "sop",
+      "content_sha256": "dcd1ccc8c06afc3ae714c1896f3b6d127365446d18465d5bcc23270ac64154be",
+      "domain_path": "vllm-ascend/vllm-omni/models-audio-tts",
+      "estimated_tokens": 1167,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms"
+      ],
+      "path": "vllm-ascend/vllm-omni/models-audio-tts/unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop": {
+      "bytes": 7643,
+      "category": "sop",
+      "content_sha256": "33e2befd03feba9cd0936af27015f52ecbc85692fe393b14baa7fc8a63893d75",
+      "domain_path": "vllm-ascend/vllm-omni/models-diffusion",
+      "estimated_tokens": 1481,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms"
+      ],
+      "path": "vllm-ascend/vllm-omni/models-diffusion/unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms": {
+      "bytes": 5362,
+      "category": "axiom",
+      "content_sha256": "d4da88a9ab7f446f1760eefe44ab5facad0300649538384d46d1073c153aa786",
+      "domain_path": "vllm-ascend/vllm-omni/architecture",
+      "estimated_tokens": 1002,
+      "evidence_strength": "software_contract",
+      "inherits_from": [],
+      "path": "vllm-ascend/vllm-omni/architecture/unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms.md",
+      "tier": "L1"
+    },
+    "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow": {
+      "bytes": 5973,
+      "category": "workflow",
+      "content_sha256": "e97989bd0e69eea934a62d78a850e7b5fee312a3014fa6c5b6a3ddbc1bd64f00",
+      "domain_path": "vllm-ascend/vllm-omni/workflows",
+      "estimated_tokens": 1050,
+      "evidence_strength": "reproduced_empirical",
+      "inherits_from": [
+        "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+        "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop",
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
+      ],
+      "path": "vllm-ascend/vllm-omni/workflows/unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow.md",
+      "tier": "L3"
+    },
+    "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop": {
+      "bytes": 7401,
+      "category": "sop",
+      "content_sha256": "b2d9c16a636bcf9024b00cf57fa0d1f9ddc2bb64c9b4a7c4bd9bfbf841bfb139",
+      "domain_path": "vllm-ascend/vllm-omni/runner-and-attention",
+      "estimated_tokens": 1393,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms"
+      ],
+      "path": "vllm-ascend/vllm-omni/runner-and-attention/unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop.md",
       "tier": "L2"
     }
   }

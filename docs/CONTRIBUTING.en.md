@@ -1,6 +1,6 @@
 # Contributing to `knowledge-vllm-ascend`
 
-[中文](../CONTRIBUTING.md) | **English** · [Back to Homepage](README.en.md)
+[中文](../CONTRIBUTING.md) | **English** · [Back to Homepage](../README.en.md)
 
 Thank you for contributing reusable `vllm-ascend` engineering knowledge with explicit limits. The contribution unit is a **graded knowledge unit** (`mindie-graded-unit/1`), not a chat transcript or a generalized summary. Every unit carries provenance, applicability conditions, evidence strength and a revision. Deterministic checks validate format, privacy and the inheritance graph; review decides whether the claim is sound.
 

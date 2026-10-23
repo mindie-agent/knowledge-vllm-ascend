@@ -1,6 +1,6 @@
 # Graded Unit Format Specification
 
-[中文](package-format.md) | **English** · [Back to Homepage](README.en.md)
+[中文](package-format.md) | **English** · [Back to Homepage](../README.en.md)
 
 This document defines the `mindie-graded-unit/1` layout, frontmatter, revision and reference rules, condition matching, inheritance, routing indexes, public feedback and reviewed changes used by `knowledge-vllm-ascend` on the `main` branch. The current C5 unit contract is `mindie-graded-unit/1`; the C6 reviewed projection uses `mindie-reviewed-change/1` (section 9). The format identifiers and validator revision are declared in [`publication-contract.json`](../publication-contract.json).
 
@@ -35,8 +35,10 @@ knowledge-vllm-ascend/
 │   └── <unit_id>.md                          # mindie-graded-unit/1
 ├── feedback/
 │   └── votes-<id>.json                       # mindie-graded-feedback/1
+├── README.md
+├── README.en.md
+├── LICENSE
 └── docs/
-    ├── README.en.md
     ├── CONTRIBUTING.en.md
     ├── package-format.md
     ├── package-format.en.md
@@ -349,7 +351,7 @@ The old `material-v1` corpus is archived under `docs/archive/material-v1/85ab134
 The historical migration metadata records:
 
 - `task_count`: 663
-- `archived_file_count`: 2,387
+- `archived_file_count`: 2,387 (`retained_file_count`: 48 on `main`; `pruned_unreferenced_file_count`: 2,339 preserved at `85ab134f`)
 - `block_count`: 1,723
 - `feedback_count`: 1
 - each old file retains its original `git_blob_oid`, on `main`/85ab.

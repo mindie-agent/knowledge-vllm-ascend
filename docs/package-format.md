@@ -35,8 +35,10 @@ knowledge-vllm-ascend/
 │   └── <unit_id>.md                          # mindie-graded-unit/1
 ├── feedback/
 │   └── votes-<id>.json                       # mindie-graded-feedback/1
+├── README.md
+├── README.en.md
+├── LICENSE
 └── docs/
-    ├── README.en.md
     ├── CONTRIBUTING.en.md
     ├── package-format.md
     ├── package-format.en.md
@@ -349,7 +351,7 @@ python3 scripts/apply_reviewed_change.py --root . --plan reviewed-change.json --
 历史迁移元数据记录：
 
 - `task_count`: 663
-- `archived_file_count`: 2,387
+- `archived_file_count`: 2,387 (`retained_file_count`: 48 on `main`; `pruned_unreferenced_file_count`: 2,339 preserved at `85ab134f`)
 - `block_count`: 1,723
 - `feedback_count`: 1
 - 每个旧文件保留原始 `git_blob_oid`，位于 `main`/85ab。

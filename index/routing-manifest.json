@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 37.66400000313297,
+  "build_elapsed_ms": 50.44474999886006,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -339,9 +339,31 @@
     ],
     "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+    ],
+    "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+    ],
+    "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms": [],
+    "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop",
+      "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
+      "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+      "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop"
+    ],
+    "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop": [
+      "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "07ef777ba6214f7d7d324c1bc6f8eff172fe611b7f99d82d8b62aed7b6d142ef",
+  "generation": "daf0b1cfeca22b39afcd1807ce59d73604aff2b8df7ab23d79cee127c6388cbc",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -428,12 +450,17 @@
     "unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop": "vllm-ascend/kv-pool-and-disaggregation/cache-pools/ucm-and-lmcache/unit-vllm-ascend-ucm-and-lmcache-distributed-prefix-sharing-sop.md",
     "unit-vllm-ascend-verification-and-state-parity-gates": "_common/unit-vllm-ascend-verification-and-state-parity-gates.md",
     "unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop": "vllm-ascend/optimizations/quantization/w4a8-w8a8-mxfp/unit-vllm-ascend-w4a8-w8a8-mxfp8-mxfp4-gmm-and-outlier-clip-sop.md",
-    "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop": "vllm-ascend/architecture/runner-and-worker/xlite-runtime/unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop.md"
+    "unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop": "vllm-ascend/architecture/runner-and-worker/xlite-runtime/unit-vllm-ascend-xlite-lightweight-runtime-and-decode-fastpath-sop.md",
+    "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop": "vllm-ascend/vllm-omni/models-audio-tts/unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop.md",
+    "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop": "vllm-ascend/vllm-omni/models-diffusion/unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop.md",
+    "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms": "vllm-ascend/vllm-omni/architecture/unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms.md",
+    "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow": "vllm-ascend/vllm-omni/workflows/unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow.md",
+    "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop": "vllm-ascend/vllm-omni/runner-and-attention/unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop.md"
   },
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 86,
+  "unit_count": 91,
   "units": [
     {
       "category": "workflow",
@@ -5869,6 +5896,296 @@
           "XliteWrapper",
           "enable_xlite",
           "xlite_model_runner"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "framework": "vllm-omni",
+        "hardware": [
+          "Ascend 910B (Atlas A2)",
+          "Ascend 910C (Atlas A3)",
+          "Ascend 950PR/DT",
+          "Ascend 310P"
+        ]
+      },
+      "domain_path": "vllm-ascend/vllm-omni/models-audio-tts",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+      "inherits_from": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms"
+      ],
+      "path": "vllm-ascend/vllm-omni/models-audio-tts/unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop.md",
+      "provenance": {
+        "evidence_refs": [
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/models/qwen3_tts.py",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:docs/design/qwen3_omni_tts_performance_optimization.md",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:docs/design/minicpm_o45_mrv2_performance.md",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:docs/design/qwen3_omni_mrv2_performance.md"
+        ],
+        "source_digest": "63eca4a4e1151f4a0ddb480139b765ff55b574ce15f1e6036aafe5227e316b5d",
+        "source_locator": "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/models/qwen3_tts.py",
+        "source_type": "architecture_and_runtime_guide",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "vLLM-Omni Speech/Audio/TTS and Full-Duplex NPU model adaptation SOP (Qwen3-Omni, Qwen3-TTS, MiniCPM-o 4.5, CosyVoice3)",
+      "token_estimate": 1167,
+      "triggers": {
+        "error_signatures": [
+          "conv2d convolution operator in the code2wav module of Qwen3-TTS not being able to run on Aclnn",
+          "torch.stft is unsupported",
+          "ref_audio_max_seconds"
+        ],
+        "keywords": [
+          "Qwen3-Omni",
+          "Qwen3-TTS",
+          "Qwen3TTSCode2Wav",
+          "MiniCPM-o-4.5",
+          "minicpmo_4_5_code2wav",
+          "cfm_fused_body",
+          "async_chunk",
+          "CosyVoice3",
+          "Step-Audio2",
+          "MOSS-TTS",
+          "VoxCPM2"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "framework": "vllm-omni",
+        "hardware": [
+          "Ascend 910B (Atlas A2)",
+          "Ascend 910C (Atlas A3)",
+          "Ascend 950PR/DT"
+        ]
+      },
+      "domain_path": "vllm-ascend/vllm-omni/models-diffusion",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop",
+      "inherits_from": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/vllm-omni/models-diffusion/unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop.md",
+      "provenance": {
+        "evidence_refs": [
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/models/minimax_h3.py",
+          "Ascend/MindIE-SD@9fe772dfb90696e21b5e5d4e92ca07dffab84cf4:.agents/skills/framework-integration/references/vllm-omni-enablement.md",
+          "Ascend/MindIE-SD@9fe772dfb90696e21b5e5d4e92ca07dffab84cf4:.agents/skills/framework-integration/references/framework-support-matrix.md"
+        ],
+        "source_digest": "980b621e474ecdc1e2e2e35a6c8f21189b6af6009dafe2324a05f5abcb6542d3",
+        "source_locator": "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/models/minimax_h3.py",
+        "source_type": "architecture_and_runtime_guide",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "vLLM-Omni Diffusion and MindIE-SD NPU serving SOP (MiniMax-H3, Qwen-Image, FLUX, Wan2.2, RainFusion, Cache-DiT, DLO)",
+      "token_estimate": 1481,
+      "triggers": {
+        "error_signatures": [
+          "Missing preprocess images",
+          "pixel_values and image_grid_thw must be provided together",
+          "IndexError: tuple index out of range",
+          "AI Core 507015",
+          "staying dense"
+        ],
+        "keywords": [
+          "MiniMax-H3",
+          "Qwen-Image",
+          "QwenImagePipeline",
+          "QwenImageEditPlusPipeline",
+          "RAINFUSION_ATTN",
+          "cache_dit",
+          "enable-distributed-layerwise-offload",
+          "text-encoder-tp-size",
+          "mm_swiglu_mxquant",
+          "FlashGen"
+        ]
+      }
+    },
+    {
+      "category": "axiom",
+      "conditions": {
+        "framework": "vllm-omni",
+        "hardware": [
+          "Ascend 910B (Atlas A2)",
+          "Ascend 910C (Atlas A3)",
+          "Ascend 950PR/DT",
+          "Ascend 310P"
+        ]
+      },
+      "domain_path": "vllm-ascend/vllm-omni/architecture",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+      "inherits_from": [],
+      "inherits_from_closure": [],
+      "path": "vllm-ascend/vllm-omni/architecture/unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms.md",
+      "provenance": {
+        "evidence_refs": [
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/platform.py",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:docs/design/architecture_overview.md"
+        ],
+        "source_digest": "84e591f034d7878a0f59634a23eb0eaf1367577027d3f6433b8cc5b493ae4b2e",
+        "source_locator": "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/platform.py",
+        "source_type": "architecture_and_runtime_guide",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L1",
+      "title": "vLLM-Omni multi-stage PipelineConfig/DeployConfig and NPUOmniPlatform execution axioms",
+      "token_estimate": 1002,
+      "triggers": {
+        "error_signatures": [
+          "Ascend paged attention did not expose an integer kernel block size",
+          "acl 507035",
+          "Dropping non-tensor multimodal output key"
+        ],
+        "keywords": [
+          "vllm-omni",
+          "NPUOmniPlatform",
+          "PipelineConfig",
+          "DeployConfig",
+          "StageRuntime",
+          "DiffusionKVCacheMode",
+          "AscendStrictUlyssesPagedBackend",
+          "requires_contiguous_pa_kv_cache",
+          "TTFP",
+          "RTF"
+        ]
+      }
+    },
+    {
+      "category": "workflow",
+      "conditions": {
+        "framework": "vllm-omni",
+        "hardware": [
+          "Ascend 910B (Atlas A2)",
+          "Ascend 910C (Atlas A3)",
+          "Ascend 950PR/DT"
+        ]
+      },
+      "domain_path": "vllm-ascend/vllm-omni/workflows",
+      "evidence_strength": "reproduced_empirical",
+      "id": "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow",
+      "inherits_from": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop",
+        "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+        "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop",
+        "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
+        "unit-vllm-omni-audio-tts-and-duplex-npu-model-adaptation-sop",
+        "unit-vllm-omni-diffusion-and-mindie-sd-npu-serving-sop"
+      ],
+      "path": "vllm-ascend/vllm-omni/workflows/unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow.md",
+      "provenance": {
+        "evidence_refs": [
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:docs/design/qwen3_omni_tts_performance_optimization.md",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/omni_connectors/yuanrong_transfer_engine_connector.py",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:docs/design/architecture_overview.md"
+        ],
+        "source_digest": "db8c05846fc8a283e9d493562cc4d35849a7d96d8a155ada7903bea9daa7d8fc",
+        "source_locator": "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:docs/design/qwen3_omni_tts_performance_optimization.md",
+        "source_type": "architecture_and_runtime_guide",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L3",
+      "title": "vLLM-Omni multi-stage TTFP/RTF/E2EL bottleneck attribution and pipeline convergence workflow",
+      "token_estimate": 1050,
+      "triggers": {
+        "error_signatures": [
+          "TTFP equals E2EL despite streaming enabled",
+          "RTF > 1.0 under multi-request concurrency",
+          "YuanrongTransferEngineConnector requires an NPU memory pool"
+        ],
+        "keywords": [
+          "vllm-omni-workflow",
+          "TTFP",
+          "RTF",
+          "E2EL",
+          "stage-bottleneck-attribution",
+          "YuanrongTransferEngineConnector",
+          "OmniConnector",
+          "pipeline-convergence"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "framework": "vllm-omni",
+        "hardware": [
+          "Ascend 910B (Atlas A2)",
+          "Ascend 910C (Atlas A3)",
+          "Ascend 950PR/DT",
+          "Ascend 310P"
+        ]
+      },
+      "domain_path": "vllm-ascend/vllm-omni/runner-and-attention",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop",
+      "inherits_from": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms",
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants"
+      ],
+      "path": "vllm-ascend/vllm-omni/runner-and-attention/unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop.md",
+      "provenance": {
+        "evidence_refs": [
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/attention/static_shape_backend.py",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/worker/npu_ar_model_runner.py",
+          "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/worker/npu_generation_model_runner.py"
+        ],
+        "source_digest": "60829eb919542febe93e61fe29c7788e403c7da6432f6bce87f9a045fb8202ec",
+        "source_locator": "vllm-project/vllm-omni@20778540fd04eb3753632d0ea1c966f8415cc5f3:vllm_omni/platforms/npu/attention/static_shape_backend.py",
+        "source_type": "architecture_and_runtime_guide",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "vLLM-Omni NPU AR/Generation ModelRunner, OmniStaticShapeAttentionBackend, and talker_multiframe SOP",
+      "token_estimate": 1393,
+      "triggers": {
+        "error_signatures": [
+          "acl 507035",
+          "Cannot capture CUDA graphs in an inappropriate time",
+          "AttributeError: 'NPUARModelRunner' object has no attribute 'enable_hamming_sparse'",
+          "State error: sample_tokens() must be called after execute_model() returns None"
+        ],
+        "keywords": [
+          "OmniStaticShapeAttentionBackend",
+          "static_shape_decode",
+          "static_shape_prefill",
+          "NPUARModelRunner",
+          "NPUGenerationModelRunner",
+          "talker_multiframe",
+          "_NPUHostCopyBatch",
+          "ascend_warmup_patch",
+          "propose_draft_token_ids"
         ]
       }
     }

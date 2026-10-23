@@ -12,7 +12,7 @@
   <a href="https://github.com/mindie-agent/mindie-agent"><img src="https://img.shields.io/badge/MindIE%20Agent-Ecosystem-7045f5.svg" alt="MindIE Agent"></a>
   <a href="./publication-contract.json"><img src="https://img.shields.io/badge/Schema-mindie--graded--unit%2F1-0f766e.svg" alt="Schema mindie-graded-unit/1"></a>
   <a href="./publication-contract.json"><img src="https://img.shields.io/badge/domain-vllm--ascend-0284c7.svg" alt="Domain vllm-ascend"></a>
-  <a href="./index/routing-manifest.json"><img src="https://img.shields.io/badge/Graded%20Units-43%20Units-d97757.svg" alt="43 Graded Units"></a>
+  <a href="./index/routing-manifest.json"><img src="https://img.shields.io/badge/Graded%20Units-91%20Units-d97757.svg" alt="91 Graded Units"></a>
   <a href="./index/shard-topology.json"><img src="https://img.shields.io/badge/Levels-L1%20to%20L4-10a37f.svg" alt="Levels L1-L4"></a>
 </p>
 
@@ -82,11 +82,11 @@
 
 ## 🏗️ 领域全景与 L1–L4 分级架构
 
-本仓库承载 MindIE Agent 的 **`vllm-ascend` 领域分级知识源**（共 **43 个分级知识单元**：`L1: 6`、`L2: 24`、`L3: 10`、`L4: 3`）。聚焦 `vLLM-Ascend` 在昇腾 Atlas A2 / A3 NPU 上的 0-day 新模型（如 DeepSeek-V4/V4.1、Qwen3.5 GatedDeltaNet、Kimi K3、多模态 VLM/DiT/VLA）适配、TorchAir / ACLGraph 图捕获与重放、MoE 专家并行（AllToAll / MC2 / SHMEM / EPLB）、Prefill-Decode（PD）分离与 HIXL/Mooncake KV 传输、W8A8/W4A8/C8 量化、投机解码（MTP/DSpark）以及运行时故障与精度对齐。
+本仓库承载 MindIE Agent 的 **`vllm-ascend` 领域分级知识源**（共 **91 个分级知识单元**：`L1: 10`、`L2: 55`、`L3: 23`、`L4: 3`）。聚焦 `vLLM-Ascend` 在昇腾 Atlas A2 / A3 NPU 上的 0-day 新模型（如 DeepSeek-V4/V4.1、Qwen3.5 GatedDeltaNet、Kimi K3、多模态 VLM/DiT/VLA）适配、TorchAir / ACLGraph 图捕获与重放、MoE 专家并行（AllToAll / MC2 / SHMEM / EPLB）、Prefill-Decode（PD）分离与 HIXL/Mooncake KV 传输、W8A8/W4A8/C8 量化、投机解码（MTP/DSpark）以及运行时故障与精度对齐。
 
 ### 1. `mindie-graded-unit/1` 四级知识单元体系（L1–L4）
 
-本知识库拒绝碎片化的聊天摘要或脱离前提的“万能经验”，所有知识单元均按工程抽象粒度与可操作性划分为 **L1–L4 四个层级**（当前分布：**L1: 6 · L2: 24 · L3: 10 · L4: 3**）：
+本知识库拒绝碎片化的聊天摘要或脱离前提的“万能经验”，所有知识单元均按工程抽象粒度与可操作性划分为 **L1–L4 四个层级**（当前分布：**L1: 10 · L2: 55 · L3: 23 · L4: 3**）：
 
 | 层级 | 标准类别 (`category`) | 工程定位 | 核心内容与准入要求 |
 | :---: | --- | --- | --- |
@@ -101,7 +101,7 @@
 flowchart LR
   Agent["🤖 AI Coding Agent (Claude Code / Codex / Kimi / DSH)"]
   Query["🔎 knowledge_query (查询词 + 实测环境条件)"]
-  Manifest["📋 index/routing-manifest.json (43 个单元元数据 · 条件与继承闭包)"]
+  Manifest["📋 index/routing-manifest.json (91 个单元元数据 · 条件与继承闭包)"]
   Topology["🗂️ index/shard-topology.json (子领域分片拓扑 · L1-L4 统计)"]
   Match{"⚖️ 条件匹配引擎 (matched / mismatch / condition_unknown)"}
   Explain["📖 knowledge_explain (按精确修订号 @revision 精读)"]
@@ -118,14 +118,14 @@ flowchart LR
 
 ## 📊 子领域分布与代表性知识单元
 
-[`index/routing-manifest.json`](./index/routing-manifest.json) 与 [`index/shard-topology.json`](./index/shard-topology.json) 是由全量 Markdown 单元派生的权威实时清单。当前仓库共包含 **43 个分级知识单元**（**L1: 6 · L2: 24 · L3: 10 · L4: 3**）：
+[`index/routing-manifest.json`](./index/routing-manifest.json) 与 [`index/shard-topology.json`](./index/shard-topology.json) 是由全量 Markdown 单元派生的权威实时清单。当前仓库共包含 **91 个分级知识单元**（**L1: 10 · L2: 55 · L3: 23 · L4: 3**）：
 
 ### 1. 子领域（Subdomain）分布统计
 
 | 子领域目录 | 单元数量 | 层级分布 (`L1–L4`) | 核心覆盖范围 |
 | --- | :---: | :---: | --- |
-| `vllm-ascend` | **38** | `L1: 3, L2: 23, L3: 10, L4: 2` | 核心推理运行时、图模式捕获、0-day 模型适配（DeepSeek-V4/Qwen3.5/Kimi K3/VLM）、MoE EP/MC2、PD 分离、MTP 投机解码与量化排障 |
-| `_common` | **3** | `L1: 3` | 跨单元继承的底层不变量：昇腾 NPU 图捕获与自定义算子绑定前提、空闲 DP Rank 的 HCCL 集合通信不变量、Eager/Graph 精度与循环状态门禁 |
+| `vllm-ascend` | **84** | `L1: 5, L2: 54, L3: 23, L4: 2` | 核心推理运行时、图模式捕获、0-day 模型适配（DeepSeek-V4/Qwen3.5/Kimi K3/VLM）、MoE EP/MC2、PD 分离、MTP 投机解码，以及 `vllm-omni` 多阶段全模态（`Thinker -> Talker -> Code2Wav` / AR+DiT / TTS / Duplex）流水线 |
+| `_common` | **5** | `L1: 5` | 跨单元继承的底层不变量：昇腾 NPU 图捕获与自定义算子绑定前提、空闲 DP Rank 的 HCCL 集合通信不变量、Eager/Graph 精度与循环状态门禁 |
 | `integration` | **1** | `L2: 1` | 自定义算子（Custom Op）导入重试、算子注册与 NZ 格式选择门禁 SOP |
 | `0day` | **1** | `L4: 1` | Qwen3.5 GDN 空闲 DP Rank 零填充 Workspace 与空 Batch HCCL 参与深度优化模式 |
 
@@ -145,6 +145,8 @@ flowchart LR
 | [`unit-vllm-ascend-moe-shared-expert-dual-stream-and-eplb-workflow`](./vllm-ascend/optimizations/moe-and-ep/eplb-and-multistream/unit-vllm-ascend-moe-shared-expert-dual-stream-and-eplb-workflow.md) | `vllm-ascend` | **L3** / `workflow` | MoE shared-expert dual-stream overlap, core-limit deadlock prevention, EPLB scale-tensor remapping, and AFD disaggregation workflow | `mindie://vllm-ascend/units/unit-vllm-ascend-moe-shared-expert-dual-stream-and-eplb-workflow@1` |
 | [`unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator`](./vllm-ascend/speculative-decoding/unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator.md) | `vllm-ascend` | **L4** / `mutator` | v2 DSpark ACLGraph bucket alignment and device-resident D2H elimination | `mindie://vllm-ascend/units/unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator@2` |
 | [`unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator`](./vllm-ascend/models/deepseek-v4-v41/unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator.md) | `vllm-ascend` | **L4** / `mutator` | Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer views, and keep top-k block masks device-resident | `mindie://vllm-ascend/units/unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator@1` |
+| [`unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms`](./vllm-ascend/vllm-omni/architecture/unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms.md) | `vllm-ascend` | **L1** / `axiom` | vllm-omni multi-stage OmniStage DAG, OmniConnector transport, and NPUPlatform axioms | `mindie://vllm-ascend/units/unit-vllm-omni-multistage-pipeline-deploy-and-npu-platform-axioms@1` |
+| [`unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow`](./vllm-ascend/vllm-omni/workflows/unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow.md) | `vllm-ascend` | **L3** / `workflow` | vllm-omni multi-stage TTFP vs RTF attribution, async_chunk tuning, and Talker decode convergence workflow | `mindie://vllm-ascend/units/unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow@1` |
 
 ---
 
@@ -158,6 +160,7 @@ knowledge-vllm-ascend/
 ├── AGENTS.md                           # 维护者与 AI Agent 仓库操作边界规范
 ├── README.md                           # 中文主文档
 ├── README.en.md                        # 英文主文档 (English Documentation)
+├── LICENSE                             # 双许可声明 (CC BY 4.0 语料与文档 + MIT 维护脚本)
 ├── index/
 │   ├── routing-manifest.json           # [派生索引] 全量单元 ID、路径、层级、条件、继承闭包与 Token 估算
 │   └── shard-topology.json             # [派生索引] 子领域分片计数与层级拓扑
@@ -194,10 +197,19 @@ knowledge-vllm-ascend/
 - **主仓库与一键安装入口**：[`mindie-agent/mindie-agent`](https://github.com/mindie-agent/mindie-agent)
 - **知识检索与隐私脱敏运行时**：[`mindie-agent/knowledge`](https://github.com/mindie-agent/knowledge)（Python 包 `mindie-knowledge`）
 - **七大公开领域知识库矩阵**：
-  - [`knowledge-vllm-ascend`](https://github.com/mindie-agent/knowledge-vllm-ascend) — `vLLM-Ascend` 适配、图编译、MoE 与 PD 分离（43 Units）
-  - [`knowledge-operators`](https://github.com/mindie-agent/knowledge-operators) — AscendC / BiShengIR / Triton / TileLang 算子开发与优化（87 Units）
-  - [`knowledge-infer-core`](https://github.com/mindie-agent/knowledge-infer-core) — 核心推理引擎调度、KV Cache、多流并行与服务化架构（78 Units）
-  - [`knowledge-infer-distributed`](https://github.com/mindie-agent/knowledge-infer-distributed) — HCCL 集合通信、RoCE/HCCS 拓扑、多维并行与 SHMEM（23 Units）
-  - [`knowledge-infer-observability`](https://github.com/mindie-agent/knowledge-infer-observability) — CANN 故障诊断、`msprof` 性能剖析与精度验证（23 Units）
-  - [`knowledge-infer-ops-compat`](https://github.com/mindie-agent/knowledge-infer-ops-compat) — GE/TorchAir 图编译、自定义算子注册与 CUDA 迁移兼容（22 Units）
-  - [`knowledge-agent-engineering`](https://github.com/mindie-agent/knowledge-agent-engineering) — 智能体编排、远端 NPU 租约协同、脱敏审计与基准评测（23 Units）
+  - [`knowledge-vllm-ascend`](https://github.com/mindie-agent/knowledge-vllm-ascend) — `vLLM-Ascend` 与 `vLLM-Omni` 适配、图编译、MoE、PD 分离与多阶段全模态流水线（91 Units）
+  - [`knowledge-operators`](https://github.com/mindie-agent/knowledge-operators) — AscendC / BiShengIR / Triton / TileLang / MindIE-SD 算子开发与优化（105 Units）
+  - [`knowledge-infer-core`](https://github.com/mindie-agent/knowledge-infer-core) — 核心推理引擎调度、KV Cache、`MindIE-SD` 扩散加速与服务化架构（109 Units）
+  - [`knowledge-infer-distributed`](https://github.com/mindie-agent/knowledge-infer-distributed) — HCCL 集合通信、RoCE/HCCS 拓扑、Ulysses/Ring/CFG 混合并行与 SHMEM（39 Units）
+  - [`knowledge-infer-observability`](https://github.com/mindie-agent/knowledge-infer-observability) — CANN 故障诊断、`msprof` 性能剖析与 A/B/A 性能/精度门禁（39 Units）
+  - [`knowledge-infer-ops-compat`](https://github.com/mindie-agent/knowledge-infer-ops-compat) — GE/TorchAir/Inductor 图编译、自定义算子注册与两阶段框架集成（34 Units）
+  - [`knowledge-agent-engineering`](https://github.com/mindie-agent/knowledge-agent-engineering) — 智能体编排、S0–S6 自动调优工作流、脱敏审计与基准评测（33 Units）
+
+---
+
+## 📄 开源许可（License）
+
+本仓库遵循 [`LICENSE`](./LICENSE) 双许可声明（与 `mindie-publication-contract/2` 仓库结构对齐）：
+
+- **知识语料、派生索引、公开反馈与文档证据**（`<domain_path>/unit-*.md`、`index/`、`feedback/`、`README.md`、`README.en.md`、`AGENTS.md`、`docs/`）采用 **[Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE)** 许可协议。
+- **仓库维护脚本与工作流配置**（`scripts/`、`.github/workflows/`、`publication-contract.json`）采用 **[MIT License](./LICENSE)** 许可协议。
