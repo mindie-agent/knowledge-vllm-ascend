@@ -1,32 +1,48 @@
 ---
-schema: mindie-graded-unit/1
-id: unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator
-revision: 1
-tier: L4
 category: mutator
-evidence_strength: reproduced_empirical
-domain_path: vllm-ascend/models/deepseek-v4-v41
-title: Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer views, and keep top-k block masks device-resident
 conditions:
+  attention_backend: sparse_mla
   framework: vllm-ascend
   model_family:
   - deepseek-v4
   - deepseek-v4.1
   - dsv4
   - dsv3.2
-  attention_backend: sparse_mla
   quantization:
   - w8a8
   - w4a8
   - c8
+domain_path: vllm-ascend/models/deepseek-v4-v41
+evidence_strength: reproduced_empirical
+id: unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator
 inherits_from:
 - unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms
 - unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop
+provenance:
+  evidence_refs:
+  - docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/50809f1fefde44f4671b682248b8a55c32debd931359dd887585022e0a68fa79/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/99e97cb3574e1288dd1faa397b490f01e93349bdaee11d3f6909f2e5c383fac4/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0bc94d24162470fe8ce3fc189b7eb239aa868d074ff53c78706cad0c5c608243/index.md
+  experiment_status: not_run_source_only
+  source_digest: 1cddab93c1c9ee3fad0eca71a03b5fa69286f2079ed75d1e817a738acfb55ae6
+  source_locator: docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
+  source_type: ablation_design_receipt
+  supersedes: []
+revision: 2
+schema: mindie-graded-unit/1
+tier: L4
+title: Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer
+  views, and keep top-k block masks device-resident
 triggers:
   error_signatures:
-  - three TensorMove or Memcpy passes per MLA layer around qr dequantization, RMSNorm and the RoPE/NoPE split
+  - three TensorMove or Memcpy passes per MLA layer around qr dequantization, RMSNorm
+    and the RoPE/NoPE split
   - explicit contiguous clone on q_indexer or k_indexer before npu_lightning_indexer
-  - host clamp or item on the top-k valid length between npu_lightning_indexer and sparse MLA
+  - host clamp or item on the top-k valid length between npu_lightning_indexer and
+    sparse MLA
   - invalid GM address when a -1 top-k block id reaches npu_sparse_flash_attention
   - TPOT regresses at 32k or 128k while the 1k cell is unchanged
   keywords:
@@ -54,21 +70,7 @@ triggers:
   - 解码延迟
   - 算子融合
   - 消融实验
-provenance:
-  source_type: ablation_design_receipt
-  source_locator: docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
-  source_digest: 1cddab93c1c9ee3fad0eca71a03b5fa69286f2079ed75d1e817a738acfb55ae6
-  evidence_refs:
-  - docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/50809f1fefde44f4671b682248b8a55c32debd931359dd887585022e0a68fa79/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/99e97cb3574e1288dd1faa397b490f01e93349bdaee11d3f6909f2e5c383fac4/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0bc94d24162470fe8ce3fc189b7eb239aa868d074ff53c78706cad0c5c608243/index.md
-  experiment_status: not_run_source_only
-  supersedes: []
 ---
-
 # Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer views, and keep top-k block masks device-resident
 
 ## Applicability
@@ -220,4 +222,3 @@ Run at least the full candidate, the baseline, and the three `minus_*` arms. A f
 **Reporting skeleton.** For each arm record: run ID, graph mode, context length, concurrency, quantization, TPOT p50/p90, TTFT p50/p90, output throughput, selected-block count, `TensorMove`/`Memcpy` count per layer, host D2H count, accuracy metric, and the first failing device-log line (if any). This is the minimum evidence needed to distinguish a real factor effect from a cache-state or version artifact.
 
 When implementing a programmatic `run_ablation_suite()` helper in `sparse_mla_decode.py`, return a `dict[str, dict]` keyed by the exact 4 leave-one-out arm identifiers (`full_candidate`, `minus_q_fusion`, `minus_view_alias`, `minus_device_guard`) where each entry records `"tpot_ms"`, `"tensor_moves"`, `"host_d2h_syncs"`, and `"correctness_ok"`.
-

@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 50.44474999886006,
+  "build_elapsed_ms": 42.821957962587476,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -363,7 +363,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "daf0b1cfeca22b39afcd1807ce59d73604aff2b8df7ab23d79cee127c6388cbc",
+  "generation": "4e58a2a35dd1b27c27f0105a5674d212bbf168f8855be51e86a7c6f33dfba300",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -1449,7 +1449,7 @@
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 3,
       "tier": "L3",
       "title": "DeepSeek-V4-Flash, DeepSeek-V4-Pro & DeepSeek-V4.1 (mHC, Compress-4/128 DSA, Hadamard Indexer, Engram/Candidate, DSpark/MTP) workflow",
       "token_estimate": 1068,
@@ -1732,7 +1732,7 @@
         "source_type": "ablation_design_receipt",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L4",
       "title": "Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer views, and keep top-k block masks device-resident",
       "token_estimate": 4173,
