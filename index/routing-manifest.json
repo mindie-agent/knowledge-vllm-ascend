@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 48.277667025104165,
+  "build_elapsed_ms": 48.58695808798075,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -363,7 +363,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "a8c127d292dc07c195d05d81e0671ab7015b1d2271ab23d5f60a890bf1d8c40f",
+  "generation": "4c5dd54c48f68d4bf5896bc754106822ba02b84a1df082dee74457b86e973b0c",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -628,10 +628,10 @@
         "source_type": "runtime_triage_sop",
         "supersedes": []
       },
-      "revision": 3,
+      "revision": 4,
       "tier": "L2",
       "title": "ACLGraph capture invalidation, dynamic shape bucketing, and stream sync triage SOP",
-      "token_estimate": 2207,
+      "token_estimate": 2298,
       "triggers": {
         "error_signatures": [
           "ACLGraph replay falls back to eager execution on decode steps",
@@ -809,10 +809,10 @@
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 3,
+      "revision": 4,
       "tier": "L2",
       "title": "Hybrid linear attention (GatedDeltaNet / KDA / Bailing MoE linear attention) metadata builder and Triton FLA SOP",
-      "token_estimate": 1604,
+      "token_estimate": 1647,
       "triggers": {
         "error_signatures": [
           "GatedDeltaNet or KDA layer corrupts recurrent state when batch mixes prefill and decode requests",
