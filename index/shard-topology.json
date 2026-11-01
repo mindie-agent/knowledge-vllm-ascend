@@ -365,8 +365,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 609316,
-      "estimated_tokens": 100995,
+      "bytes": 617612,
+      "estimated_tokens": 102742,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -510,8 +510,8 @@
       },
       {
         "automatic": false,
-        "bytes": 579879,
-        "estimated_tokens": 96477,
+        "bytes": 588175,
+        "estimated_tokens": 98224,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -606,7 +606,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 42.821957962587476,
+  "index_build_elapsed_ms": 48.277667025104165,
   "leaves": [
     {
       "automatic": false,
@@ -718,8 +718,8 @@
     },
     {
       "automatic": false,
-      "bytes": 7547,
-      "estimated_tokens": 1255,
+      "bytes": 9335,
+      "estimated_tokens": 1604,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/attention/backends/hybrid-linear-attention",
@@ -1413,8 +1413,8 @@
     },
     {
       "automatic": false,
-      "bytes": 30711,
-      "estimated_tokens": 6438,
+      "bytes": 31831,
+      "estimated_tokens": 6668,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runtime/cannbot-runbooks",
@@ -1427,8 +1427,8 @@
     },
     {
       "automatic": false,
-      "bytes": 5790,
-      "estimated_tokens": 1039,
+      "bytes": 11178,
+      "estimated_tokens": 2207,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runtime/graph-capture",
@@ -1712,8 +1712,8 @@
     },
     {
       "automatic": false,
-      "bytes": 22152,
-      "estimated_tokens": 3475,
+      "bytes": 23940,
+      "estimated_tokens": 3824,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/attention/backends",
@@ -2083,8 +2083,8 @@
     },
     {
       "automatic": false,
-      "bytes": 55443,
-      "estimated_tokens": 10176,
+      "bytes": 61951,
+      "estimated_tokens": 11574,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/runtime",
@@ -2205,11 +2205,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop": {
-      "bytes": 5790,
+      "bytes": 11178,
       "category": "sop",
-      "content_sha256": "898719ce7c8f81089993dd725b1148f09a8ddea7de0a8795ab7e20a968984923",
+      "content_sha256": "d66c4de773a186865405ce1e8dae404a985a672ca5d2885210e7a5381ec8a0d8",
       "domain_path": "vllm-ascend/runtime/graph-capture",
-      "estimated_tokens": 1039,
+      "estimated_tokens": 2207,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -2245,11 +2245,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-bailing-linear-and-gdn-metadata-builder-sop": {
-      "bytes": 7547,
+      "bytes": 9335,
       "category": "sop",
-      "content_sha256": "ae2b2332a60e3b437422a19c2848c1d62a25f25cb5ee5396e150f1d52e5151b7",
+      "content_sha256": "1b4c4dc75699d07c97a75b00a8471fbda0b54e3c4bf8958cd698ec78853b2337",
       "domain_path": "vllm-ascend/attention/backends/hybrid-linear-attention",
-      "estimated_tokens": 1255,
+      "estimated_tokens": 1604,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -2285,11 +2285,11 @@
       "tier": "L1"
     },
     "unit-vllm-ascend-cann-error-code-and-hang-crash-triage-sop": {
-      "bytes": 14565,
+      "bytes": 15685,
       "category": "sop",
-      "content_sha256": "b4fb60055447c73dbc7121ce321eb6e8074521015dda27a6e7a3b823f70eb2fe",
+      "content_sha256": "e765f7ee822416d9f08fb64f01c79967ad74eaa58c808fc400939178bdbfe6cb",
       "domain_path": "vllm-ascend/runtime/cannbot-runbooks",
-      "estimated_tokens": 3036,
+      "estimated_tokens": 3266,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"

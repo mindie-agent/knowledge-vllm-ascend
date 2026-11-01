@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 42.821957962587476,
+  "build_elapsed_ms": 48.277667025104165,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -363,7 +363,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "4e58a2a35dd1b27c27f0105a5674d212bbf168f8855be51e86a7c6f33dfba300",
+  "generation": "a8c127d292dc07c195d05d81e0671ab7015b1d2271ab23d5f60a890bf1d8c40f",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -628,22 +628,43 @@
         "source_type": "runtime_triage_sop",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 3,
       "tier": "L2",
       "title": "ACLGraph capture invalidation, dynamic shape bucketing, and stream sync triage SOP",
-      "token_estimate": 1039,
+      "token_estimate": 2207,
       "triggers": {
         "error_signatures": [
           "ACLGraph replay falls back to eager execution on decode steps",
           "RuntimeError during npu_graph capture due to host-device synchronization or dynamic allocation",
           "decode output diverges after batch size changes across padded graph buckets",
-          "eager execution passes on the same decode input while aclgraph or piecewise replay diverges"
+          "eager execution passes on the same decode input while aclgraph or piecewise replay diverges",
+          "NPUGraph replay corrupts state slot 0 or reads stale warmup buffers on padded decode rows",
+          "AutoRegressiveAclGraphManager _updatable_graph_replay or PCP draft block_table diverges on step > 0",
+          "RoutedExpertsCapturer returns zeros or stale warmup expert IDs in upper batch rows under TP > 1"
         ],
         "keywords": [
           "ACLGraph",
+          "mindie-debugger",
+          "debugger aclgraph",
+          "debugger precision",
+          "ACLGraphVllmInspector",
+          "ACLGraphAddressTracker",
+          "ACLGraphDumper",
+          "MemoryWatchpoint",
+          "StorageGraph",
+          "LockstepDiffer",
           "graph capture",
           "invalidation",
           "padded batch",
+          "PAD_SLOT_ID",
+          "null_block_id",
+          "causal_conv1d",
+          "conv_state",
+          "AutoRegressiveAclGraphManager",
+          "_updatable_graph_replay",
+          "build_fia_params",
+          "RoutedExpertsCapturer",
+          "patch_routed_experts_capture",
           "bucket",
           "eager fallback",
           "stream synchronization",
@@ -788,14 +809,16 @@
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 3,
       "tier": "L2",
       "title": "Hybrid linear attention (GatedDeltaNet / KDA / Bailing MoE linear attention) metadata builder and Triton FLA SOP",
-      "token_estimate": 1255,
+      "token_estimate": 1604,
       "triggers": {
         "error_signatures": [
           "GatedDeltaNet or KDA layer corrupts recurrent state when batch mixes prefill and decode requests",
           "AscendGDNMetadataBuilder non_spec_state_indices_tensor points to padding slot -1 without mask guard",
+          "aclnnRecurrentGatedDeltaRule tiling failed 507015 when non_spec_state_indices_tensor length exceeds decode token count T",
+          "causal_conv1d_update or copy_conv_state corrupts slot 0 or padded output rows during NPUGraph replay",
           "Bailing linear attention slope tensor or chunk_gated_delta_rule Triton launch fails on Ascend",
           "Qwen3.5 PCP or PD accuracy degrades in FULL_DECODE_ONLY graph mode after moving GDN conv1d metadata to device tensors",
           "MTP step >= 1 full-graph decode fails with KvQuantSparseAttnSharedkv AICORE errcode 264 when query_start_loc[-1] exceeds num_actual_tokens",
@@ -807,6 +830,13 @@
           "bailing_moe_linear_attn",
           "chunk_gated_delta_rule",
           "fused_recurrent_gated_delta_rule",
+          "aclnnRecurrentGatedDeltaRule",
+          "non_spec_state_indices_tensor",
+          "causal_conv1d",
+          "conv_state",
+          "null_block_id",
+          "PAD_SLOT_ID",
+          "mindie-debugger",
           "kimi_kda",
           "mamba_utils",
           "num_decode_tokens",
@@ -970,10 +1000,10 @@
         "source_type": "cannbot_skill_and_runbook_distillation",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 2,
       "tier": "L2",
       "title": "CANN error-code, AICore exception, HCCL hang and OOM triage SOP for vllm-ascend",
-      "token_estimate": 3036,
+      "token_estimate": 3266,
       "triggers": {
         "error_signatures": [
           "EZ9999 AclNN_Inner_Error with no semantic cause in the message",
@@ -983,18 +1013,24 @@
           "ErrCode=507035 vector core exception",
           "PrintCoreInfo reports aic error mask, PC start and IFU/MTE/VEC/CUBE status",
           "rank zero HCCL timeout while another rank has the first real error",
-          "service hangs after a graph capture or an idle DP step"
+          "service hangs after a graph capture or an idle DP step",
+          "aclnnRecurrentGatedDeltaRule tiling failed 507015 when ssm_state_indices length exceeds T"
         ],
         "keywords": [
           "CANN error code",
+          "mindie-debugger",
+          "debugger triage",
+          "decode-code",
           "EZ9999",
           "EL0004",
           "EI0006",
           "EI0002",
           "507015",
+          "507011",
           "507018",
           "507035",
           "507001",
+          "aclnnRecurrentGatedDeltaRule",
           "AICore",
           "AICPU",
           "vector core",

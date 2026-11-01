@@ -23,7 +23,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/gdn_attn_builder.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 2
+revision: 3
 schema: mindie-graded-unit/1
 tier: L2
 title: Hybrid linear attention (GatedDeltaNet / KDA / Bailing MoE linear attention)
@@ -34,6 +34,8 @@ triggers:
     decode requests
   - AscendGDNMetadataBuilder non_spec_state_indices_tensor points to padding slot
     -1 without mask guard
+  - aclnnRecurrentGatedDeltaRule tiling failed 507015 when non_spec_state_indices_tensor length exceeds decode token count T
+  - causal_conv1d_update or copy_conv_state corrupts slot 0 or padded output rows during NPUGraph replay
   - Bailing linear attention slope tensor or chunk_gated_delta_rule Triton launch
     fails on Ascend
   - Qwen3.5 PCP or PD accuracy degrades in FULL_DECODE_ONLY graph mode after moving GDN conv1d metadata to device tensors
@@ -45,6 +47,13 @@ triggers:
   - bailing_moe_linear_attn
   - chunk_gated_delta_rule
   - fused_recurrent_gated_delta_rule
+  - aclnnRecurrentGatedDeltaRule
+  - non_spec_state_indices_tensor
+  - causal_conv1d
+  - conv_state
+  - null_block_id
+  - PAD_SLOT_ID
+  - mindie-debugger
   - kimi_kda
   - mamba_utils
   - num_decode_tokens
@@ -63,6 +72,8 @@ Use this SOP when working with hybrid recurrent/linear attention layers in `vllm
    - `AscendGDNMetadataBuilder` partitions requests into speculative-verify tokens and non-speculative (prefill + standard 1-token decode) tokens, constructing `spec_query_start_loc`, `non_spec_query_start_loc`, `spec_state_indices_tensor`, and `non_spec_state_indices_tensor`. On Ascend310P (`vllm_ascend/_310p/ops/gdn_attn_builder_310.py`), use the dedicated 310P builder.
    - **Four Counting Domains under `FULL_DECODE_ONLY` & MTP:** Strictly distinguish `num_reqs` (padded graph request slots), `num_actual_tokens` (true tokens), `num_decodes` (which in vLLM `split_decodes_and_prefills()` fast-path `max_query_len <= 1` equals padded `num_reqs`), and `num_decode_tokens` (true decode tokens). When MTP is enabled globally but the current batch falls back to non-spec decode (all draft masks `-1`), the only trustworthy real request count is `actual_num_decodes = num_decode_tokens` (`attn_metadata.num_decode_tokens` on 310P).
    - **Persistent Graph Buffer Hygiene & MTP `step >= 1` Token Alignment:** Because `model_runner_v1.py` only zeroes padded block-table rows when `pcp_size == 1`, copying `num_decodes` rows into persistent graph buffers under PCP copies stale valid state slots into padding rows (and slicing the Python view to `num_actual_tokens` does not alter the captured ACLGraph buffer address). Copy only `actual_num_decodes` rows and explicitly clear padded tail entries to null/`PAD_SLOT_ID`. In MTP `step >= 1` full-graph steps, always enforce `query_start_loc[-1] == q.shape[0] == slot_mapping.shape[0]` (`num_actual_tokens`) so padded request slots never inflate `cu_seqlens_q[-1]` and trigger AICore `errcode 264`.
+   - **Slice `non_spec_state_indices_tensor` to `num_decode_tokens` before `fused_recurrent_gated_delta_rule` (`vllm_ascend/ops/gdn.py`):** Under FIA / `ACLGraph` request-level padding or when `num_decodes` includes zero-length decode rows (`num_decodes > num_decode_tokens`), `attn_metadata.non_spec_state_indices_tensor` can have more entries (e.g., 32) than the actual decode token count `T = attn_metadata.num_decode_tokens` (e.g., 30), causing `aclnnRecurrentGatedDeltaRule` to fail with `507015` (`ssm_state_indices length != T`). Always slice `attn_metadata.non_spec_state_indices_tensor[:attn_metadata.num_decode_tokens]` at every non-spec decode call site in `vllm_ascend/ops/gdn.py` (and use the `debugger` MCP tool `debugger(argv=["triage", "--root", "<log_dir>"])` to isolate the primary `507015` rank from cascading `EI0002` collective timeouts).
+   - **Guard `PAD_SLOT_ID = -1` in `causal_conv1d_update` and `copy_conv_state` during `NPUGraph` replay (`causal_conv1d.py`, `conv_state.py`):** When decode batches are padded with `PAD_SLOT_ID = -1` (`live < B_padded`), never clamp negative `conv_state_indices` to `0` (`tl.maximum(state_idx, 0)` overwrites request `0`'s conv state), and always pass `null_block_id=PAD_SLOT_ID` (`-1`) plus a pre-allocated `out=output` buffer to `causal_conv1d_update` so negative indices are skipped and graph replay output addresses remain static.
 2. **Route prefill chunks to `chunk_gated_delta_rule` and decode steps to `fused_recurrent_gated_delta_rule`:**
    - Prefill sequences (`query_len > 1` without speculative tree, and 1-token initial prefill without prior state in PD disaggregation) must preserve prefill semantics (`chunk_gated_delta_rule` in `vllm_ascend/ops/triton/fla/`).
    - Single-token continuation decode and speculative token verification execute `fused_recurrent_gated_delta_rule` updating the per-request recurrent state in place.

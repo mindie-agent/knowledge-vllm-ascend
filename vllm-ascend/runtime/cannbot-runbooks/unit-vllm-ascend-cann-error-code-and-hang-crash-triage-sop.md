@@ -26,7 +26,7 @@ provenance:
   source_locator: public/cannbot-skills/ops/cann-error-code-standard/references/development-standard.md
   source_type: cannbot_skill_and_runbook_distillation
   supersedes: []
-revision: 1
+revision: 2
 schema: mindie-graded-unit/1
 tier: L2
 title: CANN error-code, AICore exception, HCCL hang and OOM triage SOP for vllm-ascend
@@ -40,16 +40,22 @@ triggers:
   - PrintCoreInfo reports aic error mask, PC start and IFU/MTE/VEC/CUBE status
   - rank zero HCCL timeout while another rank has the first real error
   - service hangs after a graph capture or an idle DP step
+  - aclnnRecurrentGatedDeltaRule tiling failed 507015 when ssm_state_indices length exceeds T
   keywords:
   - CANN error code
+  - mindie-debugger
+  - debugger triage
+  - decode-code
   - EZ9999
   - EL0004
   - EI0006
   - EI0002
   - '507015'
+  - '507011'
   - '507018'
   - '507035'
   - '507001'
+  - aclnnRecurrentGatedDeltaRule
   - AICore
   - AICPU
   - vector core
@@ -91,7 +97,16 @@ The SOP deliberately does not treat the last error as the cause. CANN collective
    | `507035` | Runtime / RTS | Vector-core exception; often an address, alignment or DataCopyPad contract violation. |
    | `507001` | Runtime / RTS | Event timeout. Treat it as a secondary stall/timeout symptom until an allocation or device fault is confirmed. |
 
-   Search the plog, not only stdout. The usual path is `$HOME/ascend/log/debug/plog/plog-<pid>_*.log`; older or containerized layouts may use `$HOME/ascend/log/plog/`. Search every rank and sort by timestamp:
+   Search the plog, not only stdout. The usual path is `$HOME/ascend/log/debug/plog/plog-<pid>_*.log`; older or containerized layouts may use `$HOME/ascend/log/plog/`. First invoke the `debugger` MCP tool (`mindie-debugger`) to rank primary vs secondary faults across all rank logs and decode CANN error codes automatically:
+
+   ```text
+   # Via MCP tool `debugger` (in `mindie-tools`):
+   debugger(argv=["triage", "--root", "<plog_or_log_dir>"])
+   debugger(argv=["triage", "--file", "<single_log_file>"])
+   debugger(argv=["decode-code", "507015"])
+   ```
+
+   `mindie-debugger triage` parses multi-rank plogs, assigns higher priority to primary device/operator errors (`507015`, `507018`, `507035`, `EL0004`, `aclnn*` tiling failures, `score=100`) than to cascading collective timeouts (`EI0002`, `EI0006`, `score=20`), and extracts the first causal operator and error line. You can also verify directly in shell across all ranks sorted by timestamp:
 
    ```bash
    LOG_ROOT="${ASCEND_PROCESS_LOG_PATH:-$HOME/ascend/log}"
@@ -99,7 +114,7 @@ The SOP deliberately does not treat the last error as the cause. CANN collective
      | sort -t: -k1,1 -k2,2n | head -80
    ```
 
-   Read the first `[ERROR]` that names a concrete module, file and line. A later `EI0006` on rank zero is not the first error if rank seven already logged `EL0004`.
+   Read the first `[ERROR]` that names a concrete module, file and line. A later `EI0006` or `EI0002` on seven ranks is not the root cause if one rank already logged `EL0004` or `507015` (for example, `aclnnRecurrentGatedDeltaRule` tiling failure when a graph-padded `state_indices` tensor is longer than the actual decode token count `T`).
 
    **Invariant:** one root cause per incident; the first causal ERROR is earlier than, and not a consequence of, the rank-zero timeout; the decoded module matches the component that owns the failing operation.
 
