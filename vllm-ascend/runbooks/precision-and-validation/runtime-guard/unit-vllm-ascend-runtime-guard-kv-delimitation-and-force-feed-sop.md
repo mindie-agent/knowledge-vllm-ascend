@@ -20,7 +20,7 @@ provenance:
   source_locator: djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/analysis/SKILL.md
   source_type: cannbot_runbook_distillation
   supersedes: []
-revision: 2
+revision: 3
 schema: mindie-graded-unit/1
 tier: L2
 title: runtime_guard KV cache anomaly delimitation, same-mode force-feed reference,
@@ -54,10 +54,10 @@ triggers:
 
 Use this SOP to delimit whether an online serving accuracy anomaly (`token_repeat`, `logits_finite`, `spec_acceptance`, or client-observed gibberish) originates inside the KV cache (`Q1-Q7`) or downstream of KV writes (`Q8-Q10`).
 
-1. **Keep the three detector rates strictly separate (`detector-sweep`):**
-   - `trigger_rate = N_triggered / N_total` (fraction of requests firing a detector).
-   - `precision = N_true_bad_in_triggered / N_triggered` (low precision indicates over-sensitive thresholds such as `ngram_min` / `min_repeat_count` firing on benign markdown/math tables).
-   - `detect_rate = N_triggered_in_bad / N_all_bad` (when client outputs contain non-repetitive gibberish or mid-sentence language switching while `logits_finite` is clean and `token_repeat` does not fire, classify as `detector_gap` / `乱码漏检` and capture KV via hot-reloaded `dump_kv.auto_max_times: 0` + incremented `dump_kv.manual_dump: N`).
+1. **Keep the three detector rates strictly separate (`detector-sweep` & `04_case_studies/词汇表.md`):**
+   - `trigger_rate`: in fault-injection case studies (`04_case_studies/词汇表.md`), `trigger` counts injected fault-path executions (which can exceed request count when a request hits the fault path on multiple steps); in general request-level sweeps, `N_triggered / N_requests`.
+   - `precision`: in `04_case_studies` keep-set accounting (`词汇表.md`), the fraction of requests with genuine output degradation (`N_bad_output / N_requests`, excluding benign CJK text); in detector threshold tuning, `N_true_bad_in_triggered / N_triggered` (low detector precision indicates over-sensitive `ngram_min` / `min_repeat_count` firing on benign markdown/math tables).
+   - `detect_rate`: in `04_case_studies` accounting, the fraction of requests reported by Guard (`N_guard_reported / N_requests`), or relative to bad outputs (`N_triggered_in_bad / N_all_bad`). When client outputs exhibit genuine degradation (`precision > 0`) while `detect == 0` (`logits_finite` is clean and `token_repeat` does not fire on non-repetitive gibberish or mid-sentence language switching), classify as `detector_gap` / `乱码漏检` and capture KV via hot-reloaded `dump_kv.auto_max_times: 0` + incremented `dump_kv.manual_dump: N`.
 
 ## Procedure
 
@@ -80,14 +80,14 @@ Use this SOP to delimit whether an online serving accuracy anomaly (`token_repea
      2. **Step 2 — `used_slots` numeric-first gate (`numeric_issue` before `cosine_sim`)**:
         - Check `target_nan`, `target_inf`, `baseline_nonfinite`, and `target_zero_norm` (`norm_targ == 0` while `norm_base > 0`, caused by dropped KV writes or `slot_mapping = -1`) **before** computing cosine similarity. Never sort layers by raw `cosine_sim` when `numeric_issue` is present (`cosine_sim` must be `None`).
      3. **Step 3 — Dual-view localization (Table 1 token evolution + Table 2 layer chain)**:
-        - **Table 1 (`token_idx 0..N-1 × layer`)**: Locate the first token `T0` where `mean(k_cos, v_cos)` drops or `numeric_issue` appears. Annotate columns `t >= max(n_prompt, T0)` with `out[k]=<token_id>`: once decode outputs diverge at `T0`, subsequent token columns feed different input tokens into the model, so post-`T0` KV divergence is expected causal feedback rather than new independent faults.
+        - **Table 1 (`token_idx 0..N-1 × layer`)**: Locate the first token `T0` where `mean(k_cos, v_cos)` drops, `k_max_diff`/`v_max_diff` spikes, or `numeric_issue` appears. Annotate decode columns `t >= max(n_prompt, T0)` with `out[k]=<token_id>`: under independent decoding without `force-feed`, once decoded outputs diverge at `T0`, subsequent token columns feed different input tokens into the model, whereas under `force-feed` (`prompt_token_ids + output_token_ids[:-1]`), both runs receive identical token IDs at every position so post-`T0` differences remain valid under identical token inputs (reflecting KV attention propagation from `T0` or subsequent step faults).
         - **Table 2 (`layer 0..L-1` at fixed token `T0`)**: Inspect `k_cos`, `v_cos`, `k_max_diff`, `v_max_diff`, and `numeric_issue` across all layers at `T0` to identify the exact first failing layer `L0`.
 
 4. **Walk the `Q1-Q10` decision tree and emit the 4-tier closure report:**
-   - **Step A (`Q1-Q2` Region)**: Does `T0` fall in prefill (`0 .. n_prompt-1`, `Q1`) or decode (`n_prompt .. N-1`, `Q2`), or are all `used_slots` across all layers/tokens clean (`cos > 0.999` and `numeric_issue is None` -> jump to Step D)?
+   - **Step A (`Q1-Q2` Region)**: Does `T0` fall in prefill (`0 .. n_prompt-1`, `Q1`) or decode (`n_prompt .. N-1`, `Q2`), or are all `used_slots` across all layers/tokens clean (`cos > 0.999`, bounded `max_abs_err` / `rel_l2_err` confirming no scale-multiplication drift since `cos(x, 2*x) == 1.0`, and `numeric_issue is None` -> jump to Step D)?
    - **Step B (`Q3-Q5` Temporal Shape)**: Is the drop at `T0` a step-function cliff (`Q3`: check if `T0` is a multiple of `block_size` -> paged block allocation/offload/prefix-cache boundary, or `chunk_size` -> chunked prefill boundary) or a gradual multi-step decay (`Q4-Q5`: quantization rounding accumulation or RoPE position drift)?
    - **Step C (`Q6-Q7` Layer Topology at `T0`)**:
      - Drops starting at a specific layer `L0` and propagating to `L0+1..L-1` (`Q6`): operator, fusion pass, or quantization scale fault inside layer `L0` -> hand off to `mindie-debugger` (`aclgraph inspect` if graph-only, or `--enforce-eager` `msprobe` scoped to `layer.L0`).
      - Drops simultaneously at `layer 0` (`Q7`): input embedding, `positions`, `slot_mapping`, or `block_table` corruption before layer `0`.
-   - **Step D (`Q8-Q10` Clean KV, Bad Output)**: When all `used_slots` match (`cos > 0.999`) up to the anomalous step, the KV cache is innocent; isolate downstream post-attention stages: last-layer attention read over `nonfinite_pollution` in `unused_slots` (`Q8`), `final_layernorm` / `lm_head` / TP `AllGather` (`Q9`), or sampler / detokenizer / speculative rejection (`Q10`).
+   - **Step D (`Q8-Q10` Clean KV, Bad Output)**: When all `used_slots` match (`cos > 0.999`, bounded `max_abs_err` / `rel_l2_err`, and `numeric_issue is None`) up to the anomalous step, the KV cache is innocent; isolate downstream post-attention stages: last-layer attention read over `nonfinite_pollution` in `unused_slots` (`Q8`), `final_layernorm` / `lm_head` / TP `AllGather` (`Q9`), or sampler / detokenizer / speculative rejection (`Q10`).
    - **Four-Tier Closure Output**: Report **Tier 1** (`KV Corrupt` vs `KV Clean`), **Tier 2** (`First Divergent Token T0 & Layer L0`), **Tier 3** (`Root-Cause Subsystem`), and **Tier 4** (`Deterministic Next Verification Command`).

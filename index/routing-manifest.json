@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 104.6523000113666,
+  "build_elapsed_ms": 86.02489996701479,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -372,7 +372,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "628618752b32cf89a0c36ccfaa0142d848352daca915ae7716ed40f12a6b1a89",
+  "generation": "2849f5349bcb16939f5738eb2b8980908a51e393c801b0e674246c6546cd9473",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -5318,10 +5318,10 @@
         "source_type": "cannbot_runbook_distillation",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 3,
       "tier": "L2",
       "title": "runtime_guard KV cache anomaly delimitation, same-mode force-feed reference, numeric-first comparison, and Q1-Q10 SOP",
-      "token_estimate": 1598,
+      "token_estimate": 1865,
       "triggers": {
         "error_signatures": [
           "runtime_guard triggers token_repeat or logits_finite and writes dump_kv .pt files for a degraded request",
@@ -5374,15 +5374,15 @@
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 2,
+      "revision": 3,
       "tier": "L1",
       "title": "vllm-ascend runtime_guard MRV2 hook boundary, shipped detectors, last-PP TP topology, and dump_kv watermark axioms",
-      "token_estimate": 984,
+      "token_estimate": 1077,
       "triggers": {
         "error_signatures": [
           "runtime_guard enabled under VLLM_ASCEND_USE_V2_MODEL_RUNNER=0 produces no log or report without MRV1 backport patch",
           "runtime_guard runtime_config_hot_reload toggled from false to true at runtime never reloads runtime_config_path",
-          "runtime_guard manual_dump set to 1 repeatedly or alongside auto_max_times > 0 does not trigger a new KV dump",
+          "runtime_guard manual_dump set to 1 repeatedly does not trigger a second KV dump or setting manual_dump > 0 alongside auto_max_times > 0 is rejected by validate_dump_mutual_exclusive",
           "runtime_guard dump_kv across TP ranks yields per-rank KV head slices requiring dim=-2 concatenation"
         ],
         "keywords": [

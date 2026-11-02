@@ -19,7 +19,7 @@ provenance:
   source_locator: djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/config-recommender/SKILL.md
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 2
+revision: 3
 schema: mindie-graded-unit/1
 tier: L1
 title: vllm-ascend runtime_guard MRV2 hook boundary, shipped detectors, last-PP TP
@@ -30,8 +30,8 @@ triggers:
     or report without MRV1 backport patch
   - runtime_guard runtime_config_hot_reload toggled from false to true at runtime
     never reloads runtime_config_path
-  - runtime_guard manual_dump set to 1 repeatedly or alongside auto_max_times > 0
-    does not trigger a new KV dump
+  - runtime_guard manual_dump set to 1 repeatedly does not trigger a second KV dump
+    or setting manual_dump > 0 alongside auto_max_times > 0 is rejected by validate_dump_mutual_exclusive
   - runtime_guard dump_kv across TP ranks yields per-rank KV head slices requiring
     dim=-2 concatenation
   keywords:
@@ -53,7 +53,7 @@ triggers:
 
 **Constraint.**
 
-1. **ModelRunner hook boundary (`MRV2` native vs `MRV1`/`v0.3.0` backports).** Native `runtime_guard` hooks `vllm_ascend/worker/v2/model_runner.py` (`ModelRunner V2`) at two points per step: post-forward (`logits` before sampling) and post-sampler (`sampled_token_ids`). Running with `VLLM_ASCEND_USE_V2_MODEL_RUNNER=0` (`ModelRunner V1` in `model_runner_v1.py`) or on `vllm-ascend v0.11.0` (`v0.3.0` branch) silently bypasses `runtime_guard` unless the corresponding `05_mrv1_backport` or `05_v030_backport` patch series is applied.
+1. **ModelRunner hook boundary (`MRV2` native vs `MRV1` / `releases/v0.30.0` backports).** Native `runtime_guard` hooks `vllm_ascend/worker/v2/model_runner.py` (`ModelRunner V2`) at two points per step: post-forward (`logits` before sampling) and post-sampler (`sampled_token_ids`). Running with `VLLM_ASCEND_USE_V2_MODEL_RUNNER=0` (`ModelRunner V1` in `model_runner_v1.py`) silently bypasses `runtime_guard` unless the `05_mrv1_backport` patch series is applied; running on `releases/v0.30.0` (and its release candidates under `MRV2`) requires the `05_v030_backport` patch series on its recorded `BASE` commit in `CHANGELOG.md`. The two backport patch series target mutually exclusive baselines and must never be stacked (`叠打`).
 
 2. **Shipped detector whitelist (`token_repeat`, `logits_finite`, `spec_acceptance` only).** Only three detectors are implemented in `RuntimeGuardConfig.from_dict()`:
    - `token_repeat`: CPU n-gram repetition check on post-sampler token IDs (`ngram_min`, `ngram_max`, `min_repeat_count`, `check_interval_steps`).
@@ -67,8 +67,8 @@ triggers:
 
 4. **Startup-only hot-reload and `manual_dump` watermark semantics.**
    - `runtime_config_hot_reload: true` and `runtime_config_path` must be set at process startup; the `file_mtime` poller is created only during initialization, so changing `runtime_config_hot_reload` from `false` to `true` at runtime has no effect.
-   - `report.max_per_req` controls per-request JSONL emission (`0` = final summary on request completion only; `1` = first anomaly trigger + final summary; `N > 1` = up to `N` triggers + final summary).
-   - `dump_kv.manual_dump` is an integer **cumulative watermark** (`manual_dump > _manual_dumped_count`), not a boolean toggle, and is evaluated **only when `auto_max_times == 0`**. If `auto_max_times > 0`, `manual_dump` is ignored; to trigger successive manual dumps via hot-reload, set `auto_max_times: 0` and increment `manual_dump` (`0 -> 1 -> 2 -> ...`).
+   - `report.max_per_req` (minimum valid integer `1`, validated by `max_per_req >= 1`; `0` is rejected) caps the number of report files emitted per `(incident_type, req_id)` and stops further anomaly detection for that request once the cap is reached.
+   - `dump_kv.manual_dump` is an integer **cumulative watermark** (`manual_dump > _manual_dumped_count`), not a boolean toggle, and is mutually exclusive with `auto_max_times > 0`: supplying `manual_dump > 0` together with `auto_max_times > 0` is **rejected by `validate_dump_mutual_exclusive`** (retaining the previous valid config during hot-reload). To trigger successive manual dumps via hot-reload, set `auto_max_times: 0` and increment `manual_dump` (`0 -> 1 -> 2 -> ...`).
 
 5. **Attention backend coverage.** `dump_kv` extracts paged KV blocks for standard `PagedAttention` (`[2, num_blocks, block_size, n_kv_heads, head_dim]`), split `(k_cache, v_cache)` tuples, and DeepSeek `MLA` (`kv_lora_rank=512` + `qk_rope_head_dim=64` `[num_blocks, block_size, 1, dim]`), while skipping linear/recurrent state layers (`GDN` / `Mamba` conv+SSM states).
 

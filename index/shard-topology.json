@@ -374,8 +374,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 638177,
-      "estimated_tokens": 106768,
+      "bytes": 639687,
+      "estimated_tokens": 107128,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -521,8 +521,8 @@
       },
       {
         "automatic": false,
-        "bytes": 608740,
-        "estimated_tokens": 102250,
+        "bytes": 610250,
+        "estimated_tokens": 102610,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -619,7 +619,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 104.6523000113666,
+  "index_build_elapsed_ms": 86.02489996701479,
   "leaves": [
     {
       "automatic": false,
@@ -1400,8 +1400,8 @@
     },
     {
       "automatic": false,
-      "bytes": 14365,
-      "estimated_tokens": 2582,
+      "bytes": 15875,
+      "estimated_tokens": 2942,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
@@ -2083,8 +2083,8 @@
     },
     {
       "automatic": false,
-      "bytes": 22447,
-      "estimated_tokens": 3551,
+      "bytes": 23957,
+      "estimated_tokens": 3911,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/runbooks/precision-and-validation",
@@ -3228,11 +3228,11 @@
       "tier": "L3"
     },
     "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop": {
-      "bytes": 8454,
+      "bytes": 9522,
       "category": "sop",
-      "content_sha256": "5c0d74511e957d4a85ff067781f8494de0502e3738e0509c6ae97bb67bdccff3",
+      "content_sha256": "124471a1ad9299a2f0176ce64ce06aa00f3248935f7d105d0462a1f215df8984",
       "domain_path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
-      "estimated_tokens": 1598,
+      "estimated_tokens": 1865,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -3243,11 +3243,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-runtime-guard-topology-and-config-axioms": {
-      "bytes": 5911,
+      "bytes": 6353,
       "category": "axiom",
-      "content_sha256": "0b3660cc2284e63e4d9b4930197a0f4f862b81c3eb9e9568bafd397715baa2b8",
+      "content_sha256": "45c7f67ae744df215764f14b5e9876164fc21c2cfcaced61cb29549d25840d66",
       "domain_path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
-      "estimated_tokens": 984,
+      "estimated_tokens": 1077,
       "evidence_strength": "software_contract",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
