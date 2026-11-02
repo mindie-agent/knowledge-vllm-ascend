@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 48.58695808798075,
+  "build_elapsed_ms": 104.6523000113666,
   "closure": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -300,6 +300,15 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
     ],
+    "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-runtime-guard-topology-and-config-axioms"
+    ],
+    "unit-vllm-ascend-runtime-guard-topology-and-config-axioms": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
     "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
@@ -363,7 +372,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "4c5dd54c48f68d4bf5896bc754106822ba02b84a1df082dee74457b86e973b0c",
+  "generation": "628618752b32cf89a0c36ccfaa0142d848352daca915ae7716ed40f12a6b1a89",
   "id_path": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
     "unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop": "vllm-ascend/compilation/custom-ops/ascend-310p-ops/unit-vllm-ascend-310p-dedicated-ops-fp16-cast-and-nz-sop.md",
@@ -440,6 +449,8 @@
     "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow": "vllm-ascend/models/qwen/qwen35-36-38/unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow.md",
     "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation.md",
     "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp/unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow.md",
+    "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop": "vllm-ascend/runbooks/precision-and-validation/runtime-guard/unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop.md",
+    "unit-vllm-ascend-runtime-guard-topology-and-config-axioms": "vllm-ascend/runbooks/precision-and-validation/runtime-guard/unit-vllm-ascend-runtime-guard-topology-and-config-axioms.md",
     "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow": "vllm-ascend/attention/backends/sparse-kv-offload/unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow.md",
     "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms": "_common/unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms.md",
     "unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop": "vllm-ascend/optimizations/speculative-decoding/rejection-and-metrics/unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop.md",
@@ -460,7 +471,7 @@
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 91,
+  "unit_count": 93,
   "units": [
     {
       "category": "workflow",
@@ -3655,22 +3666,25 @@
         "evidence_refs": [
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/developer_guide/performance_and_debug/msprobe_guide.md",
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/developer_guide/Design_Documents/quantization.md",
-          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/quantization/modelslim_config.py"
+          "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/quantization/modelslim_config.py",
+          "zhaochuang001/awesome-agent-skills@836e239f80cb76c45a5dd667839e40f336789472:vllm-ascend-accuracy/SKILL.md",
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/msprobe-dump/SKILL.md"
         ],
-        "source_digest": "90b6290a295511211947d005cba3b59b94aeeb737c654f7aa660ea5e7715f0a2",
-        "source_locator": "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/developer_guide/performance_and_debug/msprobe_guide.md",
+        "source_digest": "929c5e7cc4f3893b98274ed56f63bc65dfaaeaaf6f80aad80bcdad0b25eb975e",
+        "source_locator": "zhaochuang001/awesome-agent-skills@836e239f80cb76c45a5dd667839e40f336789472:vllm-ascend-accuracy/SKILL.md",
         "source_type": "verification_and_debug_guide",
         "supersedes": []
       },
-      "revision": 1,
+      "revision": 3,
       "tier": "L3",
-      "title": "msprobe layerwise tensor dump and BF16-vs-quantized accuracy bisection workflow",
-      "token_estimate": 652,
+      "title": "vllm-ascend 4-symptom accuracy triage, 11-dimension ablation, runtime_guard/mindie-debugger handoff, and eager msprobe bisection workflow",
+      "token_estimate": 1962,
       "triggers": {
         "error_signatures": [
           "quantized model emits gibberish, repeated punctuation, or >2% AISBench accuracy drop vs BF16",
           "layer output cosine similarity drops below 0.98 after W8A8, W4A8, or KV C8 quantization",
-          "first token logits match in eager mode but diverge when fused MoE or npugraph_ex is enabled"
+          "first token logits match in eager mode but diverge when fused MoE or npugraph_ex is enabled",
+          "MTP speculative decoding or high-concurrency W8A8 serving produces step-2+ token collapse or language drift"
         ],
         "keywords": [
           "msprobe",
@@ -3680,7 +3694,10 @@
           "max_abs_err",
           "quantization accuracy",
           "layerwise dump",
-          "outlier"
+          "outlier",
+          "runtime_guard",
+          "enforce-eager",
+          "HCCL_DETERMINISTIC"
         ]
       }
     },
@@ -5266,6 +5283,120 @@
           "MLAPO",
           "copy_mla_kv",
           "npu_attention_update"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "component": "runtime_guard",
+        "framework": "vllm-ascend"
+      },
+      "domain_path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates",
+        "unit-vllm-ascend-runtime-guard-topology-and-config-axioms"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates",
+        "unit-vllm-ascend-runtime-guard-topology-and-config-axioms"
+      ],
+      "path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard/unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop.md",
+      "provenance": {
+        "evidence_refs": [
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:02_problem_localization/README.md",
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/investigation/SKILL.md",
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/ref-kv-dump/SKILL.md",
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/analysis/SKILL.md"
+        ],
+        "source_digest": "a69b763c0f8500a1a3d184102acc5fd385aea61833becc3cc28d6ed65c366bd4",
+        "source_locator": "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/analysis/SKILL.md",
+        "source_type": "cannbot_runbook_distillation",
+        "supersedes": []
+      },
+      "revision": 2,
+      "tier": "L2",
+      "title": "runtime_guard KV cache anomaly delimitation, same-mode force-feed reference, numeric-first comparison, and Q1-Q10 SOP",
+      "token_estimate": 1598,
+      "triggers": {
+        "error_signatures": [
+          "runtime_guard triggers token_repeat or logits_finite and writes dump_kv .pt files for a degraded request",
+          "vllm-ascend emits non-repetitive gibberish or language drift missed by token_repeat (detector_gap) requiring manual_dump KV inspection",
+          "cosine similarity on dumped KV cache is misled by NaN/Inf or all-zero norm collapse in used_slots or NaN pollution in unused_slots",
+          "request KV dump has len(block_ids) * block_size < n_tokens causing out-of-bounds KV slot reads"
+        ],
+        "keywords": [
+          "runtime_guard",
+          "dump_kv",
+          "force_feed",
+          "locate_first_divergence",
+          "used_slots",
+          "unused_slots",
+          "zero_norm",
+          "detector_gap",
+          "manual_dump",
+          "verify_request_kv",
+          "Q1-Q10"
+        ]
+      }
+    },
+    {
+      "category": "axiom",
+      "conditions": {
+        "component": "runtime_guard",
+        "framework": "vllm-ascend"
+      },
+      "domain_path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
+      "evidence_strength": "software_contract",
+      "id": "unit-vllm-ascend-runtime-guard-topology-and-config-axioms",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "inherits_from_closure": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard/unit-vllm-ascend-runtime-guard-topology-and-config-axioms.md",
+      "provenance": {
+        "evidence_refs": [
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:01_enable_and_start/README.md",
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:03_detectors/README.md",
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/config-recommender/SKILL.md",
+          "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/SKILLS_METADATA.md"
+        ],
+        "source_digest": "98b7c2981f0fd5d5a4822be8bb3af6385b632f8f3ca22395f9745e44e78bda8f",
+        "source_locator": "djh95/runtime-guard-docs@45bc2603f48f883a448ed7c2bbeed38f9a2398e1:06_agent_skills/config-recommender/SKILL.md",
+        "source_type": "architecture_and_runtime_guide",
+        "supersedes": []
+      },
+      "revision": 2,
+      "tier": "L1",
+      "title": "vllm-ascend runtime_guard MRV2 hook boundary, shipped detectors, last-PP TP topology, and dump_kv watermark axioms",
+      "token_estimate": 984,
+      "triggers": {
+        "error_signatures": [
+          "runtime_guard enabled under VLLM_ASCEND_USE_V2_MODEL_RUNNER=0 produces no log or report without MRV1 backport patch",
+          "runtime_guard runtime_config_hot_reload toggled from false to true at runtime never reloads runtime_config_path",
+          "runtime_guard manual_dump set to 1 repeatedly or alongside auto_max_times > 0 does not trigger a new KV dump",
+          "runtime_guard dump_kv across TP ranks yields per-rank KV head slices requiring dim=-2 concatenation"
+        ],
+        "keywords": [
+          "runtime_guard",
+          "token_repeat",
+          "logits_finite",
+          "spec_acceptance",
+          "dump_kv",
+          "manual_dump",
+          "auto_max_times",
+          "runtime_config_hot_reload",
+          "due_bus",
+          "used_slots",
+          "unused_slots"
         ]
       }
     },
