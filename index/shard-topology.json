@@ -299,6 +299,15 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
     ],
+    "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates",
+      "unit-vllm-ascend-runtime-guard-topology-and-config-axioms"
+    ],
+    "unit-vllm-ascend-runtime-guard-topology-and-config-axioms": [
+      "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+      "unit-vllm-ascend-verification-and-state-parity-gates"
+    ],
     "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-vllm-ascend-attention-v1-mla-dsa-sfa-fa3-routing-sop"
@@ -365,8 +374,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 618144,
-      "estimated_tokens": 102876,
+      "bytes": 639687,
+      "estimated_tokens": 107128,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -445,6 +454,8 @@
         "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow",
         "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
         "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow",
+        "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop",
+        "unit-vllm-ascend-runtime-guard-topology-and-config-axioms",
         "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow",
         "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
         "unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop",
@@ -462,7 +473,7 @@
         "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow",
         "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
       ],
-      "units": 91
+      "units": 93
     },
     "domains": [
       {
@@ -510,8 +521,8 @@
       },
       {
         "automatic": false,
-        "bytes": 588707,
-        "estimated_tokens": 98358,
+        "bytes": 610250,
+        "estimated_tokens": 102610,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -587,6 +598,8 @@
           "unit-vllm-ascend-qwen35-36-38-2p4t-hybrid-gdn-moe-bringup-workflow",
           "unit-vllm-ascend-qwen35-gated-deltanet-decode-adaptation",
           "unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow",
+          "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop",
+          "unit-vllm-ascend-runtime-guard-topology-and-config-axioms",
           "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow",
           "unit-vllm-ascend-spec-decode-entropy-threshold-and-step-token-metrics-sop",
           "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow",
@@ -602,11 +615,11 @@
           "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow",
           "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
         ],
-        "units": 84
+        "units": 86
       }
     ]
   },
-  "index_build_elapsed_ms": 48.58695808798075,
+  "index_build_elapsed_ms": 86.02489996701479,
   "leaves": [
     {
       "automatic": false,
@@ -1335,8 +1348,8 @@
     },
     {
       "automatic": false,
-      "bytes": 4403,
-      "estimated_tokens": 652,
+      "bytes": 10071,
+      "estimated_tokens": 1962,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/quantization/weight-switch/accuracy-triage",
@@ -1384,6 +1397,20 @@
         "unit-vllm-ascend-precision-bisect-cp-lse-rope-moe-and-validation-sop"
       ],
       "units": 1
+    },
+    {
+      "automatic": false,
+      "bytes": 15875,
+      "estimated_tokens": 2942,
+      "exceeds": [],
+      "kind": "leaf",
+      "path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
+      "recommended_action": "review_leaf_split",
+      "unit_ids": [
+        "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop",
+        "unit-vllm-ascend-runtime-guard-topology-and-config-axioms"
+      ],
+      "units": 2
     },
     {
       "automatic": false,
@@ -2029,8 +2056,8 @@
     },
     {
       "automatic": false,
-      "bytes": 8453,
-      "estimated_tokens": 1210,
+      "bytes": 14121,
+      "estimated_tokens": 2520,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/quantization/weight-switch",
@@ -2056,16 +2083,18 @@
     },
     {
       "automatic": false,
-      "bytes": 8082,
-      "estimated_tokens": 969,
+      "bytes": 23957,
+      "estimated_tokens": 3911,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/runbooks/precision-and-validation",
       "recommended_action": "review_two_level_subtree_split",
       "unit_ids": [
-        "unit-vllm-ascend-precision-bisect-cp-lse-rope-moe-and-validation-sop"
+        "unit-vllm-ascend-precision-bisect-cp-lse-rope-moe-and-validation-sop",
+        "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop",
+        "unit-vllm-ascend-runtime-guard-topology-and-config-axioms"
       ],
-      "units": 1
+      "units": 3
     },
     {
       "automatic": false,
@@ -2174,7 +2203,7 @@
       "units": 5
     }
   ],
-  "unit_count": 91,
+  "unit_count": 93,
   "units": {
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": {
       "bytes": 4712,
@@ -2845,11 +2874,11 @@
       "tier": "L3"
     },
     "unit-vllm-ascend-msprobe-quantization-accuracy-triage-workflow": {
-      "bytes": 4403,
+      "bytes": 10071,
       "category": "workflow",
-      "content_sha256": "d11c8860aefb19747f340606d9e36c9dbb6e0ff0da4ef4bdb43c4394d0259427",
+      "content_sha256": "82ea0fa1879223f6de7518e606d45bd9c9a34446e6ade7c557d2adef9dac56cb",
       "domain_path": "vllm-ascend/quantization/weight-switch/accuracy-triage",
-      "estimated_tokens": 652,
+      "estimated_tokens": 1962,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
@@ -3197,6 +3226,35 @@
       ],
       "path": "vllm-ascend/attention/context-parallel/ring-ulysses-dcp/unit-vllm-ascend-ring-ulysses-dcp-kv-partition-and-lse-workflow.md",
       "tier": "L3"
+    },
+    "unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop": {
+      "bytes": 9522,
+      "category": "sop",
+      "content_sha256": "124471a1ad9299a2f0176ce64ce06aa00f3248935f7d105d0462a1f215df8984",
+      "domain_path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
+      "estimated_tokens": 1865,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-runtime-guard-topology-and-config-axioms",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard/unit-vllm-ascend-runtime-guard-kv-delimitation-and-force-feed-sop.md",
+      "tier": "L2"
+    },
+    "unit-vllm-ascend-runtime-guard-topology-and-config-axioms": {
+      "bytes": 6353,
+      "category": "axiom",
+      "content_sha256": "45c7f67ae744df215764f14b5e9876164fc21c2cfcaced61cb29549d25840d66",
+      "domain_path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard",
+      "estimated_tokens": 1077,
+      "evidence_strength": "software_contract",
+      "inherits_from": [
+        "unit-vllm-ascend-npu-runtime-and-graph-invariants",
+        "unit-vllm-ascend-verification-and-state-parity-gates"
+      ],
+      "path": "vllm-ascend/runbooks/precision-and-validation/runtime-guard/unit-vllm-ascend-runtime-guard-topology-and-config-axioms.md",
+      "tier": "L1"
     },
     "unit-vllm-ascend-sfa-layerwise-and-sparse-kv-offload-workflow": {
       "bytes": 6203,
