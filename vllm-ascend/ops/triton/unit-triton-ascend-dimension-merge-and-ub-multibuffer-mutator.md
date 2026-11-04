@@ -169,3 +169,8 @@ In `spatial_group_norm_reduce(x, weight, bias, num_groups=4, eps=1e-5, *, merge_
 - **`minus_block_scaling` (`scale_block_size=False`, with `merge_hw=True`)**: Keep FP32 accumulation on flattened `xg = x.to(torch.float32).view(n, num_groups, elems_per_group)`, but iterate in `4` fixed tiles (`chunk = max(1, elems_per_group // 4)`) slicing `xg[:, :, start : start + chunk]` so `0 < indexing_operations < minus_dim_merge["indexing_operations"]` and `tensor_operations > full_candidate["tensor_operations"]`.
 - **`minus_multibuffer_cast_guard` (`multibuffer_cast_guard=False`, with `merge_hw=True, scale_block_size=True`)**: Perform intermediate `bfloat16` cast and subtraction on `xg_bf16 = x.to(torch.bfloat16).view(n, num_groups, elems_per_group)` (`mean_bf16 = xg_bf16.to(torch.float32).mean(dim=-1, keepdim=True).to(torch.bfloat16)`, `centered_bf16 = xg_bf16 + (-mean_bf16)`) so `bf16_casts > full_candidate["bf16_casts"]` and `bf16_arithmetic > 0` while outputs remain finite.
 
+
+- **`select_optimal_block_size(numel: int, dtype: torch.dtype, num_live_f32_buffers: int = 3) -> int`**:
+  Compute `max_elems_by_ub = (128 * 1024) // (4 * max(num_live_f32_buffers, 1))`, `cap = 4096 if dtype == torch.float32 else min(16384, max_elems_by_ub * 2)`, power-of-two `raw = 1 << (max(1, min(numel, cap)) - 1).bit_length()`, and return `max(512, min(raw, cap))`.
+- **`run_ablation_suite(*args, **kwargs) -> dict[str, dict]`**:
+  Run `spatial_group_norm_reduce` across the 4 arms (`"full_candidate"`, `"minus_dim_merge"`, `"minus_block_scaling"`, `"minus_multibuffer_cast_guard"`) and return a dict mapping each arm name to its metrics dict (including `"correctness_ok": True`).
