@@ -18,7 +18,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/mla.py
   source_type: ablation_design_receipt
   supersedes: []
-revision: 2
+revision: 3
 schema: mindie-graded-unit/1
 tier: L4
 title: Fuse MLA prolog Q/KV projections, vectorize RoPE without broadcast clones,
@@ -41,107 +41,25 @@ triggers:
 ---
 # Fuse MLA prolog Q/KV projections, vectorize RoPE without broadcast clones, and coalesce paged KV cache scatter (`vllm_ascend/ops/mla.py`)
 
-## Transformation & Leave-One-Out Ablation Contract (`vllm_ascend/ops/mla.py`)
+## Architectural Specification (`Ascend 950DT`)
 
-Combine all 3 retained factors in `mla_prolog_rope_kvcache_step` while explicitly rejecting the accuracy-destroying decoy factor `enable_lowbit_qk_truncation=False`, and expose `run_ablation_report()`:
+On `Ascend 950DT`, standard single-factor MLA prolog tuning fails because separate `w_q_a`/`w_kv_a` GEMMs, `.repeat()`/`.clone()` RoPE broadcasts, per-slot Python scatter loops, and low-bit QK rounding violate both the dispatch budget (`linear_ops <= 2`, `clone_repeat_ops == 0`, `select_slice_ops <= 12`) and the BF16 accuracy bound (`max_abs_err <= 2e-2`).
 
-```python
-def mla_prolog_rope_kvcache_step(
-    hidden_states: torch.Tensor,
-    w_q_a: torch.Tensor,
-    q_a_rms_weight: torch.Tensor,
-    w_q_b: torch.Tensor,
-    w_kv_a: torch.Tensor,
-    kv_a_rms_weight: torch.Tensor,
-    cos: torch.Tensor,
-    sin: torch.Tensor,
-    kv_cache_nope: torch.Tensor,
-    kv_cache_rope: torch.Tensor,
-    slot_mapping: torch.Tensor,
-    num_heads: int,
-    qk_nope_head_dim: int,
-    qk_rope_head_dim: int,
-    kv_lora_rank: int,
-    eps: float = 1e-6,
-    *,
-    fuse_qkv_norm_proj: bool = True,
-    vectorized_rope_no_broadcast: bool = True,
-    coalesce_kv_cache_scatter: bool = True,
-    enable_lowbit_qk_truncation: bool = False,
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    orig_dtype = hidden_states.dtype
-    T = hidden_states.shape[0]
-    q_lora_rank = w_q_a.shape[0]
-    head_dim = qk_nope_head_dim + qk_rope_head_dim
+Implement the three coupled factors in `mla_prolog_rope_kvcache_step` while rejecting the accuracy-destroying decoy factor `enable_lowbit_qk_truncation`:
 
-    if fuse_qkv_norm_proj:
-        w_qkv = torch.cat((w_q_a, w_kv_a), dim=0)
-        qkv_all = F.linear(hidden_states, w_qkv).float()
-        q_latent = qkv_all[:, :q_lora_rank]
-        kv_latent = qkv_all[:, q_lora_rank : q_lora_rank + kv_lora_rank]
-        k_pe_raw = qkv_all[:, q_lora_rank + kv_lora_rank :].to(orig_dtype)
-    else:
-        q_latent = F.linear(hidden_states.clone(), w_q_a).float()
-        kv_all = F.linear(hidden_states.clone(), w_kv_a).float()
-        kv_latent = kv_all[:, :kv_lora_rank].clone()
-        k_pe_raw = kv_all[:, kv_lora_rank:].clone().to(orig_dtype)
+1. **`fuse_qkv_norm_proj` (`bool = True`) — Single Concatenated Down-Projection & Vectorized FP32 RMSNorm**:
+   - **When `True`**: Concatenate `w_qkv = torch.cat((w_q_a, w_kv_a), dim=0)` and execute a single GEMM `qkv_all = F.linear(hidden_states, w_qkv).float()` (so the entire step executes only `2` `F.linear` operations total: `w_qkv` and `w_q_b`). Slice `q_latent = qkv_all[:, :q_lora_rank]`, `kv_latent = qkv_all[:, q_lora_rank : q_lora_rank + kv_lora_rank]`, and `k_pe_raw = qkv_all[:, q_lora_rank + kv_lora_rank :].to(orig_dtype)`. Compute vectorized FP32 RMSNorm over `dim=-1, keepdim=True` for `q_latent` and `kv_latent` without any Python token loops or `.clone()` calls.
+   - **When `False` (ablation arm `minus_qkv_norm_proj_fusion`)**: Project `w_q_a` and `w_kv_a` with two separate `F.linear` calls (`linear_ops == 3`, higher `tensor_ops`).
 
-    q_rstd = torch.rsqrt(q_latent.pow(2).mean(dim=-1, keepdim=True) + eps)
-    q_normed = (q_latent * q_rstd * q_a_rms_weight.float()).to(orig_dtype)
-    kv_rstd = torch.rsqrt(kv_latent.pow(2).mean(dim=-1, keepdim=True) + eps)
-    kv_nope_normed = (kv_latent * kv_rstd * kv_a_rms_weight.float()).to(orig_dtype)
+2. **`vectorized_rope_no_broadcast` (`bool = True`) — Stride-0 View RoPE without `.repeat()` or `.clone()`**:
+   - **When `True`**: Split `q_all = F.linear(q_normed, w_q_b).view(T, num_heads, head_dim)` into `q_nope = q_all[:, :, :qk_nope_head_dim]` and `q_pe = q_all[:, :, qk_nope_head_dim:].float()`. For half-rotation (`half = qk_rope_head_dim // 2`), rotate `q_pe` using `cos.float().unsqueeze(1)` and `sin.float().unsqueeze(1)` (stride-0 broadcast over `num_heads`), and rotate 2D `k_pe_raw.float()` directly using 2D `cos.float()` and `sin.float()` without expanding across `num_heads` (`clone_repeat_ops == 0`).
+   - **When `False` (ablation arm `minus_vectorized_rope`)**: Materialize repeated/cloned `cos` and `sin` buffers across `num_heads` via `.unsqueeze(1).repeat(1, num_heads, 1).clone()` (`clone_repeat_ops > 0`).
 
-    q_all = F.linear(q_normed, w_q_b).view(T, num_heads, head_dim)
-    q_nope = q_all[:, :, :qk_nope_head_dim]
-    q_pe = q_all[:, :, qk_nope_head_dim:].float()
-    half = qk_rope_head_dim // 2
+3. **`coalesce_kv_cache_scatter` (`bool = True`) — Flat Paged KV Cache `index_copy_`**:
+   - **When `True`**: Filter valid token slots via `valid = slot_mapping >= 0` and `valid_slots = slot_mapping[valid].to(torch.int64)`. Scatter `kv_nope_normed[valid]` into `kv_cache_nope.view(-1, kv_lora_rank)` and `k_pe_rot[valid]` into `kv_cache_rope.view(-1, qk_rope_head_dim)` via `index_copy_(0, valid_slots, ...)` (`select_slice_ops <= 12`).
+   - **When `False` (ablation arm `minus_coalesced_kv_scatter`)**: Fall back to the per-token Python loop indexing `kv_cache_nope[b_idx, b_off]` (`select_slice_ops > 12`).
 
-    if vectorized_rope_no_broadcast:
-        q_rot_half = torch.cat((-q_pe[..., half:], q_pe[..., :half]), dim=-1)
-        q_pe_rot = (q_pe * cos.float().unsqueeze(1) + q_rot_half * sin.float().unsqueeze(1)).to(orig_dtype)
-        k_pe_f = k_pe_raw.float()
-        k_rot_half = torch.cat((-k_pe_f[..., half:], k_pe_f[..., :half]), dim=-1)
-        k_pe_rot = (k_pe_f * cos.float() + k_rot_half * sin.float()).to(orig_dtype)
-    else:
-        cos_q = cos.float().unsqueeze(1).repeat(1, num_heads, 1).clone()
-        sin_q = sin.float().unsqueeze(1).repeat(1, num_heads, 1).clone()
-        q_rot_half = torch.cat((-q_pe[..., half:].clone(), q_pe[..., :half].clone()), dim=-1)
-        q_pe_rot = (q_pe * cos_q + q_rot_half * sin_q).to(orig_dtype)
-        k_pe_f = k_pe_raw.float().clone()
-        k_rot_half = torch.cat((-k_pe_f[..., half:].clone(), k_pe_f[..., :half].clone()), dim=-1)
-        k_pe_rot = (k_pe_f * cos.float().clone() + k_rot_half * sin.float().clone()).to(orig_dtype)
-
-    q_out = torch.cat((q_nope, q_pe_rot), dim=-1)
-    if enable_lowbit_qk_truncation:
-        q_out = (torch.round(q_out.float() * 16.0) / 16.0).to(orig_dtype)
-
-    if coalesce_kv_cache_scatter:
-        valid = slot_mapping >= 0
-        valid_slots = slot_mapping[valid].to(torch.int64)
-        kv_cache_nope.view(-1, kv_lora_rank).index_copy_(0, valid_slots, kv_nope_normed[valid])
-        kv_cache_rope.view(-1, qk_rope_head_dim).index_copy_(0, valid_slots, k_pe_rot[valid])
-    else:
-        block_size = kv_cache_nope.shape[1]
-        for t in range(T):
-            slot = int(slot_mapping[t].item())
-            if slot >= 0:
-                b_idx = slot // block_size
-                b_off = slot % block_size
-                kv_cache_nope[b_idx, b_off].copy_(kv_nope_normed[t])
-                kv_cache_rope[b_idx, b_off].copy_(k_pe_rot[t])
-
-    return q_out, kv_nope_normed, k_pe_rot
-
-
-def run_ablation_report() -> dict[str, object]:
-    return {
-        "retained_factors": [
-            "fuse_qkv_norm_proj",
-            "vectorized_rope_no_broadcast",
-            "coalesce_kv_cache_scatter",
-        ],
-        "rejected_factors": [
-            "enable_lowbit_qk_truncation",
-        ],
-    }
-```
+4. **`enable_lowbit_qk_truncation` (`bool = False`) — Rejected Decoy Factor**:
+   - **When `False` (default)**: Do NOT apply `torch.round(... * 8.0) / 8.0` or `16.0` truncation to `q_nope`, `kv_nope_normed`, or `q_out` (`max_abs_err <= 2e-2`).
+   - **When `True` (ablation arm `plus_decoy_lowbit_truncation`)**: Quantize `q_out = (torch.round(q_out.float() * 16.0) / 16.0).to(orig_dtype)` (`max_abs_err > 2e-2`).
+   - In `run_ablation_report()`, return `"retained_factors": ["fuse_qkv_norm_proj", "vectorized_rope_no_broadcast", "coalesce_kv_cache_scatter"]` and `"rejected_factors": ["enable_lowbit_qk_truncation"]`.

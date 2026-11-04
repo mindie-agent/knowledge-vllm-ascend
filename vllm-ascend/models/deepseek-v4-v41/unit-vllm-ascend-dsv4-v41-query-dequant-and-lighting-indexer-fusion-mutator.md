@@ -156,7 +156,7 @@ The mutation has three separable factors. Apply them in the order below, keep ea
    **Change.** Keep the selected indices, the valid-length tensor and the block-table guard on the device. Compute the valid count with a device clamp, replace `-1` with a safe allocated dummy block, and pass `seqused_k` so the dummy is excluded from attention. Keep the graph's block table and `seqused_k` as persistent device buffers updated in place; if a host scalar is genuinely required, compute it once in the metadata/prepare stage outside capture and reuse the padded capacity. The QLI/FIA path reads `seqused_k` directly, so do not add a host reduction just to fill `max_seqlen_k`.
 
    ```python
-   valid = torch.clamp(seqused_k, min=0, max=topk)          # [num_reqs], int32, device
+   valid_seq = (topk_indices >= 0).sum(dim=-1).to(torch.int32)  # [num_reqs], valid compressed block count
    safe_idx = torch.where(topk_indices < 0,
                           torch.zeros_like(topk_indices),  # block 0 is allocated and masked
                           topk_indices)
@@ -164,7 +164,7 @@ The mutation has three separable factors. Apply them in the order below, keep ea
    torch.ops._C_ascend.npu_sparse_flash_attention(
        q, k_cache, v_cache,
        block_table=block_table,
-       seqused_k=valid,        # the dummy block is outside the valid prefix
+       seqused_k=valid_seq,    # the dummy block is outside the valid compressed block prefix
        max_seqlen_k=padded_capacity,   # padded, not a host-derived exact length
        sparse_mode=3,
    )
@@ -213,179 +213,8 @@ Run at least the full candidate, the baseline, and the three `minus_*` arms. A f
 
 **Reporting skeleton.** For each arm record: run ID, graph mode, context length, concurrency, quantization, TPOT p50/p90, TTFT p50/p90, output throughput, selected-block count, `TensorMove`/`Memcpy` count per layer, host D2H count, accuracy metric, and the first failing device-log line (if any). This is the minimum evidence needed to distinguish a real factor effect from a cache-state or version artifact.
 
-When implementing a programmatic `run_ablation_suite()` helper in `sparse_mla_decode.py`, return a `dict[str, dict]` keyed by the exact 4 leave-one-out arm identifiers (`full_candidate`, `minus_q_fusion`, `minus_view_alias`, `minus_device_guard`) where each entry records `"tpot_ms"`, `"tensor_moves"`, `"host_d2h_syncs"`, and `"correctness_ok"`.
+When implementing `sparse_mla_decode_step` and `run_ablation_suite(*args, **kwargs)` in `vllm_ascend/models/deepseek_v4/sparse_mla_decode.py`, support the 3 keyword-only boolean factor flags (`fuse_q_qr_dequant: bool = True`, `alias_qli_views: bool = True`, `device_topk_guard: bool = True`):
+- **Factor 1 (`fuse_q_qr_dequant`)**: When `True`, call `torch.ops._C_ascend.fused_q_dequant_rmsnorm_rope_split(qr_i8, qr_scale, rms_weight, w_q_absorbed, cos, sin, eps=eps, n_heads=n_heads, nope_dim=nope_dim, rope_dim=rope_dim)` (`q_fused_calls == 1`). When `False` (`minus_q_fusion`), run the unfused dequant + RMSNorm + `matmul` + `_apply_rope_slice` path (`q_fused_calls == 0`).
+- **Factor 2 (`alias_qli_views`)**: When `True`, pass zero-copy storage-aliased views `q_idx = q_packed[..., :index_dim]` and `k_idx = k_idx_cache` directly to `npu_quant_lightning_indexer` without `.clone()` or `.contiguous()` (preserving `q_idx.untyped_storage().data_ptr() == q_packed.untyped_storage().data_ptr()` and `k_idx.untyped_storage().data_ptr() == k_idx_cache.untyped_storage().data_ptr()`). When `False` (`minus_view_alias`), materialize cloned contiguous buffers `q_idx = q_packed[..., :index_dim].clone().contiguous()` and `k_idx = k_idx_cache.clone().contiguous()`.
+- **Factor 3 (`device_topk_guard`)**: When `True`, mask negative `topk_indices < 0` to `0` (`torch.where(topk_indices < 0, torch.zeros_like(topk_indices), topk_indices)`), scatter into a cloned `block_table`, compute the valid compressed block count `valid_seq = (topk_indices >= 0).sum(dim=-1).to(torch.int32)` on device without mutating caller `seqused_k`, and pass `seqused_k=valid_seq, max_seqlen_k=padded_capacity` to `npu_sparse_flash_attention`. When `False` (`minus_device_guard`), scatter raw `topk_indices` and pass `seqused_k=seqused_k, max_seqlen_k=int(seqused_k.max().item())` (catching `RuntimeError` inside `run_ablation_suite` and recording `"correctness_ok": False`).
 
-
-## Reference Implementation (`vllm_ascend/models/deepseek_v4/sparse_mla_decode.py`)
-
-To pass both the independent tensor/storage-alias/guard verification and the 4-arm Leave-One-Out ablation replay in `sparse_mla_decode.py`, implement `sparse_mla_decode_step` with optional keyword-only boolean ablation flags (`fuse_q_qr_dequant=True`, `alias_qli_views=True`, `device_topk_guard=True`) and expose `run_ablation_suite()` calling `sparse_mla_decode_step` across the 4 arms (`full_candidate`, `minus_q_fusion`, `minus_view_alias`, `minus_device_guard`):
-
-```python
-def _unfused_q_dequant_rmsnorm_rope(
-    qr_i8: torch.Tensor,
-    qr_scale: torch.Tensor,
-    rms_weight: torch.Tensor,
-    w_q_absorbed: torch.Tensor,
-    cos: torch.Tensor,
-    sin: torch.Tensor,
-    *,
-    n_heads: int,
-    nope_dim: int,
-    rope_dim: int,
-    eps: float,
-) -> torch.Tensor:
-    t_len = qr_i8.shape[0]
-    qr_fp32 = qr_i8.to(torch.float32) * qr_scale.unsqueeze(-1).to(torch.float32)
-    variance = qr_fp32.pow(2).mean(dim=-1, keepdim=True)
-    qr_norm = qr_fp32 * torch.rsqrt(variance + eps) * rms_weight.to(torch.float32)
-    q_full = F.linear(qr_norm, w_q_absorbed).view(t_len, n_heads, nope_dim + rope_dim)
-    q_nope = q_full[..., :nope_dim].clone()
-    q_rope = q_full[..., nope_dim:].clone()
-    half = rope_dim // 2
-    q_rope_rot = torch.cat([-q_rope[..., half:], q_rope[..., :half]], dim=-1)
-    q_rope_out = q_rope * cos.unsqueeze(1) + q_rope_rot * sin.unsqueeze(1)
-    return torch.cat([q_nope, q_rope_out], dim=-1).contiguous()
-
-
-def sparse_mla_decode_step(
-    qr_i8: torch.Tensor,
-    qr_scale: torch.Tensor,
-    rms_weight: torch.Tensor,
-    w_q_absorbed: torch.Tensor,
-    cos: torch.Tensor,
-    sin: torch.Tensor,
-    k_idx_cache: torch.Tensor,
-    k_cache: torch.Tensor,
-    v_cache: torch.Tensor,
-    weights: torch.Tensor,
-    q_scale: torch.Tensor,
-    k_scale: torch.Tensor,
-    block_table: torch.Tensor,
-    topk_slots: torch.Tensor,
-    query_start_loc: torch.Tensor,
-    seqused_k: torch.Tensor,
-    *,
-    n_heads: int = 8,
-    nope_dim: int = 512,
-    rope_dim: int = 64,
-    index_dim: int = 128,
-    topk: int = 8,
-    compress_ratio: int = 4,
-    padded_capacity: int = 32,
-    eps: float = 1e-6,
-    fuse_q_qr_dequant: bool = True,
-    alias_qli_views: bool = True,
-    device_topk_guard: bool = True,
-) -> tuple[torch.Tensor, dict[str, int]]:
-    tensor_moves = 0
-    host_d2h_syncs = 0
-
-    if fuse_q_qr_dequant:
-        q = torch.ops._C_ascend.fused_q_dequant_rmsnorm_rope_split(
-            qr_i8, qr_scale, rms_weight, w_q_absorbed, cos, sin,
-            eps=eps, n_heads=n_heads, nope_dim=nope_dim, rope_dim=rope_dim,
-        )
-    else:
-        q = _unfused_q_dequant_rmsnorm_rope(
-            qr_i8, qr_scale, rms_weight, w_q_absorbed, cos, sin,
-            n_heads=n_heads, nope_dim=nope_dim, rope_dim=rope_dim, eps=eps,
-        )
-        tensor_moves += 3
-
-    if alias_qli_views:
-        q_idx = q[..., :index_dim]
-        k_idx = k_idx_cache
-    else:
-        q_idx = q[..., :index_dim].contiguous()
-        k_idx = k_idx_cache.clone().contiguous()
-        tensor_moves += 2
-
-    topk_indices = torch.ops._C_ascend.npu_quant_lightning_indexer(
-        q_idx, k_idx, weights, q_scale, k_scale,
-        block_table=block_table,
-        query_start_loc=query_start_loc,
-        seqused_k=seqused_k,
-        topk=topk,
-        compress_ratio=compress_ratio,
-        layout_query="TND",
-        layout_key="PA_BSND",
-    )
-
-    if device_topk_guard:
-        safe_topk = torch.where(topk_indices < 0, torch.zeros_like(topk_indices), topk_indices)
-        valid_seq = (topk_indices >= 0).sum(dim=-1).to(torch.int32)
-        bt = block_table.clone()
-        bt.scatter_(1, topk_slots, safe_topk)
-        sfa_seq = valid_seq
-        sfa_cap = padded_capacity
-    else:
-        host_d2h_syncs += 1
-        bt = block_table.clone()
-        bt.scatter_(1, topk_slots, topk_indices)
-        sfa_seq = seqused_k
-        sfa_cap = int(seqused_k.max().item())
-
-    attn_out = torch.ops._C_ascend.npu_sparse_flash_attention(
-        q, k_cache, v_cache,
-        block_table=bt,
-        seqused_k=sfa_seq,
-        max_seqlen_k=sfa_cap,
-        sparse_mode=3,
-    )
-    return attn_out, {"tensor_moves": tensor_moves, "host_d2h_syncs": host_d2h_syncs}
-
-
-def run_ablation_suite(*args, **kwargs) -> dict[str, dict[str, object]]:
-    if len(args) >= 16:
-        inputs = args[:16]
-        core = {
-            k: kwargs[k]
-            for k in ("n_heads", "nope_dim", "rope_dim", "index_dim", "topk", "compress_ratio", "padded_capacity", "eps")
-            if k in kwargs
-        }
-    else:
-        gen = torch.Generator().manual_seed(91042)
-        t_len, n_heads, q_lora_rank = 4, 4, 24
-        nope_dim, rope_dim, index_dim = 512, 64, 128
-        topk, compress_ratio, padded_capacity = 8, 4, 32
-        qr_i8 = torch.randint(-32, 32, (t_len, q_lora_rank), generator=gen, dtype=torch.int8)
-        qr_scale = torch.linspace(0.02, 0.08, t_len, dtype=torch.float32)
-        rms_weight = torch.randn((q_lora_rank,), generator=gen, dtype=torch.float32)
-        w_q_absorbed = torch.randn((n_heads * (nope_dim + rope_dim), q_lora_rank), generator=gen, dtype=torch.float32) * 0.02
-        angles = torch.randn((t_len, rope_dim), generator=gen, dtype=torch.float32)
-        cos, sin = angles.cos(), angles.sin()
-        k_idx_cache = torch.randn((padded_capacity, 16, n_heads, index_dim), generator=gen, dtype=torch.float32)
-        k_cache = torch.randn((padded_capacity, 16, n_heads, nope_dim + rope_dim), generator=gen, dtype=torch.float32)
-        v_cache = torch.randn((padded_capacity, 16, n_heads, nope_dim), generator=gen, dtype=torch.float32)
-        weights = torch.ones((t_len, n_heads), dtype=torch.float32)
-        q_scale = torch.ones((t_len, n_heads), dtype=torch.float32)
-        k_scale = torch.ones((padded_capacity,), dtype=torch.float32)
-        block_table = torch.zeros((t_len, padded_capacity), dtype=torch.int32)
-        topk_slots = torch.arange(topk, dtype=torch.int64).unsqueeze(0).expand(t_len, topk).contiguous()
-        query_start_loc = torch.arange(0, t_len + 1, dtype=torch.int32)
-        seqused_k = torch.tensor([64, 12, 32, 8], dtype=torch.int32)
-        inputs = (
-            qr_i8, qr_scale, rms_weight, w_q_absorbed, cos, sin,
-            k_idx_cache, k_cache, v_cache, weights, q_scale, k_scale,
-            block_table, topk_slots, query_start_loc, seqused_k,
-        )
-        core = dict(
-            n_heads=n_heads, nope_dim=nope_dim, rope_dim=rope_dim, index_dim=index_dim,
-            topk=topk, compress_ratio=compress_ratio, padded_capacity=padded_capacity, eps=1e-6,
-        )
-
-    arms = {
-        "full_candidate": dict(fuse_q_qr_dequant=True, alias_qli_views=True, device_topk_guard=True),
-        "minus_q_fusion": dict(fuse_q_qr_dequant=False, alias_qli_views=True, device_topk_guard=True),
-        "minus_view_alias": dict(fuse_q_qr_dequant=True, alias_qli_views=False, device_topk_guard=True),
-        "minus_device_guard": dict(fuse_q_qr_dequant=True, alias_qli_views=True, device_topk_guard=False),
-    }
-    results: dict[str, dict[str, object]] = {}
-    for arm_name, flags in arms.items():
-        try:
-            _, metrics = sparse_mla_decode_step(*tuple(t.clone() for t in inputs), **core, **flags)
-            results[arm_name] = {**metrics, "correctness_ok": True}
-        except RuntimeError as exc:
-            results[arm_name] = {"tensor_moves": 0, "host_d2h_syncs": 1, "correctness_ok": False, "error": str(exc)}
-    return results
-```
