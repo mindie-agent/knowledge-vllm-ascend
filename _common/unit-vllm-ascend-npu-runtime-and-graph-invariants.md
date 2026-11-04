@@ -1,15 +1,9 @@
 ---
 category: axiom
 conditions:
-  repository:
+  framework:
   - vllm-ascend
-  - vllm-project/vllm-ascend
-  - vllm-ascend-idle-dp
-  npu_model:
-  - Ascend910
-  - Ascend910B
-  - Ascend910B4
-  - Ascend910_93
+  - any
 domain_path: _common
 evidence_strength: hardware_spec
 id: unit-vllm-ascend-npu-runtime-and-graph-invariants
@@ -21,7 +15,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@d8c9e3a673af918c94a7794ef6f1f69c024d9c62:vllm_ascend/worker/model_runner_v1.py
   source_type: runtime_architecture_specification
   supersedes: []
-revision: 2
+revision: 3
 schema: mindie-graded-unit/1
 tier: L1
 title: Ascend NPU graph-capture and custom-kernel binding premises
@@ -42,7 +36,6 @@ triggers:
   - weight_nz_mode
   - Ascend910_93
 ---
-
 # Ascend NPU graph-capture and custom-kernel binding premises
 
 ## Condition

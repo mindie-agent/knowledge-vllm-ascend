@@ -1,93 +1,65 @@
 ---
 category: workflow
 conditions:
-  framework: vllm-ascend
-  model_family:
-  - deepseek-v4
-  - deepseek-v4-flash
-  - deepseek-v4-pro
-  - deepseek-v4.1
+  framework:
+  - vllm-ascend
+  - any
 domain_path: vllm-ascend/models/deepseek/v4-pro-flash
 evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow
 inherits_from:
 - unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms
 - unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop
-- unit-vllm-ascend-llm-base-dspark-and-dflash-proposer-sop
 provenance:
   evidence_refs:
   - vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/model.py
-  - vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/compressor.py
-  - vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/indexer.py
-  - vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/dspark.py
-  - vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/tutorials/models/DeepSeek-V4-Flash.md
-  - vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:docs/source/tutorials/models/DeepSeek-V4-Pro.md
   source_digest: 257c415f820f6d203b78b3e1000b5e30c475281db1d99a270c65cba52a3f62ab
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/model.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 3
+revision: 5
 schema: mindie-graded-unit/1
 tier: L3
-title: DeepSeek-V4-Flash, DeepSeek-V4-Pro & DeepSeek-V4.1 (mHC, Compress-4/128 DSA,
-  Hadamard Indexer, Engram/Candidate, DSpark/MTP) workflow
+title: DeepSeek-V4/V4.1 SparseMLA decode (`sparse_mla_decode.py`) standard 3-stage
+  tuning workflow
 triggers:
   error_signatures:
+  - AICore invalid GM address negative block id (-1) reached npu_sparse_flash_attention
   - DeepSeek-V4-Pro multi-node W4A8-MTP times out during weight load or HCCL collective
     init
-  - DeepSeek-V4-Flash-0731 DSpark draft model fails when rope_dsv4 inverse RoPE or
-    Markov head is miswired
-  - AscendDSAC4Backend or AscendDSAC128Backend block size mismatch on DSV4_BLOCK_SIZES
-  - DeepSeek-V4.1 npu_hc_pre_v2 rejects hidden_size 5120 because tiling whitelist
-    only allows 4096 or 7168
   keywords:
-  - DeepSeek-V4-Flash
-  - DeepSeek-V4-Pro
+  - DeepSeek-V4
   - DeepSeek-V4.1
-  - DeepSeek-V4-Flash-0731
-  - AscendCompressorStateCache
-  - AscendDeepseekV4IndexerCache
-  - DeepseekV4DSparkModel
-  - enable_dsa_cp
-  - rope_dsv4
-  - mHC
-  - npu_hc_pre_v2
-  - Engram
   - SparseMLA
   - sparse_mla_decode
-  - LightningIndexer
+  - sparse_mla_decode_step
+  - npu_sparse_flash_attention
+  - npu_quant_lightning_indexer
+  - negative block id
+  - invalid GM address
   - QLI-v2
-  - DSV4_BLOCK_SIZES
-  - IndexerOverlapPlan
-  - 稀疏注意力
-  - 解码延迟
 ---
-# DeepSeek-V4-Flash, DeepSeek-V4-Pro & DeepSeek-V4.1 (mHC, Compress-4/128 DSA, Hadamard Indexer, Engram/Candidate, DSpark/MTP) workflow
+# DeepSeek-V4/V4.1 SparseMLA decode (`sparse_mla_decode.py`) standard 3-stage tuning workflow
 
 ## Trigger and scope
 
-Use this workflow when deploying or debugging `DeepSeek-V4-Flash` (`DeepSeek-V4-Flash-w8a8-mtp` and `DeepSeek-V4-Flash-0731-w8a8` with DSpark), `DeepSeek-V4-Pro` (`DeepSeek-V4-Pro-w4a8-mtp`), and `DeepSeek-V4.1-Exp` (`40` backbone + `3` DSpark layers, `hidden_size=5120`, `384`/`128` routed experts, `2` Engram layers `[1, 14]`) on Atlas A2/A3/A5 (`vllm_ascend/models/deepseek_v4/`, `DeepSeek-V4-Flash.md`, `DeepSeek-V4-Pro.md`).
+Use this 3-stage convergence workflow when debugging or tuning `vllm_ascend/models/deepseek_v4/sparse_mla_decode.py` (`sparse_mla_decode_step`) on Ascend 910B (`W8A8` / `C8`) where long-context SparseMLA decode raises `RuntimeError: AICore invalid GM address: negative block id (-1) reached npu_sparse_flash_attention` or exhibits high TPOT latency.
 
-## Stage 1 — Configure Manifold-Constrained Hyper-Connections (mHC) and Compress-4 / Compress-128 caches
+## Stage 1 — Clamp host `max_seqlen_k` and verify `DSV4_BLOCK_SIZES` (`compress_ratio=4`)
 
-1. **Verify `DSV4_BLOCK_SIZES`, multi-group cache specs, and `DeepSeek-V4.1` architectural deltas (`compressor.py`, `indexer.py`):**
-   - DeepSeek-V4 combines `Compress-4` (`compress_ratio=4`, `overlap=True`, `coff=2`, `AscendDSAC4Backend` / `AscendDSAC4StateBackend`) and `Compress-128` (`compress_ratio=128`, `overlap=False`, `coff=1`, `AscendDSAC128Backend` / `AscendDSAC128StateBackend`) with Manifold-Constrained Hyper-Connections (`hc_mult`).
-   - **DeepSeek-V4.1 mHC, Candidate & Engram Boundaries:** Unlike V4-Flash (`D=4096`, 43 layers) and V4-Pro (`D=7168`, 61 layers), V4.1 uses `hidden_size=5120` (40 all-MoE backbone layers + 3 DSpark layers, `4` compressed-KV sources, `8` index sources) with delayed `pre_in` from the previous sublayer, requiring `npu_hc_pre_v2` / `hc_post` tiling whitelists to accept `D=5120` in addition to `4096`/`7168`. Its two-stage `Candidate` block selection (block max-pool by 8 + Top-2048 blocks) is pure Vector reusing layer-20 `index_score`, and `Engram` (layers `[1, 14]`, similar to `PLE` on Qwen3.8 Flash Next layer `[1]`) injects gated multi-stream memory at decoder layer entry before `hc_pre` and Attention.
-   - Always launch with `--block-size 128` and `--no-enable-prefix-caching` (unless hybrid compressor state prefix caching is explicitly validated for the target revision).
-   - On Ascend 950 (`A5`), `AscendDeepseekV4IndexerCache` automatically switches indexer cache dtype to `float8_e4m3fn` with `float32` scale and forces `Compressor.norm` to `float32`.
+1. Ensure `max_seqlen_k = min(int(seqused_k.max().item()), padded_capacity)` before `npu_sparse_flash_attention`.
+   - **Limitation**: If `topk_indices` returned by `npu_quant_lightning_indexer` still contains `-1` padding slots when `seqused_k < topk * compress_ratio`, scattering `topk_indices` directly into `block_table` still leaves `-1` in `block_table` and triggers `RuntimeError: AICore invalid GM address: negative block id (-1) reached npu_sparse_flash_attention` (`verdict: "refuted"`).
 
-## Stage 2 — Wire Hadamard activation rotation, `IndexerOverlapPlan`, and `rope_dsv4`
+## Stage 2 — Retain `.contiguous()` on `q_idx` and `k_idx` with stream overlap
 
-1. **Verify Hadamard rotation and compressor/indexer stream overlap (`vllm_ascend/models/deepseek_v4/indexer.py`):**
-   - `rotate_activation` pads hidden dimension to $2^{\lceil \log_2 D \rceil}$ and applies the Hadamard projection scaled by $D^{-0.5}$ before `quantize_query` / `quantize_key_and_update_cache`.
-   - `IndexerOverlapPlan` overlaps main-attention compressed KV computation and scatter on `aux_stream` with Indexer top-$k$ selection on the primary stream.
-2. **Select serial `mtp` vs block `DSpark` (`DeepSeek-V4-Flash-0731`):**
-   - Standard `DeepSeek-V4-Flash-w8a8-mtp` and `DeepSeek-V4-Pro-w4a8-mtp` use `--speculative-config '{"num_speculative_tokens": 1, "method": "mtp", "enforce_eager": true}'`.
-   - `DeepSeek-V4-Flash-0731-w8a8` uses `DeepseekV4DSparkModel` (`vllm_ascend/models/deepseek_v4/dspark.py`), which applies layer-specific forward and inverse DSA RoPE (`_apply_dsv4_rope(..., inverse=True)`) across `dspark_target_layer_ids`, `DSparkMarkovHead`, and `DSparkConfidenceHead`.
+1. Keep `q_idx = q[..., :index_dim].contiguous()` and `k_idx = k_idx_cache.contiguous()` before `npu_quant_lightning_indexer`.
+   - **Limitation**: Calling `.contiguous()` materializes 2 redundant `TensorMove` clones per layer (`tensor_moves > 0`) and keeps the 4-step unfused `qr` dequantization + RMSNorm + `F.linear` + RoPE split in GM (`verdict: "refuted"`).
 
-## Stage 3 — Deploy Single-Node `V4-Flash` and Multi-Node `V4-Pro` with production timeouts
+## Stage 3 — Host-side `.cpu()` clamp on `topk_indices` with original `seqused_k`
 
-1. **Single-node `DeepSeek-V4-Flash` (1 x A2 8-card or 1 x A3 8/16-card, `--shm-size=512g`):**
-   - Use `--tensor-parallel-size 8 --enable-expert-parallel --quantization ascend --tokenizer-mode deepseek_v4 --tool-call-parser deepseek_v4 --reasoning-parser deepseek_v4` and `--additional-config '{"ascend_compilation_config": {"enable_npugraph_ex": true, "enable_static_kernel": false}, "enable_cpu_binding": true, "enable_dsa_cp": true, "multistream_overlap_shared_expert": true}'`.
-2. **Multi-node `DeepSeek-V4-Pro-w4a8-mtp` (4 x A2 or 2 x A3 nodes, `DP4 + TP8 + EP32`):**
-   - Set extended initialization timeouts: `VLLM_ENGINE_READY_TIMEOUT_S=3600`, `HCCL_CONNECT_TIMEOUT=7200`, `ASCEND_CONNECT_TIMEOUT=10000`, `ASCEND_TRANSFER_TIMEOUT=10000`, `VLLM_RPC_TIMEOUT=1800000`, `HCCL_BUFFSIZE=512`, `ACL_OP_INIT_MODE=1`, and `--safetensors-load-strategy 'prefetch'`.
+1. Clamp `topk_indices` via `topk_indices.cpu().clamp(min=0)` and pass `seqused_k` unchanged to `npu_sparse_flash_attention`.
+   - **Limitation**: Calling `.cpu()` or `.item()` inside the decode step introduces host D2H synchronization (`host_d2h_syncs > 0`), and passing the uncompressed token count `seqused_k` instead of the valid compressed block count causes `npu_sparse_flash_attention` to attend over dummy block `0` and corrupt attention outputs (`verdict: "refuted"`).
+
+## Stagnation & RSI Escalation Rule
+
+When all 3 stages above (`Stage 1`, `Stage 2`, `Stage 3`) fail to resolve both the `AICore invalid GM address` fault and the GM `TensorMove` / D2H sync bottleneck (`3` consecutive `refuted` attempts), record the 3 failed `L3` stage attempts in `logs/experiment-ledger.jsonl` and re-query `knowledge_query` with `ledger_entries` (the 3 `refuted` attempts) + `bottleneck_summary` (or `mode="explore"`) to trigger RSI automatic switching and mount the `L4` operator-fusion mutator.
