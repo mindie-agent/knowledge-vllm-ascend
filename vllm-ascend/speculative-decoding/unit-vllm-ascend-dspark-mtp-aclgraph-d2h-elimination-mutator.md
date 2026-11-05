@@ -1,8 +1,11 @@
 ---
 category: mutator
 conditions:
+  dspark_graph_path: v2_ascend_dspark_full_graph
+  execution_mode: aclgraph
   framework:
   - vllm-ascend
+  runtime: vllm-ascend
   soc:
   - Ascend910B
   - Ascend910B2
@@ -11,6 +14,9 @@ conditions:
   - Ascend910_93
   - Ascend950
   - Ascend950DT
+  workload_phase:
+  - decode
+  - speculative_decode
 domain_path: vllm-ascend/speculative-decoding
 evidence_strength: hypothesis
 id: unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator
@@ -27,7 +33,7 @@ provenance:
   source_repository: https://github.com/vllm-project/vllm-ascend
   source_type: ablation_design_receipt
   supersedes: []
-revision: 7
+revision: 8
 schema: mindie-graded-unit/1
 tier: L4
 title: v2 DSpark ACLGraph bucket alignment, metadata hoisting, and device-resident

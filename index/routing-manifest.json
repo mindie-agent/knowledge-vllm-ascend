@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 52.399749867618084,
+  "build_elapsed_ms": 48.84537495672703,
   "closure": {
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -382,7 +382,7 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "5ed13c3fb61cad5c7690820f1641d40df1f3786d54fbebd5806b3da0b114ca2f",
+  "generation": "58ad5f01cedda91647a19b9c6eaeb1b43aa11db62dd632a3063a625bb6b3d499",
   "id_path": {
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": "vllm-ascend/ops/triton/unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator.md",
     "unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow": "vllm-ascend/ops/triton/unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow.md",
@@ -1691,9 +1691,12 @@
     {
       "category": "mutator",
       "conditions": {
+        "dspark_graph_path": "v2_ascend_dspark_full_graph",
+        "execution_mode": "aclgraph",
         "framework": [
           "vllm-ascend"
         ],
+        "runtime": "vllm-ascend",
         "soc": [
           "Ascend910B",
           "Ascend910B2",
@@ -1702,6 +1705,10 @@
           "Ascend910_93",
           "Ascend950",
           "Ascend950DT"
+        ],
+        "workload_phase": [
+          "decode",
+          "speculative_decode"
         ]
       },
       "domain_path": "vllm-ascend/speculative-decoding",
@@ -1728,7 +1735,7 @@
         "source_type": "ablation_design_receipt",
         "supersedes": []
       },
-      "revision": 7,
+      "revision": 8,
       "tier": "L4",
       "title": "v2 DSpark ACLGraph bucket alignment, metadata hoisting, and device-resident D2H elimination (`vllm_ascend/worker/v2/spec_decode/dspark/speculator.py`)",
       "token_estimate": 1135,
@@ -5762,9 +5769,12 @@
     {
       "category": "workflow",
       "conditions": {
+        "dspark_graph_path": "v2_ascend_dspark_full_graph",
+        "execution_mode": "aclgraph",
         "framework": [
           "vllm-ascend"
         ],
+        "runtime": "vllm-ascend",
         "soc": [
           "Ascend910B",
           "Ascend910B2",
@@ -5773,6 +5783,10 @@
           "Ascend910_93",
           "Ascend950",
           "Ascend950DT"
+        ],
+        "workload_phase": [
+          "decode",
+          "speculative_decode"
         ]
       },
       "domain_path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
@@ -5794,7 +5808,7 @@
         "source_type": "architecture_and_runtime_guide",
         "supersedes": []
       },
-      "revision": 6,
+      "revision": 7,
       "tier": "L3",
       "title": "Speculative Decode MTP / DSpark ACLGraph (`vllm_ascend/worker/v2/spec_decode/dspark/speculator.py`) Standard Tuning Workflow",
       "token_estimate": 689,

@@ -384,7 +384,7 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 643346,
+      "bytes": 643648,
       "estimated_tokens": 107836,
       "kind": "federation",
       "path": ".",
@@ -535,7 +535,7 @@
       },
       {
         "automatic": false,
-        "bytes": 613907,
+        "bytes": 614209,
         "estimated_tokens": 103318,
         "exceeds": [],
         "kind": "federation",
@@ -637,7 +637,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 52.399749867618084,
+  "index_build_elapsed_ms": 48.84537495672703,
   "leaves": [
     {
       "automatic": false,
@@ -1593,7 +1593,7 @@
     },
     {
       "automatic": false,
-      "bytes": 6339,
+      "bytes": 6490,
       "estimated_tokens": 1135,
       "exceeds": [],
       "kind": "leaf",
@@ -1632,7 +1632,7 @@
     },
     {
       "automatic": false,
-      "bytes": 4259,
+      "bytes": 4410,
       "estimated_tokens": 689,
       "exceeds": [],
       "kind": "leaf",
@@ -2233,7 +2233,7 @@
     },
     {
       "automatic": false,
-      "bytes": 6339,
+      "bytes": 6490,
       "estimated_tokens": 1135,
       "exceeds": [],
       "kind": "subtree",
@@ -2246,7 +2246,7 @@
     },
     {
       "automatic": false,
-      "bytes": 13595,
+      "bytes": 13746,
       "estimated_tokens": 2037,
       "exceeds": [],
       "kind": "subtree",
@@ -2538,9 +2538,9 @@
       "tier": "L1"
     },
     "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": {
-      "bytes": 6339,
+      "bytes": 6490,
       "category": "mutator",
-      "content_sha256": "ee718bcd8589a95ec053e7bf9412720074e8ea9266c7f1a74930175f4d8debc1",
+      "content_sha256": "50fd6db1e8635461da9eb875eeafa8241183d91e7f11dee152beff1f43946150",
       "domain_path": "vllm-ascend/speculative-decoding",
       "estimated_tokens": 1135,
       "evidence_strength": "hypothesis",
@@ -3424,9 +3424,9 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow": {
-      "bytes": 4259,
+      "bytes": 4410,
       "category": "workflow",
-      "content_sha256": "fed3ce62ec1dc77aa4c03f97dd22ca7ea8d0aa05bb1f8e3d268cc173924172e3",
+      "content_sha256": "374dc17940248fb2a76a4817fd4ba041d02506df221049594c3fea4fd117dd92",
       "domain_path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
       "estimated_tokens": 689,
       "evidence_strength": "single_observation",
