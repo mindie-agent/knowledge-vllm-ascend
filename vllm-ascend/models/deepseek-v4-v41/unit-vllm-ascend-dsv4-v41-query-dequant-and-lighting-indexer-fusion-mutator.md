@@ -1,17 +1,9 @@
 ---
 category: mutator
 conditions:
-  attention_backend: sparse_mla
-  framework: vllm-ascend
-  model_family:
-  - deepseek-v4
-  - deepseek-v4.1
-  - dsv4
-  - dsv3.2
-  quantization:
-  - w8a8
-  - w4a8
-  - c8
+  framework:
+  - vllm-ascend
+  - any
 domain_path: vllm-ascend/models/deepseek-v4-v41
 evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator
@@ -31,7 +23,7 @@ provenance:
   source_locator: docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
   source_type: ablation_design_receipt
   supersedes: []
-revision: 2
+revision: 5
 schema: mindie-graded-unit/1
 tier: L4
 title: Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer
@@ -164,7 +156,7 @@ The mutation has three separable factors. Apply them in the order below, keep ea
    **Change.** Keep the selected indices, the valid-length tensor and the block-table guard on the device. Compute the valid count with a device clamp, replace `-1` with a safe allocated dummy block, and pass `seqused_k` so the dummy is excluded from attention. Keep the graph's block table and `seqused_k` as persistent device buffers updated in place; if a host scalar is genuinely required, compute it once in the metadata/prepare stage outside capture and reuse the padded capacity. The QLI/FIA path reads `seqused_k` directly, so do not add a host reduction just to fill `max_seqlen_k`.
 
    ```python
-   valid = torch.clamp(seqused_k, min=0, max=topk)          # [num_reqs], int32, device
+   valid_seq = (topk_indices >= 0).sum(dim=-1).to(torch.int32)  # [num_reqs], valid compressed block count
    safe_idx = torch.where(topk_indices < 0,
                           torch.zeros_like(topk_indices),  # block 0 is allocated and masked
                           topk_indices)
@@ -172,7 +164,7 @@ The mutation has three separable factors. Apply them in the order below, keep ea
    torch.ops._C_ascend.npu_sparse_flash_attention(
        q, k_cache, v_cache,
        block_table=block_table,
-       seqused_k=valid,        # the dummy block is outside the valid prefix
+       seqused_k=valid_seq,    # the dummy block is outside the valid compressed block prefix
        max_seqlen_k=padded_capacity,   # padded, not a host-derived exact length
        sparse_mode=3,
    )
@@ -221,4 +213,7 @@ Run at least the full candidate, the baseline, and the three `minus_*` arms. A f
 
 **Reporting skeleton.** For each arm record: run ID, graph mode, context length, concurrency, quantization, TPOT p50/p90, TTFT p50/p90, output throughput, selected-block count, `TensorMove`/`Memcpy` count per layer, host D2H count, accuracy metric, and the first failing device-log line (if any). This is the minimum evidence needed to distinguish a real factor effect from a cache-state or version artifact.
 
-When implementing a programmatic `run_ablation_suite()` helper in `sparse_mla_decode.py`, return a `dict[str, dict]` keyed by the exact 4 leave-one-out arm identifiers (`full_candidate`, `minus_q_fusion`, `minus_view_alias`, `minus_device_guard`) where each entry records `"tpot_ms"`, `"tensor_moves"`, `"host_d2h_syncs"`, and `"correctness_ok"`.
+When implementing `sparse_mla_decode_step` and `run_ablation_suite(*args, **kwargs)` in `vllm_ascend/models/deepseek_v4/sparse_mla_decode.py`, support the 3 keyword-only boolean factor flags (`fuse_q_qr_dequant: bool = True`, `alias_qli_views: bool = True`, `device_topk_guard: bool = True`):
+- **Factor 1 (`fuse_q_qr_dequant`)**: When `True`, call `torch.ops._C_ascend.fused_q_dequant_rmsnorm_rope_split(qr_i8, qr_scale, rms_weight, w_q_absorbed, cos, sin, eps=eps, n_heads=n_heads, nope_dim=nope_dim, rope_dim=rope_dim)` (`q_fused_calls == 1`). When `False` (`minus_q_fusion`), run the unfused dequant + RMSNorm + `matmul` + `_apply_rope_slice` path (`q_fused_calls == 0`).
+- **Factor 2 (`alias_qli_views`)**: When `True`, pass zero-copy storage-aliased views `q_idx = q_packed[..., :index_dim]` and `k_idx = k_idx_cache` directly to `npu_quant_lightning_indexer` without `.clone()` or `.contiguous()` (preserving `q_idx.untyped_storage().data_ptr() == q_packed.untyped_storage().data_ptr()` and `k_idx.untyped_storage().data_ptr() == k_idx_cache.untyped_storage().data_ptr()`). When `False` (`minus_view_alias`), materialize cloned contiguous buffers `q_idx = q_packed[..., :index_dim].clone().contiguous()` and `k_idx = k_idx_cache.clone().contiguous()`.
+- **Factor 3 (`device_topk_guard`)**: When `True`, mask negative `topk_indices < 0` to `0` (`torch.where(topk_indices < 0, torch.zeros_like(topk_indices), topk_indices)`), scatter into a cloned `block_table`, compute the valid compressed block count `valid_seq = (topk_indices >= 0).sum(dim=-1).to(torch.int32)` on device without mutating caller `seqused_k`, and pass `seqused_k=valid_seq, max_seqlen_k=padded_capacity` to `npu_sparse_flash_attention`. When `False` (`minus_device_guard`), scatter raw `topk_indices` and pass `seqused_k=seqused_k, max_seqlen_k=int(seqused_k.max().item())` (catching `RuntimeError` inside `run_ablation_suite` and recording `"correctness_ok": False`).

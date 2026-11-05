@@ -1,32 +1,43 @@
 ---
-schema: mindie-graded-unit/1
-id: unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms
-revision: 1
-tier: L1
 category: axiom
-evidence_strength: software_contract
-domain_path: vllm-ascend/models/deepseek-v4-v41
-title: DeepSeek-V4/V4.1 MLA latent, LightningIndexer/QLI-v2, Compressor/Engram, and absorption invariants
 conditions:
-  framework: vllm-ascend
-  model_family:
-  - deepseek-v4
-  - deepseek-v4.1
-  - dsv4
-  - dsv3.2
-  soc:
-  - Ascend910B
-  - Ascend910_93
-  - Ascend950
+  framework:
+  - vllm-ascend
+  - any
+domain_path: vllm-ascend/models/deepseek-v4-v41
+evidence_strength: software_contract
+id: unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms
 inherits_from:
 - unit-vllm-ascend-npu-runtime-and-graph-invariants
+provenance:
+  evidence_refs:
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8329f666c3f1ed8962ee75cda1081fa980e25ccfa3c7179f83a7737b37860a28/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/bad4bf3370420a4fa68a1300b59acf74e43c293bf54a187d85299b012073e8ed/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/a15c80208a9b43704a944b69a8c518645a2e4e42965218e0c397986cde2ec745/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/99e97cb3574e1288dd1faa397b490f01e93349bdaee11d3f6909f2e5c383fac4/index.md
+  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0bc94d24162470fe8ce3fc189b7eb239aa868d074ff53c78706cad0c5c608243/index.md
+  source_digest: d688b8e09beac9ce4d77e155f906689494cfeed6a7c851f4682a797772841194
+  source_locator: docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md
+  source_type: session_distill
+  supersedes: []
+revision: 2
+schema: mindie-graded-unit/1
+tier: L1
+title: DeepSeek-V4/V4.1 MLA latent, LightningIndexer/QLI-v2, Compressor/Engram, and
+  absorption invariants
 triggers:
   error_signatures:
   - LightningIndexer or QLI-v2 selects a block id outside the paged KV or block table
-  - AICore invalid GM address or cross-device timeout after npu_sparse_flash_attention or npu_quant_lightning_indexer
-  - C8 latent KV dequantizes to garbage because k_norm or the per-token scale is applied in the wrong order
-  - Engram lookup returns different embeddings on different TP or DP ranks for identical token ids
-  - decode logits diverge after switching between absorbed and non-absorbed MLA paths in a mixed batch
+  - AICore invalid GM address or cross-device timeout after npu_sparse_flash_attention
+    or npu_quant_lightning_indexer
+  - C8 latent KV dequantizes to garbage because k_norm or the per-token scale is applied
+    in the wrong order
+  - Engram lookup returns different embeddings on different TP or DP ranks for identical
+    token ids
+  - decode logits diverge after switching between absorbed and non-absorbed MLA paths
+    in a mixed batch
   - compressor output is consumed before its group-completion flag is set
   keywords:
   - deepseek-v4
@@ -45,21 +56,7 @@ triggers:
   - W8A8
   - W4A8
   - topk
-provenance:
-  source_type: session_distill
-  source_locator: docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md
-  source_digest: d688b8e09beac9ce4d77e155f906689494cfeed6a7c851f4682a797772841194
-  evidence_refs:
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/8329f666c3f1ed8962ee75cda1081fa980e25ccfa3c7179f83a7737b37860a28/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/808bb55d9e61d35c1139101ac03f327490c2379febbe012966cd3ec42b2dbfc5/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/bad4bf3370420a4fa68a1300b59acf74e43c293bf54a187d85299b012073e8ed/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/a15c80208a9b43704a944b69a8c518645a2e4e42965218e0c397986cde2ec745/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/99e97cb3574e1288dd1faa397b490f01e93349bdaee11d3f6909f2e5c383fac4/index.md
-  - docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/0bc94d24162470fe8ce3fc189b7eb239aa868d074ff53c78706cad0c5c608243/index.md
-  supersedes: []
 ---
-
 # DeepSeek-V4/V4.1 MLA latent, LightningIndexer/QLI-v2, Compressor/Engram, and absorption invariants
 
 **Condition.** Applies when a `vllm-ascend` DeepSeek-V4, V4.1, DSV4 or DSV3.2-lineage model is served on Ascend910B, Ascend910_93 (A3) or Ascend950 (A5) with SparseMLA, a LightningIndexer/QLI-v2 path, Compressor state, Engram lookup tables, or MLA weight absorption. The layer contract is per layer, not per model: SWA layers have no indexer, C4/CSA layers instantiate the indexer, and C128/HCA layers are dense attention over compressed history plus a short SWA branch and have no LightningIndexer. The axiom needs a known `kv_lora_rank` (512 in the observed DSV4/V4.1 checkpoints), `qk_rope_head_dim` (64), indexer `head_dim` (128), `topk`, and `compress_ratio`. If any of these is unknown, or a draft model uses a different KV geometry, do not apply these numbers.

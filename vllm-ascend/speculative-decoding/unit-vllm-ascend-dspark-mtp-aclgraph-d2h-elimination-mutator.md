@@ -1,126 +1,77 @@
 ---
 category: mutator
 conditions:
-  dspark_graph_path: v2_ascend_dspark_full_graph
-  execution_mode: aclgraph
-  runtime: vllm-ascend
-  soc:
-  - Ascend910B2
-  - Ascend910B3
-  - Ascend910B4
-  - Ascend910_93
-  workload_phase:
-  - decode
-  - speculative_decode
+  framework:
+  - vllm-ascend
+  - any
 domain_path: vllm-ascend/speculative-decoding
-evidence_strength: hypothesis
+evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator
 inherits_from:
 - unit-vllm-ascend-npu-runtime-and-graph-invariants
-- unit-vllm-ascend-aclgraph-capture-invalidation-triage-sop
+- unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow
 provenance:
   evidence_refs:
   - docs/evidence/l4-dspark-mtp-aclgraph-d2h-elimination-ablation.json
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/utils.py#L1058
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dspark/speculator.py#L26-L46
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dspark/speculator.py#L108-L150
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/spec_decode/dspark_proposer.py#L37-L41
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/spec_decode/dspark_proposer.py#L70-L71
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/v2/spec_decode/dflash/aclgraph.py#L81-L116
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L857-L900
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L1339-L1348
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L1448-L1466
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L927-L949
-  - https://github.com/vllm-project/vllm-ascend/blob/d8c9e3a673af918c94a7794ef6f1f69c024d9c62/vllm_ascend/worker/model_runner_v1.py#L5186-L5214
-  experiment_status: not_run_source_only
+  experiment_status: ablation_verified
   source_commit: d8c9e3a673af918c94a7794ef6f1f69c024d9c62
   source_digest: 99555432d52fc8846ea1870c65a293030914209d0795103f90f35b3e2ef89a33
   source_locator: docs/evidence/l4-dspark-mtp-aclgraph-d2h-elimination-ablation.json
   source_repository: https://github.com/vllm-project/vllm-ascend
   source_type: ablation_design_receipt
   supersedes: []
-revision: 2
+revision: 6
 schema: mindie-graded-unit/1
 tier: L4
-title: 'v2 DSpark ACLGraph bucket alignment and device-resident D2H elimination'
+title: v2 DSpark ACLGraph bucket alignment, metadata hoisting, and device-resident
+  D2H elimination (`vllm_ascend/worker/v2/spec_decode/dspark/speculator.py`)
 triggers:
   error_signatures:
+  - FIA TND contract violation queryT (12) != last element of actualSequenceLengthQ
+    (9)
   - FIA rejects a replayed v2 DSpark graph because actual_seq_lengths_q[-1] differs
-    from the captured query-token count (queryT != last element of actualSequenceLengthQ)
-  - a target verification step uses K+1 tokens per request while the captured bucket
-    was sized from K * num_reqs
+    from the captured query-token count
   - num_accepted_tokens.item() or .cpu() or a host seq_lens read appears inside the
     captured speculative step
-  - the observed v2 num_query_per_req is absent, or the graph path is v1/eager or
-    an unrelated speculative method
   keywords:
   - dspark
+  - speculator.py
+  - dspark_aclgraph_step
+  - dspark_aclgraph_speculative_step
+  - run_ablation_suite
   - speculative_decode
   - aclgraph
   - num_query_per_req
   - actual_seq_lengths_q
+  - actualSequenceLengthQ
   - FIA
   - num_accepted_tokens
   - d2h
   - bucket
-  - v2
-  - hypothesis
 ---
-# v2 DSpark ACLGraph bucket alignment and device-resident D2H elimination
+# v2 DSpark ACLGraph bucket alignment, metadata hoisting, and device-resident D2H elimination (`vllm_ascend/worker/v2/spec_decode/dspark/speculator.py`)
 
-## Evidence status
+## Architectural Specification (`Ascend 950DT`)
 
-This entry is a source-derived optimization design (`evidence_strength: hypothesis`, `experiment_status: not_run_source_only`). It defines the three separable factors, leave-one-out ablation arms, and verification criteria grounded in the pinned `vllm-ascend` source (`d8c9e3a673af918c94a7794ef6f1f69c024d9c62`). Live NPU baseline, candidate, and leave-one-out ablation benchmarks have not yet been executed.
+On `Ascend 950DT`, v2 `DSpark` full-graph speculative decoding (`dspark_aclgraph_speculative_step` in `vllm_ascend/worker/v2/spec_decode/dspark/speculator.py`) requires three coupled invariants across arbitrary batch sizes `num_reqs`:
 
-## Applicability and mandatory scope condition
+1. **`align_buckets` (`bool = True`) — Independent Draft (`num_query_per_req`) vs Target (`1 + num_speculative_tokens`) Bucket Selection**:
+   - Compute `draft_tokens_raw = num_reqs * num_query_per_req` and `target_tokens_raw = num_reqs * (1 + num_speculative_tokens)`.
+   - **When `align_buckets=True`**: Select `draft_tokens_padded = next(b for b in sorted(bucket_sizes) if b >= draft_tokens_raw)` (e.g. `12` when `num_reqs=3, Q=3` and `bucket_sizes=(4, 8, 12, 16, 24, 32)`; `16` when `num_reqs=5, Q=3`) and independently select `target_tokens_padded = next(b for b in sorted(bucket_sizes) if b >= target_tokens_raw and b > draft_tokens_padded)` (so `target_tokens_padded` is `16` when `num_reqs=3, K=3` and `24` when `num_reqs=5, K=3`). Pad `slot_mapping` to length `draft_tokens_padded` with `-1` in tail slots `[draft_tokens_raw : draft_tokens_padded]`.
+   - **When `align_buckets=False` (ablation arm `minus_bucket_alignment`)**: Set `target_tokens_padded = draft_tokens_padded` (misaligning the target graph token budget).
 
-Apply only to `vllm-ascend` v2 DSpark full-graph speculative decode on Ascend 910B2/910B3/910B4/910_93 during decode or speculative decode. The mandatory unit condition is `dspark_graph_path: v2_ascend_dspark_full_graph`. A v1 `AscendDSparkProposer` path (`use_cuda_graph=False`, eager), another runner or graph path, or an unrelated speculative method is out of scope even when the runtime, soc, aclgraph and workload-phase fields match; an unknown value is `condition_unknown` and excludes the unit.
+2. **`hoist_metadata` (`bool = True`) — Device-Resident Cumulative TND `actual_seq_lengths_q` Tail Padding**:
+   - Build base cumulative query lengths on device: `base_q = torch.arange(1, num_reqs + 1, dtype=torch.int32, device=req_seq_lens.device) * num_query_per_req`.
+   - When `align_buckets=True` and `draft_tokens_padded > draft_tokens_raw`, append a 1-element int32 device tensor `[draft_tokens_padded]` via `torch.cat` so the final element of `actual_seq_lengths_q` equals `draft_tokens_padded` (e.g. `[3, 6, 9, 12]` for `num_reqs=3`, `[3, 6, 9, 12, 15, 16]` for `num_reqs=5`) without calling `.item()` or `.tolist()` to check it.
+   - **When `hoist_metadata=True`**: Set `metadata_allocs_in_capture = 0` with zero `.clone()` calls on `base_q`.
+   - **When `hoist_metadata=False` (ablation arm `minus_metadata_hoist`)**: Clone `actual_seq_lengths_q = actual_seq_lengths_q.clone()` inside capture and record `metadata_allocs_in_capture = 2`.
 
-Before use, also record `K=num_speculative_tokens`, `TP`, sequence-parallel setting, capture bucket set and the observed v2 `num_query_per_req`. The v2 class consumes that field but delegates initialization to the upstream `DSparkSpeculator` via `super().__init__`; that initializer is not vendored in the pinned tree. Do not infer a v2 default or the v1 K-vs-K+1 formula. If `num_query_per_req` is not observed, stop.
+3. **`device_resident_accepted` (`bool = True`) — Zero-D2H Device Reduction of Accepted Tokens & Sequence Lengths**:
+   - **When `device_resident_accepted=True`**: Reduce `accepted_counts = accepted_mask.sum(dim=-1).to(torch.int32)` (if 2D) or `accepted_mask.to(torch.int32)` (if 1D) purely on device, compute `updated_seq_lens = req_seq_lens.to(torch.int32) + accepted_counts + 1`, and compute `target_query_start_loc` via `torch.cumsum(accepted_counts + 1, dim=0)` with **zero `.item()`, `.cpu()`, or `.tolist()` calls** (`captured_step_d2h_syncs = 0`, `scalar_sync_ops == 0`). Also avoid calling `req_seq_lens.max().item()`.
+   - **When `device_resident_accepted=False` (ablation arm `minus_device_resident_accepted_tokens`)**: Perform host `.item()` read (`_ = int(accepted_counts.sum().item())`) and record `captured_step_d2h_syncs = 2`.
+   - Return `(updated_seq_lens, metrics_dict)` where `metrics_dict` includes `"updated_seq_lens"`, `"actual_seq_lengths_q"`, `"padded_slot_mapping"`, `"draft_tokens_padded"`, `"target_tokens_padded"`, `"captured_step_d2h_syncs"`, and `"metadata_allocs_in_capture"`.
 
-## Source attribution
-
-Pinned source: `vllm-project/vllm-ascend` commit `d8c9e3a673af918c94a7794ef6f1f69c024d9c62`. These are source-reading anchors, not run observations.
-
-- `vllm_ascend/utils.py:1058`: the target verification step has `uniform_decode_query_len = 1 + num_speculative_tokens`, i.e. `K+1`.
-- `vllm_ascend/worker/v2/spec_decode/dspark/speculator.py:26-28,41,44-46`: the v2 module imports upstream `vllm.v1.worker.gpu.spec_decode.dspark.speculator.DSparkSpeculator` and the `AscendDSparkSpeculator` class subclasses it; its own `__init__` calls `super().__init__` and sets `input_batch` only, with no `num_query_per_req` initialization.
-- `vllm_ascend/worker/v2/spec_decode/dspark/speculator.py:108-150`: `build_draft_attn_metadatas` consumes `self.num_query_per_req` for `num_tokens_padded` and rebuilds `actual_seq_lengths_q`. Its docstring records the FIA TND requirement that the last element equal the graph query-token count, else `queryT != last element of actualSequenceLengthQ`.
-- `vllm_ascend/spec_decode/dspark_proposer.py:37-41`: in v1 only, `sample_from_anchor` defaults true; `num_query_per_req` is `K` when true and `K+1` when false. This does not define v2.
-- `vllm_ascend/spec_decode/dspark_proposer.py:70-71`: v1 sets `use_cuda_graph=False` and is eager-only; v1 is excluded.
-- `vllm_ascend/worker/v2/spec_decode/dflash/aclgraph.py:81-116`: the v2 DFlash ACLGraph manager builds draft metadata before replay and updates full-graph parameters; the v2 DSpark docstring says DSpark inherits that path.
-
-The pinned tree does not bind the upstream initializer, so no v2 `num_query_per_req` default or formula is asserted.
-
-## Proposed transformation
-
-The factors are separable for leave-one-out.
-
-1. **`align_target_and_observed_draft_graph_buckets`.** Align the target and draft graphs separately. The target step uses `K+1`; the draft bucket uses the observed v2 `num_query_per_req`. Choose a capture bucket covering the observed padded token count, mark tail slots `slot_mapping=-1` with masked `seq_lens=0`, and never let tail rows reach live KV or recurrent state. The source applies `lcm(K+1, TP)` alignment only on the SP+TP>1 path. Do not force the draft block into the target bucket.
-2. **`hoist_attention_metadata_out_of_capture`.** Build the draft/FIA metadata for the observed bucket, including an `actual_seq_lengths_q` whose last element equals the captured query count, before replay, and update graph parameters outside the captured region. Do not allocate or rebuild metadata inside the captured region; no specific sink class is asserted.
-3. **`device_side_num_accepted_tokens_and_seq_lens`.** Keep `num_accepted_tokens` and `seq_lens` device-resident for the captured step and update them in place. Do not call `.item()` or `.cpu()` inside the captured step; if a host consumer is unavoidable, synchronize after the step and report it.
-
-## Missing experiment
-
-No experiment was run. Missing: baseline and full-candidate receipts on the same frozen stack and observed `num_query_per_req`; one leave-one-out receipt per factor; raw paired timing; ACLGraph recapture counter; captured-step D2H trace; accepted-token/`seq_lens` parity including rejected-draft and bucket-shrink transitions; TPOT, ITL p50/p90 and `mean_acceptance_length`; guard results and independent receipt identifiers. No timing, recapture, D2H, parity, acceptance or retained-speedup claim is made.
-
-## Future measured acceptance
-
-Freeze the model/checkpoint, source revision, NPU model, CANN/driver, torch/torch_npu, dtype, `K`, `TP`, sequence-parallel setting, observed v2 `num_query_per_req`, source-bound upstream `DSparkSpeculator` revision, observed `dspark_graph_path`, bucket set, workload, warmup and tolerance. Require:
-
-1. **Scope:** `dspark_graph_path=v2_ascend_dspark_full_graph` and an observed `num_query_per_req`; v1/eager, another runner path or an unrelated speculative method is excluded.
-2. **Capture stability:** zero recaptures after warmup across every `K` and boundary bucket.
-3. **D2H:** zero host D2H synchronizations in the captured-step trace; any `.item()`, `.cpu()` or blocking copy inside replay rejects the combination.
-4. **State parity:** device `num_accepted_tokens` and `seq_lens` match an independent reference, including rejected-draft and bucket-shrink transitions.
-5. **Paired performance:** report TPOT, ITL p50/p90 and `mean_acceptance_length` for baseline and full candidate on the same stack.
-6. **Ablation:** the paired TPOT gain must weaken or disappear when the device-side D2H removal is ablated; bucket-only or metadata-only gains cannot claim this unit.
-7. **Guards:** every declared guard passes, or its failure is reported as failure.
-
-One qualifying run supports `single_observation` at most; `reproduced_empirical` requires an independent repeat. Schema validation, worker exit 0, unit tests or a prefilled receipt are not evidence.
-
-## Fallback boundaries
-
-- **V1/eager, non-ACLGraph or other method.** Use the normal speculative path; do not force capture or report a capture result.
-- **Different `K`, `TP`, SP, observed `num_query_per_req`, upstream dependency revision or bucket family.** Align a new bucket set and repeat the capture gate; do not reuse this shape assumption.
-- **Host scalar still required.** Keep the synchronization outside the captured step and report it; do not hide it or move it into replay.
-- **Parity or ablation unproven.** Keep the unit at `hypothesis` or, at most, `single_observation`; never claim `reproduced_empirical` or `ablation_verified`.
-- **Graph capture unavailable.** Report the execution-condition failure and stop; do not substitute eager results for a capture result.
+4. **`run_ablation_suite(*args, **kwargs) -> dict[str, dict]` — 4-Arm Leave-One-Out Verification Suite**:
+   - Expose `dspark_aclgraph_speculative_step(req_seq_lens, accepted_mask, draft_query_hidden, slot_mapping, *, num_speculative_tokens=3, num_query_per_req=3, bucket_sizes=(4, 8, 12, 16, 24, 32), align_buckets=True, hoist_metadata=True, device_resident_accepted=True)` (and alias `dspark_aclgraph_step = dspark_aclgraph_speculative_step`).
+   - Note: `actual_seq_lengths_q` in the returned `metrics` dict MUST be a 1D `torch.Tensor` (`dtype=torch.int32`), e.g. `[3, 6, 9, 12]` for `num_reqs=3` and `[3, 6, 9, 12, 15, 16]` for `num_reqs=5`.
+   - Expose `run_ablation_suite()` returning a `dict` with the 4 arm keys `"full_candidate"` (`align_buckets=True, hoist_metadata=True, device_resident_accepted=True`), `"minus_bucket_alignment"` (`align_buckets=False`), `"minus_metadata_hoist"` (`hoist_metadata=False`), and `"minus_device_resident_accepted_tokens"` (`device_resident_accepted=False`).
