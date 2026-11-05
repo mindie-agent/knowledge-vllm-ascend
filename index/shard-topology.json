@@ -384,8 +384,8 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 653963,
-      "estimated_tokens": 110713,
+      "bytes": 642418,
+      "estimated_tokens": 107807,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
@@ -535,8 +535,8 @@
       },
       {
         "automatic": false,
-        "bytes": 624647,
-        "estimated_tokens": 106195,
+        "bytes": 613102,
+        "estimated_tokens": 103289,
         "exceeds": [],
         "kind": "federation",
         "path": "vllm-ascend",
@@ -637,7 +637,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 47.456624917685986,
+  "index_build_elapsed_ms": 50.68225017748773,
   "leaves": [
     {
       "automatic": false,
@@ -814,8 +814,8 @@
     },
     {
       "automatic": false,
-      "bytes": 9085,
-      "estimated_tokens": 1631,
+      "bytes": 9097,
+      "estimated_tokens": 1634,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/attention/mla-prolog",
@@ -986,8 +986,8 @@
     },
     {
       "automatic": false,
-      "bytes": 41857,
-      "estimated_tokens": 8830,
+      "bytes": 35975,
+      "estimated_tokens": 7359,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/models/deepseek-v4-v41",
@@ -1014,8 +1014,8 @@
     },
     {
       "automatic": false,
-      "bytes": 3977,
-      "estimated_tokens": 647,
+      "bytes": 4036,
+      "estimated_tokens": 662,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/models/deepseek/v4-pro-flash",
@@ -1146,8 +1146,8 @@
     },
     {
       "automatic": false,
-      "bytes": 17969,
-      "estimated_tokens": 3765,
+      "bytes": 15068,
+      "estimated_tokens": 3039,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/ops/triton",
@@ -1593,8 +1593,8 @@
     },
     {
       "automatic": false,
-      "bytes": 9558,
-      "estimated_tokens": 1974,
+      "bytes": 6238,
+      "estimated_tokens": 1135,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/speculative-decoding",
@@ -1632,8 +1632,8 @@
     },
     {
       "automatic": false,
-      "bytes": 3665,
-      "estimated_tokens": 577,
+      "bytes": 4152,
+      "estimated_tokens": 689,
       "exceeds": [],
       "kind": "leaf",
       "path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
@@ -1785,8 +1785,8 @@
     },
     {
       "automatic": false,
-      "bytes": 9085,
-      "estimated_tokens": 1631,
+      "bytes": 9097,
+      "estimated_tokens": 1634,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/attention",
@@ -1902,8 +1902,8 @@
     },
     {
       "automatic": false,
-      "bytes": 87283,
-      "estimated_tokens": 18475,
+      "bytes": 81401,
+      "estimated_tokens": 17004,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/models",
@@ -1920,8 +1920,8 @@
     },
     {
       "automatic": false,
-      "bytes": 8302,
-      "estimated_tokens": 1207,
+      "bytes": 8361,
+      "estimated_tokens": 1222,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/models/deepseek",
@@ -2002,8 +2002,8 @@
     },
     {
       "automatic": false,
-      "bytes": 17969,
-      "estimated_tokens": 3765,
+      "bytes": 15068,
+      "estimated_tokens": 3039,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/ops",
@@ -2233,8 +2233,8 @@
     },
     {
       "automatic": false,
-      "bytes": 9558,
-      "estimated_tokens": 1974,
+      "bytes": 6238,
+      "estimated_tokens": 1135,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/speculative-decoding",
@@ -2246,8 +2246,8 @@
     },
     {
       "automatic": false,
-      "bytes": 13001,
-      "estimated_tokens": 1925,
+      "bytes": 13488,
+      "estimated_tokens": 2037,
       "exceeds": [],
       "kind": "subtree",
       "path": "vllm-ascend/speculative-decoding/proposers",
@@ -2280,11 +2280,11 @@
   "unit_count": 97,
   "units": {
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": {
-      "bytes": 14716,
+      "bytes": 11236,
       "category": "mutator",
-      "content_sha256": "c8f58d7a979b1a068ac0908a27064e14cd4c184fb89b4bb48fc9ccb9b0940fa3",
+      "content_sha256": "2f0562163b8e7b94d46d3e5cf3b80ace217ebcd019f7bad8e6794e68af1de60a",
       "domain_path": "vllm-ascend/ops/triton",
-      "estimated_tokens": 3303,
+      "estimated_tokens": 2433,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow",
@@ -2294,11 +2294,11 @@
       "tier": "L4"
     },
     "unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow": {
-      "bytes": 3253,
+      "bytes": 3832,
       "category": "workflow",
-      "content_sha256": "55001f00308c28e5f5499d6e6a29fb1ef5c407fdfb72ddc388bcfaa6245978e9",
+      "content_sha256": "b5e483119dd7c1cafac9fb649497f804ef16a9c59ee8082e4dc858fed9879d2e",
       "domain_path": "vllm-ascend/ops/triton",
-      "estimated_tokens": 462,
+      "estimated_tokens": 606,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
@@ -2511,11 +2511,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow": {
-      "bytes": 3977,
+      "bytes": 4036,
       "category": "workflow",
-      "content_sha256": "72ed88d76d5653fa68a086f6f0fd00934a602fb578e22f994eab58306f03d2c8",
+      "content_sha256": "de4477cde8bd9e61b0d20fdcf9defe1ea77307b205c82355ba6c725b065754df",
       "domain_path": "vllm-ascend/models/deepseek/v4-pro-flash",
-      "estimated_tokens": 647,
+      "estimated_tokens": 662,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
@@ -2538,11 +2538,11 @@
       "tier": "L1"
     },
     "unit-vllm-ascend-dspark-mtp-aclgraph-d2h-elimination-mutator": {
-      "bytes": 9558,
+      "bytes": 6238,
       "category": "mutator",
-      "content_sha256": "0aff52926a086532411359e5c113486a1fe202405e566e09196d6592051b2488",
+      "content_sha256": "3db476266255798953461c3a3e8e395526c7c52d331967080b505d83d758b5b7",
       "domain_path": "vllm-ascend/speculative-decoding",
-      "estimated_tokens": 1974,
+      "estimated_tokens": 1135,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants",
@@ -2565,11 +2565,11 @@
       "tier": "L1"
     },
     "unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator": {
-      "bytes": 26819,
+      "bytes": 20937,
       "category": "mutator",
-      "content_sha256": "f106378490fb5f965188aee67959b67943645ef7beaf1bcaae0b53761d5306cf",
+      "content_sha256": "af916eee71229907be7458b75f04c3c4ad69a12b05d6e793f2707b6b0ce8a753",
       "domain_path": "vllm-ascend/models/deepseek-v4-v41",
-      "estimated_tokens": 6052,
+      "estimated_tokens": 4581,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms",
@@ -2866,11 +2866,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-mla-prolog-qkv-rope-kvcache-coalesce-mutator": {
-      "bytes": 5977,
+      "bytes": 5135,
       "category": "mutator",
-      "content_sha256": "62232bc7e0447efdfa63180f5fd6043627a2f3c657b00e4f80f41c06879d289b",
+      "content_sha256": "9a7e23f45f85052b263eb83ee00351449972e82dbf5b305dc5a74fcca8c23d15",
       "domain_path": "vllm-ascend/attention/mla-prolog",
-      "estimated_tokens": 1147,
+      "estimated_tokens": 937,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-mla-prolog-single-proj-and-lowbit-qk-workflow",
@@ -2880,11 +2880,11 @@
       "tier": "L4"
     },
     "unit-vllm-ascend-mla-prolog-single-proj-and-lowbit-qk-workflow": {
-      "bytes": 3108,
+      "bytes": 3962,
       "category": "workflow",
-      "content_sha256": "e58c9c0761dd1d3e83c1b2a8b2e9dc791ff69a08f7340806371c6b73c973ea2c",
+      "content_sha256": "0ea54abe80dcadc2faef3dc682109d3cd2ec7b42c4c67225dbf8dcfda1fd7ae0",
       "domain_path": "vllm-ascend/attention/mla-prolog",
-      "estimated_tokens": 484,
+      "estimated_tokens": 697,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"
@@ -3424,11 +3424,11 @@
       "tier": "L2"
     },
     "unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow": {
-      "bytes": 3665,
+      "bytes": 4152,
       "category": "workflow",
-      "content_sha256": "971c6361bf993dcbfa01eab977be21b29137c49a14a02fc6f62575238f17f9c9",
+      "content_sha256": "28a6e0e1a859cb187514825e39b0d6ea88eae1340f0c5bd7558a9325d3b525fc",
       "domain_path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback",
-      "estimated_tokens": 577,
+      "estimated_tokens": 689,
       "evidence_strength": "reproduced_empirical",
       "inherits_from": [
         "unit-vllm-ascend-npu-runtime-and-graph-invariants"

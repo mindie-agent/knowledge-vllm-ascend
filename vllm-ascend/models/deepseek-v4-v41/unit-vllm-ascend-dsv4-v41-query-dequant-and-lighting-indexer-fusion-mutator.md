@@ -23,7 +23,7 @@ provenance:
   source_locator: docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
   source_type: ablation_design_receipt
   supersedes: []
-revision: 4
+revision: 5
 schema: mindie-graded-unit/1
 tier: L4
 title: Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer
@@ -217,4 +217,3 @@ When implementing `sparse_mla_decode_step` and `run_ablation_suite(*args, **kwar
 - **Factor 1 (`fuse_q_qr_dequant`)**: When `True`, call `torch.ops._C_ascend.fused_q_dequant_rmsnorm_rope_split(qr_i8, qr_scale, rms_weight, w_q_absorbed, cos, sin, eps=eps, n_heads=n_heads, nope_dim=nope_dim, rope_dim=rope_dim)` (`q_fused_calls == 1`). When `False` (`minus_q_fusion`), run the unfused dequant + RMSNorm + `matmul` + `_apply_rope_slice` path (`q_fused_calls == 0`).
 - **Factor 2 (`alias_qli_views`)**: When `True`, pass zero-copy storage-aliased views `q_idx = q_packed[..., :index_dim]` and `k_idx = k_idx_cache` directly to `npu_quant_lightning_indexer` without `.clone()` or `.contiguous()` (preserving `q_idx.untyped_storage().data_ptr() == q_packed.untyped_storage().data_ptr()` and `k_idx.untyped_storage().data_ptr() == k_idx_cache.untyped_storage().data_ptr()`). When `False` (`minus_view_alias`), materialize cloned contiguous buffers `q_idx = q_packed[..., :index_dim].clone().contiguous()` and `k_idx = k_idx_cache.clone().contiguous()`.
 - **Factor 3 (`device_topk_guard`)**: When `True`, mask negative `topk_indices < 0` to `0` (`torch.where(topk_indices < 0, torch.zeros_like(topk_indices), topk_indices)`), scatter into a cloned `block_table`, compute the valid compressed block count `valid_seq = (topk_indices >= 0).sum(dim=-1).to(torch.int32)` on device without mutating caller `seqused_k`, and pass `seqused_k=valid_seq, max_seqlen_k=padded_capacity` to `npu_sparse_flash_attention`. When `False` (`minus_device_guard`), scatter raw `topk_indices` and pass `seqused_k=seqused_k, max_seqlen_k=int(seqused_k.max().item())` (catching `RuntimeError` inside `run_ablation_suite` and recording `"correctness_ok": False`).
-

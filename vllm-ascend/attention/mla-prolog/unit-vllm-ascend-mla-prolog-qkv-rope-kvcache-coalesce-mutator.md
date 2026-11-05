@@ -18,7 +18,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/mla.py
   source_type: ablation_design_receipt
   supersedes: []
-revision: 3
+revision: 4
 schema: mindie-graded-unit/1
 tier: L4
 title: Fuse MLA prolog Q/KV projections, vectorize RoPE without broadcast clones,

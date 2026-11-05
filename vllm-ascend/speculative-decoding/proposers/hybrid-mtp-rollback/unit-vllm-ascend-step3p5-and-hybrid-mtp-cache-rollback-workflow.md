@@ -16,7 +16,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/worker/v2/spec_decode/dspark/speculator.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 4
+revision: 5
 schema: mindie-graded-unit/1
 tier: L3
 title: Speculative Decode MTP / DSpark ACLGraph (`vllm_ascend/worker/v2/spec_decode/dspark/speculator.py`)

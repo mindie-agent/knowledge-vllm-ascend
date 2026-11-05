@@ -17,7 +17,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/model.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 6
+revision: 7
 schema: mindie-graded-unit/1
 tier: L3
 title: DeepSeek-V4/V4.1 SparseMLA decode (`sparse_mla_decode.py`) standard 3-stage

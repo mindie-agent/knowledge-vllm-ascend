@@ -20,7 +20,7 @@ provenance:
   source_repository: https://github.com/vllm-project/vllm-ascend
   source_type: ablation_design_receipt
   supersedes: []
-revision: 5
+revision: 6
 schema: mindie-graded-unit/1
 tier: L4
 title: v2 DSpark ACLGraph bucket alignment, metadata hoisting, and device-resident
