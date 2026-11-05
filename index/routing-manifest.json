@@ -1127,7 +1127,7 @@
       ],
       "path": "vllm-ascend/models/deepseek/v4-pro-flash/unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow.md",
       "revision": 6,
-      "token_estimate": 552,
+      "token_estimate": 540,
       "provenance": {
         "evidence_refs": [
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/model.py"
@@ -5255,7 +5255,7 @@
       ],
       "path": "vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback/unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow.md",
       "revision": 4,
-      "token_estimate": 568,
+      "token_estimate": 566,
       "provenance": {
         "evidence_refs": [
           "vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/worker/v2/spec_decode/dspark/speculator.py"
@@ -5995,7 +5995,7 @@
     }
   ],
   "unit_count": 97,
-  "build_elapsed_ms": 76.99108403176069,
+  "build_elapsed_ms": 76.07491686940193,
   "token_estimator": "utf8_bytes_div_4_ceiling",
   "query_budget_excludes_build": true
 }
