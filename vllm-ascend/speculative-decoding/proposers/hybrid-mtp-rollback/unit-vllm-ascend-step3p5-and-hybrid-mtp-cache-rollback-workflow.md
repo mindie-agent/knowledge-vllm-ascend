@@ -1,11 +1,24 @@
 ---
 category: workflow
 conditions:
+  dspark_graph_path: v2_ascend_dspark_full_graph
+  execution_mode: aclgraph
   framework:
   - vllm-ascend
-  - any
+  runtime: vllm-ascend
+  soc:
+  - Ascend910B
+  - Ascend910B2
+  - Ascend910B3
+  - Ascend910B4
+  - Ascend910_93
+  - Ascend950
+  - Ascend950DT
+  workload_phase:
+  - decode
+  - speculative_decode
 domain_path: vllm-ascend/speculative-decoding/proposers/hybrid-mtp-rollback
-evidence_strength: reproduced_empirical
+evidence_strength: single_observation
 id: unit-vllm-ascend-step3p5-and-hybrid-mtp-cache-rollback-workflow
 inherits_from:
 - unit-vllm-ascend-npu-runtime-and-graph-invariants
@@ -16,7 +29,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/worker/v2/spec_decode/dspark/speculator.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 5
+revision: 7
 schema: mindie-graded-unit/1
 tier: L3
 title: Speculative Decode MTP / DSpark ACLGraph (`vllm_ascend/worker/v2/spec_decode/dspark/speculator.py`)
