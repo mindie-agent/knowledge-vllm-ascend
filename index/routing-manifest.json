@@ -1,5 +1,5 @@
 {
-  "build_elapsed_ms": 49.23537513241172,
+  "build_elapsed_ms": 50.98591698333621,
   "closure": {
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
