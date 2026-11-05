@@ -3,7 +3,11 @@ category: sop
 conditions:
   framework:
   - vllm-ascend
-  - any
+  soc:
+  - Ascend910B
+  - Ascend910_93
+  - Ascend950
+  - Ascend950DT
 domain_path: vllm-ascend/models/deepseek-v4-v41
 evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-dsv4-v41-sparse-mla-lightning-indexer-and-mtp-sop
@@ -16,7 +20,7 @@ provenance:
   source_locator: docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/50809f1fefde44f4671b682248b8a55c32debd931359dd887585022e0a68fa79/index.md
   source_type: session_distill
   supersedes: []
-revision: 3
+revision: 4
 schema: mindie-graded-unit/1
 tier: L2
 title: DeepSeek-V4/V4.1 SparseMLA service configuration, C8 latent scale, and MTP

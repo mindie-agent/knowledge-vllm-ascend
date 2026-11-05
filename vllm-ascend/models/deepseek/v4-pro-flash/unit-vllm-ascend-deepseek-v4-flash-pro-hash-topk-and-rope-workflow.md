@@ -3,9 +3,13 @@ category: workflow
 conditions:
   framework:
   - vllm-ascend
-  - any
+  soc:
+  - Ascend910B
+  - Ascend910_93
+  - Ascend950
+  - Ascend950DT
 domain_path: vllm-ascend/models/deepseek/v4-pro-flash
-evidence_strength: reproduced_empirical
+evidence_strength: single_observation
 id: unit-vllm-ascend-deepseek-v4-flash-pro-hash-topk-and-rope-workflow
 inherits_from:
 - unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms
@@ -17,7 +21,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/models/deepseek_v4/model.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 7
+revision: 8
 schema: mindie-graded-unit/1
 tier: L3
 title: DeepSeek-V4/V4.1 SparseMLA decode (`sparse_mla_decode.py`) standard 3-stage

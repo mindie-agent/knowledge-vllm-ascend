@@ -3,9 +3,13 @@ category: workflow
 conditions:
   framework:
   - vllm-ascend
-  - any
+  soc:
+  - Ascend910B
+  - Ascend910_93
+  - Ascend950
+  - Ascend950DT
 domain_path: vllm-ascend/attention/mla-prolog
-evidence_strength: reproduced_empirical
+evidence_strength: single_observation
 id: unit-vllm-ascend-mla-prolog-single-proj-and-lowbit-qk-workflow
 inherits_from:
 - unit-vllm-ascend-npu-runtime-and-graph-invariants
@@ -16,7 +20,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/mla.py
   source_type: architecture_and_runtime_guide
   supersedes: []
-revision: 4
+revision: 5
 schema: mindie-graded-unit/1
 tier: L3
 title: MLA Prolog Projection, RoPE, and KV Cache Write (`vllm_ascend/ops/mla.py`)
@@ -50,9 +54,9 @@ Use this standard 3-stage tuning workflow when optimizing `mla_prolog_rope_kvcac
 
 1. Edit `vllm_ascend/ops/mla.py` to replace the per-head Python loop (`for h_idx in range(num_heads)`) by repeating `cos` and `sin` across `num_heads` via `.unsqueeze(1).repeat(1, num_heads, 1)` before applying `_rotate_half_last_dim`, then run `pytest -q tests/ut/ops/test_mla_prolog.py` to evaluate Stage 2 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
-## Stage 3 — Retain low-bit QK step rounding (`1/16` step) with block-offset KV cache writes
+## Stage 3 — Block-offset paged KV cache writes with low-bit QK step rounding disabled (`enable_lowbit_qk_truncation=False`)
 
-1. Edit `vllm_ascend/ops/mla.py` to use `1/16` quantization rounding (`torch.round(x * 16.0) / 16.0`) on `q_out` (`enable_lowbit_qk_truncation=True`) and write `kv_cache_nope[blk_idx, blk_off]` per valid slot, then run `pytest -q tests/ut/ops/test_mla_prolog.py` to evaluate Stage 3 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
+1. Edit `vllm_ascend/ops/mla.py` to keep `enable_lowbit_qk_truncation=False` (avoiding `1/16` step rounding on `q_out`, which degrades BF16 accuracy beyond `max_abs_err <= 2e-2`) while writing `kv_cache_nope[blk_idx, blk_off]` and `kv_cache_rope[blk_idx, blk_off]` per valid slot (`slot_mapping >= 0`), then run `pytest -q tests/ut/ops/test_mla_prolog.py` to evaluate Stage 3 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Verification & Follow-Up Retrieval
 

@@ -3,7 +3,11 @@ category: axiom
 conditions:
   framework:
   - vllm-ascend
-  - any
+  soc:
+  - Ascend910B
+  - Ascend910_93
+  - Ascend950
+  - Ascend950DT
 domain_path: vllm-ascend/models/deepseek-v4-v41
 evidence_strength: software_contract
 id: unit-vllm-ascend-dsv4-v41-qli-v2-compressor-and-engram-axioms
@@ -22,7 +26,7 @@ provenance:
   source_locator: docs/archive/material-v1/85ab134f333b06ac3873df6affbf3bf6ec71978c/tasks/edc44803e0feab76d8fbbb587a1b1ac7e8e1f444f3dd21e8cff3f89e177324cf/index.md
   source_type: session_distill
   supersedes: []
-revision: 2
+revision: 3
 schema: mindie-graded-unit/1
 tier: L1
 title: DeepSeek-V4/V4.1 MLA latent, LightningIndexer/QLI-v2, Compressor/Engram, and

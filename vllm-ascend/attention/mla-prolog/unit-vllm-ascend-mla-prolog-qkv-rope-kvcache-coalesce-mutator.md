@@ -3,7 +3,11 @@ category: mutator
 conditions:
   framework:
   - vllm-ascend
-  - any
+  soc:
+  - Ascend910B
+  - Ascend910_93
+  - Ascend950
+  - Ascend950DT
 domain_path: vllm-ascend/attention/mla-prolog
 evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-mla-prolog-qkv-rope-kvcache-coalesce-mutator
@@ -18,7 +22,7 @@ provenance:
   source_locator: vllm-project/vllm-ascend@175ef4d49c2072f9233619636f0309f4f88b4e2c:vllm_ascend/ops/mla.py
   source_type: ablation_design_receipt
   supersedes: []
-revision: 4
+revision: 5
 schema: mindie-graded-unit/1
 tier: L4
 title: Fuse MLA prolog Q/KV projections, vectorize RoPE without broadcast clones,

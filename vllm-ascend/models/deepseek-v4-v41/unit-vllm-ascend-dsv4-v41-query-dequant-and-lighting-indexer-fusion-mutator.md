@@ -3,7 +3,11 @@ category: mutator
 conditions:
   framework:
   - vllm-ascend
-  - any
+  soc:
+  - Ascend910B
+  - Ascend910_93
+  - Ascend950
+  - Ascend950DT
 domain_path: vllm-ascend/models/deepseek-v4-v41
 evidence_strength: reproduced_empirical
 id: unit-vllm-ascend-dsv4-v41-query-dequant-and-lighting-indexer-fusion-mutator
@@ -23,7 +27,7 @@ provenance:
   source_locator: docs/evidence/l4-dsv4-query-dequant-lighting-indexer-ablation.json
   source_type: ablation_design_receipt
   supersedes: []
-revision: 5
+revision: 6
 schema: mindie-graded-unit/1
 tier: L4
 title: Fuse DeepSeek-V4/V4.1 query dequant and RoPE split, alias LightningIndexer
