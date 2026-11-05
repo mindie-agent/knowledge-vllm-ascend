@@ -44,12 +44,17 @@ Use this standard 3-stage tuning workflow when optimizing `mla_prolog_rope_kvcac
 
 ## Stage 1 — Vectorize RMSNorm over the last dimension while keeping separate `w_q_a` and `w_kv_a` linear projections
 
-1. Replace the per-token Python RMSNorm loops (`for idx in range(num_tokens)`) with batch RMSNorm (`torch.rsqrt(x.pow(2).mean(dim=-1, keepdim=True) + eps)`) while keeping separate `F.linear(hidden_states, w_q_a)` and `F.linear(hidden_states, w_kv_a)` projections.
+1. Edit `vllm_ascend/ops/mla.py` to replace the per-token Python RMSNorm loops (`for idx in range(num_tokens)`) with batch RMSNorm (`torch.rsqrt(x.pow(2).mean(dim=-1, keepdim=True) + eps)`) while keeping separate `F.linear(hidden_states, w_q_a)` and `F.linear(hidden_states, w_kv_a)` projections, then run `pytest -q tests/ut/ops/test_mla_prolog.py` to evaluate Stage 1 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 2 — Expand `cos` and `sin` across heads with `.unsqueeze(1).repeat(1, num_heads, 1)`
 
-1. Replace the per-head Python loop (`for h_idx in range(num_heads)`) by repeating `cos` and `sin` across `num_heads` via `.unsqueeze(1).repeat(1, num_heads, 1)` before applying `_rotate_half_last_dim`.
+1. Edit `vllm_ascend/ops/mla.py` to replace the per-head Python loop (`for h_idx in range(num_heads)`) by repeating `cos` and `sin` across `num_heads` via `.unsqueeze(1).repeat(1, num_heads, 1)` before applying `_rotate_half_last_dim`, then run `pytest -q tests/ut/ops/test_mla_prolog.py` to evaluate Stage 2 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 3 — Retain low-bit QK step rounding (`1/16` step) with block-offset KV cache writes
 
-1. Use `1/16` quantization rounding (`torch.round(x * 16.0) / 16.0`) on `q_out` (`enable_lowbit_qk_truncation=True`) and write `kv_cache_nope[blk_idx, blk_off]` per valid slot.
+1. Edit `vllm_ascend/ops/mla.py` to use `1/16` quantization rounding (`torch.round(x * 16.0) / 16.0`) on `q_out` (`enable_lowbit_qk_truncation=True`) and write `kv_cache_nope[blk_idx, blk_off]` per valid slot, then run `pytest -q tests/ut/ops/test_mla_prolog.py` to evaluate Stage 3 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
+
+## Verification & Follow-Up Retrieval
+
+1. Always apply and test Stage 1, Stage 2, and Stage 3 as 3 separate incremental edits (running `pytest -q tests/ut/ops/test_mla_prolog.py` after each edit) so `logs/experiment-ledger.jsonl` records 3 distinct `candidate_sha256` evaluations.
+2. If the Ascend 950DT check remains `refuted` after all 3 stage edits, call `knowledge_query` again with default `mode="reuse"` (`conditions={"framework": "vllm-ascend", "soc": "Ascend950DT"}`, `token_budget=24000`, `goal`, and `bottleneck_summary`) to retrieve deeper structural remedies.

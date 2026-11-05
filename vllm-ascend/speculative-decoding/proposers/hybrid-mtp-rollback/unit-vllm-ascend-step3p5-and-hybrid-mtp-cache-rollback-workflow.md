@@ -46,12 +46,17 @@ Use this standard 3-stage workflow when configuring `dspark_aclgraph_speculative
 
 ## Stage 1 — Size `target_tokens` to `num_reqs * (1 + num_speculative_tokens)`
 
-1. Provision `1 + num_speculative_tokens` state slots per active request while building `actual_seq_lengths_q` from `num_reqs * num_query_per_req`.
+1. Edit `vllm_ascend/worker/v2/spec_decode/dspark/speculator.py` to provision `1 + num_speculative_tokens` state slots per active request while building `actual_seq_lengths_q` from `num_reqs * num_query_per_req`, then run `pytest -q tests/ut/spec_decode/test_dspark_speculator.py` to evaluate Stage 1 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 2 — Clamp `actual_seq_lengths_q[-1]` to `draft_tokens_padded` inside the step
 
-1. Update the last element of `actual_seq_lengths_q` to `draft_tokens_padded` while computing `updated_seq_lens` from `accepted_mask`.
+1. Edit `vllm_ascend/worker/v2/spec_decode/dspark/speculator.py` to update the last element of `actual_seq_lengths_q` to `draft_tokens_padded` while computing `updated_seq_lens` from `accepted_mask`, then run `pytest -q tests/ut/spec_decode/test_dspark_speculator.py` to evaluate Stage 2 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 3 — Share a Single Padded Bucket between Draft and Target Graphs
 
-1. Set `draft_tokens_padded = target_tokens_padded` to the bucket covering `num_reqs_padded * num_query_per_req`.
+1. Edit `vllm_ascend/worker/v2/spec_decode/dspark/speculator.py` to set `draft_tokens_padded = target_tokens_padded` to the bucket covering `num_reqs_padded * num_query_per_req` (and eliminate `.item()`/`.cpu()` host syncs), then run `pytest -q tests/ut/spec_decode/test_dspark_speculator.py` to evaluate Stage 3 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
+
+## Verification & Follow-Up Retrieval
+
+1. Always apply and test Stage 1, Stage 2, and Stage 3 as 3 separate incremental edits (running `pytest -q tests/ut/spec_decode/test_dspark_speculator.py` after each edit) so `logs/experiment-ledger.jsonl` records 3 distinct `candidate_sha256` evaluations.
+2. If the Ascend 950DT check remains `refuted` after all 3 stage edits, call `knowledge_query` again with default `mode="reuse"` (`conditions={"framework": "vllm-ascend", "soc": "Ascend950DT"}`, `token_budget=24000`, `goal`, and `bottleneck_summary`) to retrieve deeper structural remedies.

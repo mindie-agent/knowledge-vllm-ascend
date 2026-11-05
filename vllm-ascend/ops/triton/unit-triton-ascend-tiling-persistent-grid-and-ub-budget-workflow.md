@@ -39,12 +39,17 @@ triggers:
 
 ## Stage 1 — Clamp 1D Grid to Physical VectorCore Count (`grid = (min(total_tiles, NUM_CORES),)`)
 
-1. Select `NUM_CORES = 48` and clamp `grid = (min(total_tiles, NUM_CORES),)` via `compute_persistent_grid(total_tiles)`.
+1. Edit `spatial_group_norm_reduce.py` so `spatial_group_norm_reduce` clamps `grid = compute_persistent_grid(total_tiles)` (`NUM_CORES = 48`), then run `pytest -q tests/ut/ops/test_spatial_group_norm_reduce.py` to evaluate Stage 1 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 2 — Multi-Row Spatial Tiling (`BLOCK_ROWS = 4`) along `H` with Fixed `BLOCK_SIZE = 512`
 
-1. Process slices along `H` in chunks of `4` rows (`for h_start in range(0, height, 4)`) with fixed `BLOCK_SIZE = 512`.
+1. Edit `spatial_group_norm_reduce.py` to process slices along `H` in chunks of `4` rows (`for h_start in range(0, height, 4)`) with fixed `BLOCK_SIZE = 512`, then run `pytest -q tests/ut/ops/test_spatial_group_norm_reduce.py` to evaluate Stage 2 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 3 — Enable `multibuffer=True` Double-Buffering on Tiled Reductions
 
-1. Keep `enable_multibuffer = True` and accumulate row tiles across `(c, h)` slices.
+1. Edit `spatial_group_norm_reduce.py` to keep `enable_multibuffer = True` and accumulate row tiles across `(c, h)` slices, then run `pytest -q tests/ut/ops/test_spatial_group_norm_reduce.py` to evaluate Stage 3 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
+
+## Verification & Follow-Up Retrieval
+
+1. Always apply and test Stage 1, Stage 2, and Stage 3 as 3 separate incremental edits (running `pytest -q tests/ut/ops/test_spatial_group_norm_reduce.py` after each edit) so `logs/experiment-ledger.jsonl` records 3 distinct `candidate_sha256` evaluations.
+2. If the Ascend 950DT check remains `refuted` after all 3 stage edits, call `knowledge_query` again with default `mode="reuse"` (`domain="operators"`, `conditions={"framework": "vllm-ascend", "soc": "Ascend950DT"}`, `token_budget=24000`, `goal`, and `bottleneck_summary`) to retrieve deeper structural remedies.

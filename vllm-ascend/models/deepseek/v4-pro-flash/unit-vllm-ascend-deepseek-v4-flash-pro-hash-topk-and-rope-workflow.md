@@ -47,12 +47,17 @@ Use this standard 3-stage workflow when configuring or tuning `vllm_ascend/model
 
 ## Stage 1 — Clamp `max_seqlen_k` to `padded_capacity`
 
-1. Pass `max_seqlen_k = padded_capacity` to `npu_sparse_flash_attention` instead of reading `int(seqused_k.max().item())` on the host.
+1. Edit `sparse_mla_decode_step` to pass `max_seqlen_k = padded_capacity` to `npu_sparse_flash_attention` instead of reading `int(seqused_k.max().item())` on the host, then run `pytest -q tests/ut/models/deepseek_v4/test_dsv4_sparse_mla.py` to evaluate Stage 1 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 2 — Keep explicit `.contiguous()` on `q_idx` and `k_idx`
 
-1. Materialize contiguous buffers `q_idx = q_packed[..., :index_dim].contiguous()` and `k_idx = k_idx_cache.contiguous()` before calling `npu_quant_lightning_indexer`.
+1. Edit `sparse_mla_decode_step` to materialize contiguous buffers `q_idx = q_packed[..., :index_dim].contiguous()` and `k_idx = k_idx_cache.contiguous()` before calling `npu_quant_lightning_indexer`, then run `pytest -q tests/ut/models/deepseek_v4/test_dsv4_sparse_mla.py` to evaluate Stage 2 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
 
 ## Stage 3 — Clamp `topk_indices` with `torch.clamp(topk_indices, min=0)` and pass `torch.clamp(seqused_k, max=topk)`
 
-1. Clamp negative `topk_indices` via `torch.clamp(topk_indices, min=0)` and pass `seqused_k = torch.clamp(seqused_k.to(torch.int32), max=topk)` to `npu_sparse_flash_attention`.
+1. Edit `sparse_mla_decode_step` to clamp negative `topk_indices` via `torch.clamp(topk_indices, min=0)` and pass `seqused_k = torch.clamp(seqused_k.to(torch.int32), max=topk)` to `npu_sparse_flash_attention`, then run `pytest -q tests/ut/models/deepseek_v4/test_dsv4_sparse_mla.py` to evaluate Stage 3 and record its `candidate_sha256` outcome in `logs/experiment-ledger.jsonl`.
+
+## Verification & Follow-Up Retrieval
+
+1. Always apply and test Stage 1, Stage 2, and Stage 3 as 3 separate incremental edits (running `pytest -q tests/ut/models/deepseek_v4/test_dsv4_sparse_mla.py` after each edit) so `logs/experiment-ledger.jsonl` records 3 distinct `candidate_sha256` evaluations.
+2. If the Ascend 950DT check remains `refuted` after all 3 stage edits, call `knowledge_query` again with default `mode="reuse"` (`conditions={"framework": "vllm-ascend", "soc": "Ascend950DT"}`, `token_budget=24000`, `goal`, and `bottleneck_summary`) to retrieve deeper structural remedies.
