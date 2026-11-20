@@ -1,9 +1,10 @@
 {
-  "build_elapsed_ms": 54.96466672047973,
+  "build_elapsed_ms": 88.15170003799722,
   "closure": {
     "unit-ascend-day0-vector-fusion-mlapo-prefetch-multistream-mutator": [
       "unit-vllm-ascend-hbm-memory-hidden-assassins-axioms"
     ],
+    "unit-mindie-knowledge-rpc-dispatch-compatibility": [],
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow"
@@ -392,9 +393,10 @@
       "unit-vllm-ascend-npu-runtime-and-graph-invariants"
     ]
   },
-  "generation": "94161dbb4b9c5706c85de7276ebbc0de0925a53373f8f8c75adc3107d29a8220",
+  "generation": "89d73134aea3a549aa8f4c54e29754ee76c9b6a8d86997b5964f38cb83f0cbd8",
   "id_path": {
     "unit-ascend-day0-vector-fusion-mlapo-prefetch-multistream-mutator": "vllm-ascend/day0-graph/mla-prolog-prefetch/unit-ascend-day0-vector-fusion-mlapo-prefetch-multistream-mutator.md",
+    "unit-mindie-knowledge-rpc-dispatch-compatibility": "_common/unit-mindie-knowledge-rpc-dispatch-compatibility.md",
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": "vllm-ascend/ops/triton/unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator.md",
     "unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow": "vllm-ascend/ops/triton/unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow.md",
     "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow": "vllm-ascend/runtime/qwen35-gated-deltanet-decode/unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow.md",
@@ -499,7 +501,7 @@
   "query_budget_excludes_build": true,
   "schema_version": "mindie-routing-manifest/1",
   "token_estimator": "utf8_bytes_div_4_ceiling",
-  "unit_count": 101,
+  "unit_count": 102,
   "units": [
     {
       "category": "mutator",
@@ -565,6 +567,54 @@
           "Cube prologue epilogue absorption",
           "multi-stream overlap",
           "leave-one-out ablation"
+        ]
+      }
+    },
+    {
+      "category": "sop",
+      "conditions": {
+        "framework": {
+          "mindie-harness": "0.1.4",
+          "mindie-knowledge": "0.13.24"
+        },
+        "workload_scope": [
+          "knowledge_mcp"
+        ]
+      },
+      "domain_path": "_common",
+      "evidence_strength": "single_observation",
+      "id": "unit-mindie-knowledge-rpc-dispatch-compatibility",
+      "inherits_from": [],
+      "inherits_from_closure": [],
+      "path": "_common/unit-mindie-knowledge-rpc-dispatch-compatibility.md",
+      "provenance": {
+        "evidence_refs": [
+          "mindie-agent/harness@d23aa2f9c31cbe3bd7a029f7257e032c3cbfde46:mindie_harness/mcp/knowledge_rpc.py",
+          "mindie-agent/knowledge@9f48272a3ba87248bfda0e4068692511aac4dfa4:mindie_knowledge/__init__.py",
+          "mindie-agent/knowledge@9f48272a3ba87248bfda0e4068692511aac4dfa4:mindie_knowledge/loop/transport.py"
+        ],
+        "source_digest": "3eef9d692c58a1d29bee3c01f4fcbe73fee303bb738407e729b353ba7849d03d",
+        "source_locator": "mindie-agent/harness@d23aa2f9c31cbe3bd7a029f7257e032c3cbfde46:mindie_harness/mcp/knowledge_rpc.py",
+        "source_type": "software_integration_contract",
+        "supersedes": []
+      },
+      "revision": 1,
+      "tier": "L2",
+      "title": "MindIE knowledge RPC dispatch requires loop-module compatibility",
+      "token_estimate": 465,
+      "triggers": {
+        "error_signatures": [
+          "knowledge_unavailable with submission_state=not_sent",
+          "installed mindie-knowledge is treated as unavailable by knowledge MCP"
+        ],
+        "keywords": [
+          "mindie-harness",
+          "mindie-knowledge",
+          "knowledge RPC",
+          "knowledge_unavailable",
+          "ensure_service",
+          "select_engine_config",
+          "loop.transport"
         ]
       }
     },
@@ -6851,3 +6901,4 @@
     }
   ]
 }
+
