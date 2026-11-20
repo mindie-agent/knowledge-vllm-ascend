@@ -3,6 +3,7 @@
     "unit-ascend-day0-vector-fusion-mlapo-prefetch-multistream-mutator": [
       "unit-vllm-ascend-hbm-memory-hidden-assassins-axioms"
     ],
+    "unit-mindie-knowledge-rpc-dispatch-compatibility": [],
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": [
       "unit-vllm-ascend-npu-runtime-and-graph-invariants",
       "unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow"
@@ -394,12 +395,13 @@
   "federation": {
     "corpus": {
       "automatic": false,
-      "bytes": 662668,
-      "estimated_tokens": 110815,
+      "bytes": 665828,
+      "estimated_tokens": 111280,
       "kind": "federation",
       "path": ".",
       "unit_ids": [
         "unit-ascend-day0-vector-fusion-mlapo-prefetch-multistream-mutator",
+        "unit-mindie-knowledge-rpc-dispatch-compatibility",
         "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator",
         "unit-triton-ascend-tiling-persistent-grid-and-ub-budget-workflow",
         "unit-vllm-ascend-0day-hybrid-model-bringup-hermes-workflow",
@@ -501,7 +503,7 @@
         "unit-vllm-omni-multistage-ttfp-rtf-and-pipeline-convergence-workflow",
         "unit-vllm-omni-npu-ar-generation-runner-and-static-shape-decode-sop"
       ],
-      "units": 101
+      "units": 102
     },
     "domains": [
       {
@@ -519,13 +521,14 @@
       },
       {
         "automatic": false,
-        "bytes": 21454,
-        "estimated_tokens": 3042,
+        "bytes": 24614,
+        "estimated_tokens": 3507,
         "exceeds": [],
         "kind": "federation",
         "path": "_common",
         "recommended_action": "review_federation_boundary",
         "unit_ids": [
+          "unit-mindie-knowledge-rpc-dispatch-compatibility",
           "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
           "unit-vllm-ascend-hbm-memory-hidden-assassins-axioms",
           "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -533,7 +536,7 @@
           "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
           "unit-vllm-ascend-verification-and-state-parity-gates"
         ],
-        "units": 6
+        "units": 7
       },
       {
         "automatic": false,
@@ -655,7 +658,7 @@
       }
     ]
   },
-  "index_build_elapsed_ms": 54.96466672047973,
+  "index_build_elapsed_ms": 88.15170003799722,
   "leaves": [
     {
       "automatic": false,
@@ -672,13 +675,14 @@
     },
     {
       "automatic": false,
-      "bytes": 21454,
-      "estimated_tokens": 3042,
+      "bytes": 24614,
+      "estimated_tokens": 3507,
       "exceeds": [],
       "kind": "leaf",
       "path": "_common",
       "recommended_action": "review_leaf_split",
       "unit_ids": [
+        "unit-mindie-knowledge-rpc-dispatch-compatibility",
         "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
         "unit-vllm-ascend-hbm-memory-hidden-assassins-axioms",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -686,7 +690,7 @@
         "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 6
+      "units": 7
     },
     {
       "automatic": false,
@@ -1784,13 +1788,14 @@
     },
     {
       "automatic": false,
-      "bytes": 21454,
-      "estimated_tokens": 3042,
+      "bytes": 24614,
+      "estimated_tokens": 3507,
       "exceeds": [],
       "kind": "subtree",
       "path": "_common",
       "recommended_action": "review_two_level_subtree_split",
       "unit_ids": [
+        "unit-mindie-knowledge-rpc-dispatch-compatibility",
         "unit-vllm-ascend-deterministic-batch-invariance-and-eval-axioms",
         "unit-vllm-ascend-hbm-memory-hidden-assassins-axioms",
         "unit-vllm-ascend-hccl-and-dp-collective-invariants",
@@ -1798,7 +1803,7 @@
         "unit-vllm-ascend-soc-generation-feature-matrix-and-abi-axioms",
         "unit-vllm-ascend-verification-and-state-parity-gates"
       ],
-      "units": 6
+      "units": 7
     },
     {
       "automatic": false,
@@ -2363,7 +2368,7 @@
       "units": 5
     }
   ],
-  "unit_count": 101,
+  "unit_count": 102,
   "units": {
     "unit-ascend-day0-vector-fusion-mlapo-prefetch-multistream-mutator": {
       "bytes": 3116,
@@ -2377,6 +2382,17 @@
       ],
       "path": "vllm-ascend/day0-graph/mla-prolog-prefetch/unit-ascend-day0-vector-fusion-mlapo-prefetch-multistream-mutator.md",
       "tier": "L4"
+    },
+    "unit-mindie-knowledge-rpc-dispatch-compatibility": {
+      "bytes": 3160,
+      "category": "sop",
+      "content_sha256": "411c87b5d5e6a3fa4a1cfcdd27e486d731ede153424fcb5f32234a13a1c3e045",
+      "domain_path": "_common",
+      "estimated_tokens": 465,
+      "evidence_strength": "single_observation",
+      "inherits_from": [],
+      "path": "_common/unit-mindie-knowledge-rpc-dispatch-compatibility.md",
+      "tier": "L2"
     },
     "unit-triton-ascend-dimension-merge-and-ub-multibuffer-mutator": {
       "bytes": 11285,
@@ -3735,3 +3751,4 @@
     }
   }
 }
+
